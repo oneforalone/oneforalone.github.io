@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="对于 Lisp 来说，与其他语言的主要差别有三个：  Lisp 的每个表达式都会返回一个值，没有 statement 和 expression 的分别。 Lisp 的词法规则会比其他的语言简单些，词法树只需要解析小括号、引号、空格以及逗号。引号包括双引号、单引号以及反引号。 Lisp 使用小括号作为统一的分隔符，而不是像其他语言一样使用多种组合对 expression&#x2F;statement">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hacking in Lisp">
+<meta property="og:url" content="https://oneforalone.github.io/2022/04/10/hacking-in-lisp/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="对于 Lisp 来说，与其他语言的主要差别有三个：  Lisp 的每个表达式都会返回一个值，没有 statement 和 expression 的分别。 Lisp 的词法规则会比其他的语言简单些，词法树只需要解析小括号、引号、空格以及逗号。引号包括双引号、单引号以及反引号。 Lisp 使用小括号作为统一的分隔符，而不是像其他语言一样使用多种组合对 expression&#x2F;statement">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-10T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-09T11:25:37.922Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Lisp">
+<meta property="article:tag" content="Programming">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Hacking in Lisp</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/04/12/rust-web3-tutorial/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/04/09/bitcoin-on-pi/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&text=Hacking in Lisp"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&title=Hacking in Lisp"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&is_video=false&description=Hacking in Lisp"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hacking in Lisp&body=Check out this article: https://oneforalone.github.io/2022/04/10/hacking-in-lisp/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&title=Hacking in Lisp"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&title=Hacking in Lisp"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&title=Hacking in Lisp"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&title=Hacking in Lisp"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&name=Hacking in Lisp&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&t=Hacking in Lisp"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic"><span class="toc-number">1.</span> <span class="toc-text">Basic</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Environment-Setups"><span class="toc-number">1.1.</span> <span class="toc-text">Environment Setups</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-Lisp"><span class="toc-number">1.2.</span> <span class="toc-text">Hello Lisp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#defvar-defparameter-setf-setq"><span class="toc-number">1.3.</span> <span class="toc-text">defvar&#x2F;defparameter&#x2F;setf&#x2F;setq</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#defvar-defparameter"><span class="toc-number">1.3.1.</span> <span class="toc-text">defvar&#x2F;defparameter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#setf-setq"><span class="toc-number">1.3.2.</span> <span class="toc-text">setf&#x2F;setq</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#features"><span class="toc-number">1.3.3.</span> <span class="toc-text">*features*</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Iteration"><span class="toc-number">1.4.</span> <span class="toc-text">Iteration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LOOP-Hight-level-Overview"><span class="toc-number">1.5.</span> <span class="toc-text">LOOP: Hight-level Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Functions"><span class="toc-number">1.6.</span> <span class="toc-text">Functions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multiple-return-values"><span class="toc-number">1.7.</span> <span class="toc-text">Multiple return values</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Higher-order-functions"><span class="toc-number">1.8.</span> <span class="toc-text">Higher order functions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Create-a-new-project"><span class="toc-number">2.</span> <span class="toc-text">Create a new project:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Alist-Plist"><span class="toc-number">2.1.</span> <span class="toc-text">Alist&#x2F;Plist</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Hacking in Lisp
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-04-10T00:00:00.000Z" class="dt-published" itemprop="datePublished">2022-04-10 12:00:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-09T11:25:37.922Z" class="dt-updated" itemprop="dateModified">2023-10-09 11:25:37 AM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Programming/">Programming</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Lisp/" rel="tag">Lisp</a>, <a class="p-category" href="/tags/Programming/" rel="tag">Programming</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>对于 Lisp 来说，与其他语言的主要差别有三个：</p>
+<ul>
+<li><strong>Lisp 的每个表达式都会返回一个值，没有 statement 和 expression 的分别。</strong></li>
+<li><strong>Lisp 的词法规则会比其他的语言简单些，词法树只需要解析小括号、引号、空格以及逗号。引号包括<br>双引号、单引号以及反引号。</strong></li>
+<li><strong>Lisp 使用小括号作为统一的分隔符，而不是像其他语言一样使用多种组合</strong><br><strong>对 expression&#x2F;statement 做分隔。所以 Lisp 把分号当作注释符。</strong></li>
+</ul>
+<p>上面三点是 Lisp 和其他语言的差异，也是为什么从其他语言转到 Lisp 会比较疑惑的点。还有一点就<br>是，其他语言是不会先对传过来的参数进行求值，然后再将函数运用到这些参数的结果上，但是 Lisp<br>就是这么做的，<strong>先对参数进行求值，然后再将函数应用到这些参数的结果上计算结果。</strong></p>
+<h2 id="Basic"><a href="#Basic" class="headerlink" title="Basic"></a>Basic</h2><p>如果是其他语言，没必要介绍编译环境的安装配置，因为基本都有官网，官网上也都有对应的安装教程，或者<br>说网上一搜一大堆。但 Lisp 或者说 Common Lisp（下面不对这两者进行区分，统一使用 Lisp 指代<br>Common Lisp）不一样，最官方的是 LispWorks，那个 IDE 贵的离谱，具体是 $1,000 还是 $8,000<br>我忘了，反正这超过普通的人承受范围，虽然有免费版的，但是功能阉割的离谱，想要感受的自行去体验吧。</p>
+<p>还有一点就是 Lisp 的编译器其实是比较多的，同时大部分时候又要搭配着 Emacs 使用，Emacs 的配置<br>需要投入一点时间去学习的。所以总给人一种比较混乱的感觉。而且很多 Lisp 的教材里其实不会花什么<br>篇幅去介绍环境配置。直接开讲，你自己要去验证代码时就只能自己去查找资料。不过要感谢 Vindarel，<br>他把这个门槛给砍掉了，让 Lisp 入门变得简单了。强烈推荐去看看他编写的 <a target="_blank" rel="noopener" href="https://lispcookbook.github.io/cl-cookbook/">The Common Lisp Cookbook</a>，<br>当然我刚开始时也做了一下中文翻译，如果英文水平不是很好的话可以参考我翻译的 <a href="https://oneforalone.github.io/cl-cookbook-cn/#/">Common Lisp 秘籍</a>。</p>
+<p>废话不多说，let’s dive in.</p>
+<h3 id="Environment-Setups"><a href="#Environment-Setups" class="headerlink" title="Environment Setups"></a>Environment Setups</h3><p>环境配置看你怎么选，如果你懒得去做一些配置什么的，有人已经写好了配置，直接下载安装就好了，那个就<br>是 <a target="_blank" rel="noopener" href="https://portacle.github.io/">Portacle</a>。这个就是一个 IDE，里面基本的配置都集成好了，开箱即用，版本什么的<br>也比较新。</p>
+<p>如果喜欢折腾的话，那么就需要自己安装 <a target="_blank" rel="noopener" href="http://www.sbcl.org/">sbcl</a>，至于你用什么编辑器编辑，你自己选个喜欢的<br>就好了，普遍用的都是 sbcl + slime + emacs。不过 vscode 和 vim 之类都也都是可以的。当然<br>你也可以直接在 sbcl 中调试，但是要注意，sbcl 不支持上下左右键，如果需要支持的话，需要安装<br><a target="_blank" rel="noopener" href="https://github.com/hanslub42/rlwrap">rlwrap</a>，然后启动时执行 <code>rlwrap sbcl</code>。</p>
+<p>Lisp 的解释器或者说脚本语言的解释器都是遵循 REPL（Read Eval Print Loop）的原则，只不过在<br>sbcl 中表达式执行错误的话会进入一个 interactive debugger，要想退出这个 debugger，输入 0<br>或者按 Ctrl-D。或者更进一步想要去掉这个烦人的 debugger，可以在 sbcl 的配置文件<code>~/.sbclrc</code><br>中添加以下代码：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> print-condition-hook (<span class="name">condition</span> hook)</span><br><span class="line">  <span class="string">&quot;Print this error message (condition) and abort the current operation.&quot;</span></span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignore</span> hook))</span><br><span class="line">  (<span class="name">princ</span> condition)</span><br><span class="line">  (<span class="name">clear-input</span>)</span><br><span class="line">  (<span class="name">abort</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">;; WARN: this will</span></span><br><span class="line">(<span class="name">setf</span> *debugger-hook* #&#x27;print-condition-hook)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Hello-Lisp"><a href="#Hello-Lisp" class="headerlink" title="Hello Lisp"></a>Hello Lisp</h3><p>从 C 语言那里流传下来的传统（虽然 Lisp 要比 C 早），接触一门语言的时候都喜欢用打印一个<br>“Hello World” 开始。其实大部分 Lisp 的教程都不会一开始写 hello world，而是直接从其<br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/S-%E8%A1%A8%E8%BE%BE%E5%BC%8F/4409560">S-expression</a> 开始讲。但是这里我就遵循一下 C 的传统吧。</p>
+<p>下面是 <code>hello.lisp</code> 的代码：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> hello ()</span><br><span class="line">  <span class="string">&quot;say hello&quot;</span></span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot;hello lisp&quot;</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">hello</span>)</span><br></pre></td></tr></table></figure>
+
+<p>然后直接使用 sbcl 的 <code>--script</code> 参数加载 <code>hello.lisp</code> 文件就好，会在命令行中输出<br><code>hello lisp</code> 字符。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sbcl --script hello.lisp</span><br><span class="line">hello lisp</span><br></pre></td></tr></table></figure>
+
+<p>如果源代码中调用了其他的库&#x2F;包，需要再代码的最上面添加一行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(require :asdf)</span><br></pre></td></tr></table></figure>
+
+<p>如果想执行 <code>hello.lisp</code> 之后进入 sbcl，可以使用 <code>--load</code> 参数，这个参数是先启动 sbcl，<br>再执行 <code>hello.lisp</code> 。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ sbcl --load hello.lisp</span><br><span class="line">This is SBCL 2.1.9, an implementation of ANSI Common Lisp.</span><br><span class="line">More information about SBCL is available at &lt;http://www.sbcl.org/&gt;.</span><br><span class="line"></span><br><span class="line">SBCL is free software, provided as is, with absolutely no warranty.</span><br><span class="line">It is mostly <span class="keyword">in</span> the public domain; some portions are provided under</span><br><span class="line">BSD-style licenses.  See the CREDITS and COPYING files <span class="keyword">in</span> the</span><br><span class="line">distribution <span class="keyword">for</span> more information.</span><br><span class="line">hello lisp</span><br></pre></td></tr></table></figure>
+
+<p>简单的讲一下 <code>hello.lisp</code>，<code>defun</code> 是函数定义宏，后面接函数名，然后是函数的参数，再然后是<br>使用双引号的文档注释，最后是函数的主体。格式就是 S-expression 的格式，开头使用小括号，接一个<br>函数或宏的名字，然后是其参数。至于 <code>format</code>，就是一个输出的函数，可以类比其他语言的 <code>print</code>&#x2F;<br><code>printf</code> 函数，不过这个字符串对应的转移符和类 C 的不一致，其转译符使用的是 <code>~</code>，而不是 <code>\</code>，<br>所以换行是 <code>~%</code>，和 <code>\n</code> 一样的效果。更具体详细的介绍，参看 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Format_(Common_Lisp)">wiki</a> 和<br><a target="_blank" rel="noopener" href="http://www.lispworks.com/documentation/lw50/CLHS/Body/22_c.htm">Lisp Hyper Spec: format</a>。</p>
+<h3 id="defvar-defparameter-setf-setq"><a href="#defvar-defparameter-setf-setq" class="headerlink" title="defvar&#x2F;defparameter&#x2F;setf&#x2F;setq"></a><code>defvar</code>&#x2F;<code>defparameter</code>&#x2F;<code>setf</code>&#x2F;<code>setq</code></h3><p>refer to <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/8927741/whats-difference-between-defvar-defparameter-setf-and-setq">what’s difference between defvar defparameter setf and setq</a></p>
+<h4 id="defvar-defparameter"><a href="#defvar-defparameter" class="headerlink" title="defvar&#x2F;defparameter"></a><code>defvar</code>&#x2F;<code>defparameter</code></h4><p><code>defvar</code> 和 <code>defparameter</code> 这两个内置函数都是用来定义全局变量的。区别在于 <code>defvar</code> 在第一<br>次定义赋值后，之后都不能修改这个变量的值，而 <code>defparameter</code> 是可以修改的。<code>defvar</code> 相当于<br>是定义了一个全局常量，而 <code>defparameter</code> 只是定义了一个全局变量而已。具体表现形式见如下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&gt; (defparameter a 1)</span><br><span class="line">A</span><br><span class="line">&gt; a</span><br><span class="line">1</span><br><span class="line">&gt; (defparameter a 2)</span><br><span class="line">A</span><br><span class="line">&gt; a</span><br><span class="line">2</span><br><span class="line">&gt; (defvar b 1)</span><br><span class="line">B</span><br><span class="line">&gt; b</span><br><span class="line">1</span><br><span class="line">&gt; (defvar b 2)</span><br><span class="line">B</span><br><span class="line">&gt; b</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p>有一点需要注意的是，定义全局变量时，有一部分 lisper 喜欢使用 <code>*</code> 将变量包起来，用来标识这<br>是个全局变量，这个看自己的习惯吧，但是之后肯定会遇到这种情况的。例如之后介绍的 <code>*features*</code>。</p>
+<h4 id="setf-setq"><a href="#setf-setq" class="headerlink" title="setf&#x2F;setq"></a><code>setf</code>&#x2F;<code>setq</code></h4><p><code>setf</code> 和 <code>setq</code> 都是修改变量的值，区别是 <code>setf</code> 是使用了 <code>setq</code> 的宏，对 <code>setq</code> 进行了<br>拓展。因为 <code>setq</code> 不能对表达式的结果的值进行修改。具体的差别参考下面的代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&gt; (defparameter c (list 1 2 3))</span><br><span class="line">C</span><br><span class="line">&gt; (setf (car c) 42)</span><br><span class="line">42</span><br><span class="line">&gt; c</span><br><span class="line">(42 2 3)</span><br><span class="line">&gt; (setq (car c) 42)</span><br><span class="line">; in: SETQ (CAR C)</span><br><span class="line">;     (SETQ (CAR C) 42)</span><br><span class="line">;</span><br><span class="line">; caught ERROR:</span><br><span class="line">;   Variable name is not a symbol: (CAR C).</span><br><span class="line">;</span><br><span class="line">; compilation unit finished</span><br><span class="line">;   caught 1 ERROR condition</span><br><span class="line"></span><br><span class="line">debugger invoked on a SB-INT:COMPILED-PROGRAM-ERROR in thread</span><br><span class="line">#&lt;THREAD &quot;main thread&quot; RUNNING &#123;70085E3DB3&#125;&gt;:</span><br><span class="line">  Execution of a form compiled with errors.</span><br><span class="line">Form:</span><br><span class="line">  (SETQ (CAR C) 42)</span><br><span class="line">Compile-time error:</span><br><span class="line">  Variable name is not a symbol: (CAR C).</span><br><span class="line"></span><br><span class="line">Type HELP for debugger help, or (SB-EXT:EXIT) to exit from SBCL.</span><br><span class="line"></span><br><span class="line">restarts (invokable by number or by possibly-abbreviated name):</span><br><span class="line">  0: [ABORT] Exit debugger, returning to top level.</span><br><span class="line"></span><br><span class="line">((LAMBDA ()))</span><br><span class="line">   source: (SETQ (CAR C) 42)</span><br><span class="line">0] abort</span><br></pre></td></tr></table></figure>
+
+<h4 id="features"><a href="#features" class="headerlink" title="*features*"></a><code>*features*</code></h4><p>预定义的一个列表，可以自己添加一些自定义的特性，主要是用来根据不同的环境来执行不同的代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#+unix</span><br><span class="line">(print &quot;We are on linux&quot;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Iteration"><a href="#Iteration" class="headerlink" title="Iteration"></a>Iteration</h3><p>Lisp 中控制循环迭代最原生的是 <code>loop</code>，其他的都是后面衍生出来的。<code>dolist</code> 是遍历列表，<br><code>dotimes</code> 是已知循环的次数，<code>maphash</code> 是遍历 hash table 的。具体用法见下面代码。</p>
+<ul>
+<li><code>loop</code>:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">* (loop for x in &#x27;(1 3 5)</span><br><span class="line">     do (print x))</span><br><span class="line">1</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">NIL ; return value</span><br><span class="line"></span><br><span class="line">* (loop for x in &#x27;(1 3 5)</span><br><span class="line">     collect (print x))</span><br><span class="line">1</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">(1 3 5) ; return value</span><br><span class="line"></span><br><span class="line">* (loop for x in &#x27;(1 3 5)</span><br><span class="line">     sum (print x))</span><br><span class="line">1</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">9 ; return value</span><br><span class="line"></span><br><span class="line">* (loop for x in &#x27;(1 3 5)</span><br><span class="line">     count (print x))</span><br><span class="line">1</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">3 ; return value</span><br><span class="line"></span><br><span class="line">* (loop for x in &#x27;(1 3 5)</span><br><span class="line">     maximize (print x))</span><br><span class="line">1</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">5 ; return value</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>dolist</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">* (dolist (x &#x27;(1 3 5))</span><br><span class="line">           x ; this is the return value of the last eval of x</span><br><span class="line">    (print x))</span><br><span class="line">1</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">NIL ; return value</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>for</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">* (ql:quickload &quot;for&quot;)</span><br><span class="line"></span><br><span class="line">* (for:for ((x over #(0 2 4))</span><br><span class="line">            (y over (list 1 3 5)))</span><br><span class="line">    (format t &quot;~a - ~a ~%&quot; x y))</span><br><span class="line">0 - 1</span><br><span class="line">2 - 3</span><br><span class="line">4 - 5</span><br><span class="line">NIL</span><br></pre></td></tr></table></figure>
+
+<p>注，以上的循环中，<code>for</code> 的效率最低，所以慎用，个人还是比较喜欢用 <code>loop</code>。</p>
+<ul>
+<li><code>maphash</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">* (let ((ht (make-hash-table)))</span><br><span class="line">    (setf (gethash :a ht) 1)</span><br><span class="line">    (setf (gethash :b ht) 2)</span><br><span class="line">    (loop :for k :being :the :hash-key</span><br><span class="line">       :using (:hash-value v)</span><br><span class="line">       :of ht</span><br><span class="line">       do (print (list k v))))</span><br><span class="line">(:A 1)</span><br><span class="line">(:B 2)</span><br><span class="line">NIL</span><br><span class="line"></span><br><span class="line">* (let ((ht (make-hash-table)))</span><br><span class="line">    (setf (gethash :a ht) 1)</span><br><span class="line">    (setf (gethash :b ht) 2)</span><br><span class="line">    (maphash (lambda (k v)</span><br><span class="line">                (print (list k v)))</span><br><span class="line">             ht))</span><br><span class="line">(:A 1)</span><br><span class="line">(:B 2)</span><br><span class="line">NIL</span><br><span class="line"></span><br><span class="line">* (ql:quickload &quot;alexandria&quot;)</span><br><span class="line">* (let ((ht (make-hash-table)))</span><br><span class="line">    (setf (gethash :a ht) 1)</span><br><span class="line">    (setf (gethash :b ht) 2)</span><br><span class="line">    (alexandria:hash-table-keys ht))</span><br><span class="line">(:B :A)</span><br><span class="line"></span><br><span class="line">* (ql:quickload &quot;for&quot;)</span><br><span class="line">* (let ((ht (make-hash-table)))</span><br><span class="line">    (setf (gethash :a ht) 1)</span><br><span class="line">    (setf (gethash :b ht) 2)</span><br><span class="line">    (for:for ((key/value over ht))</span><br><span class="line">      (print key/value)))</span><br><span class="line">;; or using trivial-do https://github.com/yitzchak/trivial-do/</span><br><span class="line">(:A 1)</span><br><span class="line">(:B 2)</span><br><span class="line">NIL</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>dotimes</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">* (dotimes (i 3)</span><br><span class="line">    (print i))</span><br><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">NIL</span><br><span class="line"></span><br><span class="line">* (loop repeat 3</span><br><span class="line">     do (print &quot;hello&quot;))</span><br><span class="line">&quot;hello&quot;</span><br><span class="line">&quot;hello&quot;</span><br><span class="line">&quot;hello&quot;</span><br><span class="line">NIL</span><br><span class="line"></span><br><span class="line">;; REPL: READ EVAL PRINT LOOP</span><br><span class="line">(loop (print (eval (read))))</span><br></pre></td></tr></table></figure>
+
+<h3 id="LOOP-Hight-level-Overview"><a href="#LOOP-Hight-level-Overview" class="headerlink" title="LOOP: Hight-level Overview"></a>LOOP: Hight-level Overview</h3><p>2 rules:</p>
+<ul>
+<li>respect the order</li>
+<li>don’t nest accumulating clauses</li>
+</ul>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; Iteration:</span></span><br><span class="line"><span class="comment">;; LOOP overview</span></span><br><span class="line">(<span class="name">loop</span></span><br><span class="line">  <span class="comment">;; Initialize variables we loop over</span></span><br><span class="line">  <span class="symbol">:for</span> x <span class="symbol">:in</span> &#x27;(<span class="number">1</span> <span class="number">3</span> <span class="number">5</span>)</span><br><span class="line">  <span class="symbol">:for</span> i <span class="symbol">:from</span> <span class="number">1</span> <span class="symbol">:to</span> <span class="number">2</span> <span class="comment">;; ranges: to,below,downto...</span></span><br><span class="line">  <span class="symbol">:for</span> y <span class="symbol">:=</span> i <span class="symbol">:then</span> <span class="number">99</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">;; Use intermediate variables</span></span><br><span class="line">  <span class="symbol">:with</span> z <span class="symbol">:=</span> <span class="string">&quot;z&quot;</span> <span class="comment">;; set once, not iterated.</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">;; Initial clause</span></span><br><span class="line">  <span class="symbol">:initially</span> (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot;initially, i = ~S&quot;</span> i)</span><br><span class="line"></span><br><span class="line">  <span class="comment">;; Body</span></span><br><span class="line">  <span class="comment">;; Conditionals: if/else, when</span></span><br><span class="line">  <span class="comment">;; While, until, repeat</span></span><br><span class="line">  <span class="symbol">:if</span> (<span class="name">&gt;</span> i <span class="number">90</span>)</span><br><span class="line">  <span class="symbol">:do</span> (<span class="name">return</span> i)  <span class="comment">;; early exit</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">;; Main clauses: ;; do, collect... into,</span></span><br><span class="line">  <span class="comment">;; count, sum, maximize</span></span><br><span class="line">  <span class="comment">;; thereis, always, never</span></span><br><span class="line">  <span class="symbol">:sum</span> x <span class="symbol">:into</span> res</span><br><span class="line"></span><br><span class="line">  <span class="comment">;; Final clause</span></span><br><span class="line">  <span class="symbol">:finally</span> (<span class="name">return</span> (<span class="name">list</span> i res)))</span><br></pre></td></tr></table></figure>
+
+<h3 id="Functions"><a href="#Functions" class="headerlink" title="Functions"></a>Functions</h3><ul>
+<li><code>defun</code>：定义一个函数</li>
+<li><code>apropos</code>：查看符号是否被定义</li>
+<li><code>documentation</code>：查看对应的文档</li>
+<li><code>inspect</code>：查看具体的细节</li>
+</ul>
+<p>使用 <code>funcall</code> 调用函数时，可以使用 <code>#&#39;</code> 或 <code>&#39;</code>，两者的区别是：</p>
+<ul>
+<li><code>#&#39;</code>：表示调用当前词法作用域中定义的函数</li>
+<li><code>&#39;</code>：大部分时候是只 top-level 的函数，即全局作用域中的函数</li>
+</ul>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> hello (<span class="name">name</span> <span class="symbol">&amp;key</span> (<span class="name">happy</span> <span class="literal">t</span> happy-p))</span><br><span class="line">  <span class="string">&quot;Say hello to NAME.&quot;</span></span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot;happy is: ~S~&amp;&quot;</span> happy)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot;Hello ~a&quot;</span> name)</span><br><span class="line">  (<span class="name">when</span> happy-p</span><br><span class="line">    (<span class="name">if</span> happy</span><br><span class="line">        (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot; :)&quot;</span>)</span><br><span class="line">        (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot; :((((&quot;</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">flet</span> ((<span class="name">hello</span> (<span class="name">x</span>)</span><br><span class="line">         (<span class="name">format</span> <span class="literal">nil</span> <span class="string">&quot;*** hello ~a was overriden!~&amp;&quot;</span> x)))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot;What is &#x27;hello?~&amp;&quot;</span>)</span><br><span class="line">  (<span class="name">describe</span> &#x27;hello)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot;What is #&#x27;hello? ~a&quot;</span> #&#x27;hello)</span><br><span class="line">  (<span class="name">describe</span> #&#x27;hello)</span><br><span class="line">  (<span class="name">print</span> (<span class="name">hello</span> <span class="string">&quot;me&quot;</span>))</span><br><span class="line">  (<span class="name">print</span> <span class="string">&quot;Calling &#x27;hello:&quot;</span>)</span><br><span class="line">  (<span class="name">funcall</span> &#x27;hello <span class="string">&quot;with quote&quot;</span>)</span><br><span class="line">  (<span class="name">print</span> <span class="string">&quot;Calling #&#x27;hello:&quot;</span>)</span><br><span class="line">  (<span class="name">funcall</span> #&#x27;hello <span class="string">&quot;with #&#x27;&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<p><code>flet</code> ~ <code>let</code>，<code>let</code> 是对变量的绑定，<code>flet</code> 是对函数的绑定。<code>labels</code> ~ <code>let*</code> 类似。</p>
+<h3 id="Multiple-return-values"><a href="#Multiple-return-values" class="headerlink" title="Multiple return values"></a>Multiple return values</h3><p><code>values</code> 会输出多个值，但返回的是多个值中的第一个，可以使用 <code>nth-value</code> 获取到对应的元素，<br>使用 <code>multiple-value-bind</code> 将 <code>values</code> 返回的多个值绑定到多个变量上。</p>
+<h3 id="Higher-order-functions"><a href="#Higher-order-functions" class="headerlink" title="Higher order functions"></a>Higher order functions</h3><p>Lisp 还有个优点是函数可以作为参数使用，这个后续的语言都是从 Lisp 模仿过去的。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> compute (<span class="name">x</span> y <span class="symbol">&amp;key</span> operation #&#x27;+)</span><br><span class="line">  (<span class="name">funcall</span> operation x y))</span><br><span class="line"></span><br><span class="line">(<span class="name">compute</span> <span class="number">1</span> <span class="number">2</span>) <span class="comment">;; =&gt; 3</span></span><br><span class="line">(<span class="name">compute</span> <span class="number">1</span> <span class="number">2</span> <span class="symbol">:operation</span> #&#x27;-) <span class="comment">;; =&gt; -1</span></span><br><span class="line"></span><br><span class="line">(<span class="name">member</span> <span class="number">2</span> &#x27;(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)) <span class="comment">;; =&gt; (2 3)</span></span><br><span class="line">(<span class="name">member</span> <span class="string">&quot;foo&quot;</span> &#x27;(<span class="string">&quot;rst&quot;</span> <span class="string">&quot;foo&quot;</span>) <span class="symbol">:test</span> #&#x27;string-equal) <span class="comment">;; =&gt; (&quot;foo&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<p>既然函数都能当参数使用，那么当作返回值也就没啥例外的了：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">lambda</span> (<span class="name">x</span>)</span><br><span class="line">  (<span class="number">1</span>+ x))</span><br><span class="line"></span><br><span class="line">(<span class="name">compute</span> <span class="number">1</span> <span class="number">2</span> <span class="symbol">:operation</span> (<span class="name">lambda</span> (<span class="name">x</span> y)</span><br><span class="line">                           (<span class="name">+</span> <span class="number">10</span> x y)) <span class="comment">;; =&gt; 13</span></span><br><span class="line"><span class="comment">;; or</span></span><br><span class="line">(<span class="name">defun</span> add10 (<span class="name">x</span> y)</span><br><span class="line">   (<span class="name">+</span> <span class="number">10</span> x y))</span><br><span class="line">(<span class="name">compute</span> <span class="number">1</span> <span class="number">2</span> <span class="symbol">:operation</span> #&#x27;add10)</span><br><span class="line"></span><br><span class="line">(<span class="name">mapcar</span> (<span class="name">lambda</span> (<span class="name">x</span> y) (<span class="name">+</span> x y))</span><br><span class="line">  &#x27;(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) &#x27;(<span class="number">10</span> <span class="number">20</span> <span class="number">30</span>)) <span class="comment">;; =&gt; (11 22 33)</span></span><br></pre></td></tr></table></figure>
+
+<p>同时还有个 <code>setf</code> 的属性</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">counter</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">defun</span> counter-inc ()</span><br><span class="line">    (<span class="name">incf</span> counter))</span><br><span class="line"></span><br><span class="line">  (<span class="name">defun</span> counter-init ()</span><br><span class="line">    (<span class="name">setf</span> counter <span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">  (<span class="name">defun</span> counter-value ()</span><br><span class="line">     counter)</span><br><span class="line"></span><br><span class="line">  (<span class="name">defun</span> (<span class="name">setf</span> counter-value) (<span class="name">new-value</span>)</span><br><span class="line">    (<span class="name">setf</span> counter new-value)))</span><br><span class="line"></span><br><span class="line">(<span class="name">counter-inc</span>) <span class="comment">;; =&gt; 1</span></span><br><span class="line"></span><br><span class="line">(<span class="name">setf</span> (<span class="name">counter-value</span>) <span class="number">9</span>) <span class="comment">;; =&gt; 9</span></span><br></pre></td></tr></table></figure>
+
+<p><code>defmethod</code>&#x2F;<code>defgeneric</code> 用来定义泛型函数，区别在于 <code>defmethod</code> 是对每个具体实现的定义，<br>而 <code>defgeneric</code> 可以使用 <code>:method</code> 关键词一次性定义多个实现。</p>
+<ul>
+<li><code>defmethod</code></li>
+</ul>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">* (<span class="name">defmethod</span> hello (<span class="name">name</span>)</span><br><span class="line">    (<span class="name">print</span> name))</span><br><span class="line"></span><br><span class="line">* (<span class="name">defmethod</span> hello ((<span class="name">obj</span> hash-table))</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot;rrr we have a HT&quot;</span>))</span><br><span class="line"></span><br><span class="line">* (<span class="name">hello</span> (<span class="name">make-hash-table</span>))</span><br><span class="line"><span class="comment">;; =&gt; rrr we have a HT</span></span><br><span class="line"><span class="comment">;; NIL</span></span><br><span class="line">* (<span class="name">hello</span> <span class="string">&quot;me&quot;</span>)</span><br><span class="line"><span class="comment">;; &quot;me&quot;</span></span><br><span class="line"><span class="comment">;; &quot;me&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>defgeneric</code></li>
+</ul>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defgeneric</span> hello (<span class="name">sthg</span>)</span><br><span class="line">  (<span class="symbol">:method</span> ((<span class="name">sthg</span> <span class="literal">t</span>))</span><br><span class="line">      (<span class="name">print</span> sthg))</span><br><span class="line">  (<span class="symbol">:method</span> ((<span class="name">sthg</span> hash-table))</span><br><span class="line">      (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot;rrr we have a HT&quot;</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Create-a-new-project"><a href="#Create-a-new-project" class="headerlink" title="Create a new project:"></a>Create a new project:</h2><ul>
+<li><code>my-project.asd</code>:</li>
+</ul>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">in-package</span> #<span class="symbol">:asdf-user</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defsystem</span> <span class="symbol">:my-project</span></span><br><span class="line">  <span class="symbol">:depends-on</span> (<span class="symbol">:alexandria</span> <span class="symbol">:str</span> <span class="symbol">:cl-ppcre</span> <span class="symbol">:clingon</span>)</span><br><span class="line">  <span class="comment">;; flat source tree:</span></span><br><span class="line">  <span class="comment">;; - .asd</span></span><br><span class="line">  <span class="comment">;; - .lisp</span></span><br><span class="line">  <span class="symbol">:components</span> ((<span class="symbol">:file</span> <span class="string">&quot;my-project&quot;</span>) <span class="comment">;; .lisp file</span></span><br><span class="line">               (<span class="symbol">:static-file</span> <span class="string">&quot;README.md&quot;</span>)))</span><br><span class="line"></span><br><span class="line">#|</span><br><span class="line">With .lisp file in a src/ directory:</span><br><span class="line"></span><br><span class="line">  :components ((<span class="symbol">:module</span> <span class="string">&quot;src&quot;</span></span><br><span class="line">                <span class="symbol">:components</span></span><br><span class="line">                ((<span class="symbol">:file</span> <span class="string">&quot;utils&quot;</span>)</span><br><span class="line">                 (<span class="symbol">:file</span> <span class="string">&quot;my-project&quot;</span>)</span><br><span class="line">                 (<span class="symbol">:file</span> <span class="string">&quot;config&quot;</span>)))</span><br><span class="line">                (<span class="symbol">:module-2</span> ...))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>my-project.lisp</code>:</li>
+</ul>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defpackage</span> #<span class="symbol">:mypackage</span></span><br><span class="line">  (<span class="symbol">:use</span> <span class="symbol">:cl</span>)</span><br><span class="line">  (<span class="symbol">:export</span> <span class="symbol">:my-entry-point</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">in-package</span> <span class="symbol">:mypackage</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> my-entry-point ()</span><br><span class="line">  <span class="string">&quot;Say hello to current user.&quot;</span></span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot;Hello ~a!&quot;</span> (<span class="name">uiop</span><span class="symbol">:getenv</span> <span class="string">&quot;USER&quot;</span>)))</span><br></pre></td></tr></table></figure>
+
+<p>在 package 的定义和使用中，<code>#:</code> 和 <code>:</code> 用法基本是一致，只是有细微的差别，就是 <code>:</code> 会在当前<br>的 image 中将后面的符号给占用，符号补全时能找到，而 <code>#:</code> 不会占用符号，因此推荐使用 <code>#:</code>，<br>而不是 <code>:</code>。</p>
+<p><code>systems</code>: like Debian packages</p>
+<p><code>packages</code>: containers for symbols. Namespaces</p>
+<h3 id="Alist-Plist"><a href="#Alist-Plist" class="headerlink" title="Alist&#x2F;Plist"></a>Alist&#x2F;Plist</h3><p>这两种数据结构是轻量的 hash-table</p>
+<ul>
+<li>alist 的格式如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">( (:a . 1) (:b . 2) )</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>plist 的格式如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(:a 1 :b 2)</span><br></pre></td></tr></table></figure>
+
+<p>总的看来就是 alist 使用的是 <code>cons</code> 结构来关联 key-values，内部是嵌套的，而 plist 是<br>flatten 的 alist，偶数索引的元素为 key，索引为奇数的是 value（索引从 0 开始）。</p>
+<p>详细的讲解参考下面这两篇文章：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://dnaeon.github.io/common-lisp-lookup-tables-alists-and-plists/">https://dnaeon.github.io/common-lisp-lookup-tables-alists-and-plists/</a></li>
+<li><a target="_blank" rel="noopener" href="https://gigamonkeys.com/book/beyond-lists-other-uses-for-cons-cells.html">https://gigamonkeys.com/book/beyond-lists-other-uses-for-cons-cells.html</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic"><span class="toc-number">1.</span> <span class="toc-text">Basic</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Environment-Setups"><span class="toc-number">1.1.</span> <span class="toc-text">Environment Setups</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-Lisp"><span class="toc-number">1.2.</span> <span class="toc-text">Hello Lisp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#defvar-defparameter-setf-setq"><span class="toc-number">1.3.</span> <span class="toc-text">defvar&#x2F;defparameter&#x2F;setf&#x2F;setq</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#defvar-defparameter"><span class="toc-number">1.3.1.</span> <span class="toc-text">defvar&#x2F;defparameter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#setf-setq"><span class="toc-number">1.3.2.</span> <span class="toc-text">setf&#x2F;setq</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#features"><span class="toc-number">1.3.3.</span> <span class="toc-text">*features*</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Iteration"><span class="toc-number">1.4.</span> <span class="toc-text">Iteration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LOOP-Hight-level-Overview"><span class="toc-number">1.5.</span> <span class="toc-text">LOOP: Hight-level Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Functions"><span class="toc-number">1.6.</span> <span class="toc-text">Functions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multiple-return-values"><span class="toc-number">1.7.</span> <span class="toc-text">Multiple return values</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Higher-order-functions"><span class="toc-number">1.8.</span> <span class="toc-text">Higher order functions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Create-a-new-project"><span class="toc-number">2.</span> <span class="toc-text">Create a new project:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Alist-Plist"><span class="toc-number">2.1.</span> <span class="toc-text">Alist&#x2F;Plist</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&text=Hacking in Lisp"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&title=Hacking in Lisp"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&is_video=false&description=Hacking in Lisp"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hacking in Lisp&body=Check out this article: https://oneforalone.github.io/2022/04/10/hacking-in-lisp/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&title=Hacking in Lisp"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&title=Hacking in Lisp"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&title=Hacking in Lisp"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&title=Hacking in Lisp"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&name=Hacking in Lisp&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/04/10/hacking-in-lisp/&t=Hacking in Lisp"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

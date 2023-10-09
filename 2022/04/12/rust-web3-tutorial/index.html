@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="使用 rust web3 获取最新区块 创建项目 12cargo new get-blockcd get-block 项目目录结构为： 12345$ tree .&#x2F;.&#x2F;├── Cargo.toml└── src    └── main.rs  添加依赖库   在 Cargo.toml 中的 [dependencies] 下添加两个依赖库： 123[dependencies]web3 &#x3D; &amp;quot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust Web3 Tutorial">
+<meta property="og:url" content="https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="使用 rust web3 获取最新区块 创建项目 12cargo new get-blockcd get-block 项目目录结构为： 12345$ tree .&#x2F;.&#x2F;├── Cargo.toml└── src    └── main.rs  添加依赖库   在 Cargo.toml 中的 [dependencies] 下添加两个依赖库： 123[dependencies]web3 &#x3D; &amp;quot">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-12T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-09T11:25:15.357Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Blockchain">
+<meta property="article:tag" content="Rust">
+<meta property="article:tag" content="Web3">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Rust Web3 Tutorial</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/04/13/hacking-in-rust/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/04/10/hacking-in-lisp/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&text=Rust Web3 Tutorial"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&title=Rust Web3 Tutorial"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&is_video=false&description=Rust Web3 Tutorial"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Rust Web3 Tutorial&body=Check out this article: https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&title=Rust Web3 Tutorial"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&title=Rust Web3 Tutorial"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&title=Rust Web3 Tutorial"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&title=Rust Web3 Tutorial"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&name=Rust Web3 Tutorial&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&t=Rust Web3 Tutorial"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-rust-web3-%E8%8E%B7%E5%8F%96%E6%9C%80%E6%96%B0%E5%8C%BA%E5%9D%97"><span class="toc-number">1.</span> <span class="toc-text">使用 rust web3 获取最新区块</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Rust Web3 Tutorial
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-04-12T00:00:00.000Z" class="dt-published" itemprop="datePublished">2022-04-12 12:00:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-09T11:25:15.357Z" class="dt-updated" itemprop="dateModified">2023-10-09 11:25:15 AM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Blockchain/">Blockchain</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Blockchain/" rel="tag">Blockchain</a>, <a class="p-category" href="/tags/Rust/" rel="tag">Rust</a>, <a class="p-category" href="/tags/Web3/" rel="tag">Web3</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="使用-rust-web3-获取最新区块"><a href="#使用-rust-web3-获取最新区块" class="headerlink" title="使用 rust web3 获取最新区块"></a>使用 rust web3 获取最新区块</h2><ol>
+<li><p>创建项目</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cargo new get-block</span><br><span class="line"><span class="built_in">cd</span> get-block</span><br></pre></td></tr></table></figure>
+<p>项目目录结构为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ tree ./</span><br><span class="line">./</span><br><span class="line">├── Cargo.toml</span><br><span class="line">└── src</span><br><span class="line">    └── main.rs</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加依赖库</p>
+</li>
+</ol>
+<p>在 <code>Cargo.toml</code> 中的 <code>[dependencies]</code> 下添加两个依赖库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dependencies]</span><br><span class="line">web3 = &quot;0.18.0&quot;</span><br><span class="line">tokio = &#123; version = &quot;0.17.0&quot;, features = [&quot;full&quot;] &#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>编写代码</li>
+</ol>
+<p><code>src/main.rs</code>:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> web3::types::&#123;U64, BlockId, BlockNumber&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[tokio:main]</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">main</span>() <span class="punctuation">-&gt;</span> web3::<span class="type">Result</span>&lt;()&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">provider_url</span> = <span class="string">&quot;http://127.0.0.1:8545&quot;</span>;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">transport</span> = web3::transports::Http::<span class="title function_ invoke__">new</span>(provider_url)?;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">web3</span> = web3::Web3::<span class="title function_ invoke__">new</span>(transport);</span><br><span class="line">  <span class="comment">// get the latest block number/height</span></span><br><span class="line">  <span class="keyword">let</span> <span class="variable">block_number</span>: U64 = web3.<span class="title function_ invoke__">eth</span>().<span class="title function_ invoke__">block_number</span>().<span class="keyword">await</span>?;</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;The latest block number is: &#123;&#125;&quot;</span>, block_number);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// get the latest block via block number</span></span><br><span class="line">  <span class="keyword">let</span> <span class="variable">block_id</span> = BlockId::<span class="title function_ invoke__">Number</span>(BlockNumber::<span class="title function_ invoke__">Number</span>(block_number));</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">block</span> = web3.<span class="title function_ invoke__">eth</span>().<span class="title function_ invoke__">block</span>(block_id).<span class="keyword">await</span>?.<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;The block is: &#123;:?&#125;&quot;</span>, block);</span><br><span class="line"></span><br><span class="line">  <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>启动 ganache-cli</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ganache-cli --fork.network mainnet</span><br></pre></td></tr></table></figure>
+
+<p>没有安装 <code>ganache-cli</code> 的需要使用 <code>nodejs</code> 的 <code>npm</code> 安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install ganache -g</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>编译执行</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo run</span><br></pre></td></tr></table></figure>
+
+<p>执行结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">The latest block number is: 14571627</span><br><span class="line">The block is: Block &#123; hash: Some(0x539eec4efc530cee8931265f0362c8d6e51f409d746a60176a5c4efd7da4fa79), parent_hash: 0x8fe6477d17d988aa7e275f6cfd330acc0926061ac71a226387c618f9e16263e4, uncles_hash: 0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347, author: 0x0000000000000000000000000000000000000000, state_root: 0x2fed728ac42e8c196df8ba629d499fc73a666869b8ebfa586ffa430a9f8d5cbe, transactions_root: 0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421, receipts_root: 0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421, number: Some(14571627), gas_used: 0, gas_limit: 30000000, base_fee_per_gas: Some(65083191975), extra_data: Bytes([]), logs_bloom: Some(0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000), timestamp: 1649778365, difficulty: 1, total_difficulty: Some(46186172474616782016825), seal_fields: [], uncles: [], transactions: [], size: Some(518), mix_hash: Some(0x0000000000000000000000000000000000000000000000000000000000000000), nonce: Some(0x0000000000000000) &#125;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-rust-web3-%E8%8E%B7%E5%8F%96%E6%9C%80%E6%96%B0%E5%8C%BA%E5%9D%97"><span class="toc-number">1.</span> <span class="toc-text">使用 rust web3 获取最新区块</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&text=Rust Web3 Tutorial"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&title=Rust Web3 Tutorial"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&is_video=false&description=Rust Web3 Tutorial"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Rust Web3 Tutorial&body=Check out this article: https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&title=Rust Web3 Tutorial"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&title=Rust Web3 Tutorial"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&title=Rust Web3 Tutorial"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&title=Rust Web3 Tutorial"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&name=Rust Web3 Tutorial&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/04/12/rust-web3-tutorial/&t=Rust Web3 Tutorial"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

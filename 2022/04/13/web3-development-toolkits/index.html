@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="序智能合约，目前公认的是 Ethereum 上的定义，可以简单的理解为运行在 Ethereum 中 EVM 上的程序，推广一下就是运行在分布式系统上的程序。 而一个程序的开发过程，不外乎来说有三步：编写源代码，编译以及链接。 通常来说，编译和链接都是由一个工具完成的，而对于区块链来说，链接对应的是上链（我喜欢这么叫，反正就是将编译出来的 EVM 字节码发布到节点上），而上链设计到网络交互，这个差异">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web3 Development Toolkits">
+<meta property="og:url" content="https://oneforalone.github.io/2022/04/13/web3-development-toolkits/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="序智能合约，目前公认的是 Ethereum 上的定义，可以简单的理解为运行在 Ethereum 中 EVM 上的程序，推广一下就是运行在分布式系统上的程序。 而一个程序的开发过程，不外乎来说有三步：编写源代码，编译以及链接。 通常来说，编译和链接都是由一个工具完成的，而对于区块链来说，链接对应的是上链（我喜欢这么叫，反正就是将编译出来的 EVM 字节码发布到节点上），而上链设计到网络交互，这个差异">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-13T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-09T11:27:47.298Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Blockchain">
+<meta property="article:tag" content="Ethereum">
+<meta property="article:tag" content="Web3">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Web3 Development Toolkits</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/04/17/hacking-in-golang/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/04/13/hacking-in-rust/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&text=Web3 Development Toolkits"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&title=Web3 Development Toolkits"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&is_video=false&description=Web3 Development Toolkits"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Web3 Development Toolkits&body=Check out this article: https://oneforalone.github.io/2022/04/13/web3-development-toolkits/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&title=Web3 Development Toolkits"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&title=Web3 Development Toolkits"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&title=Web3 Development Toolkits"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&title=Web3 Development Toolkits"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&name=Web3 Development Toolkits&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&t=Web3 Development Toolkits"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hardhat"><span class="toc-number">2.</span> <span class="toc-text">Hardhat</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">2.2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.2.1.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E8%AF%91"><span class="toc-number">2.2.3.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8A%E9%93%BE%EF%BC%88%E9%83%A8%E7%BD%B2%EF%BC%89"><span class="toc-number">2.2.4.</span> <span class="toc-text">上链（部署）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Truffle"><span class="toc-number">3.</span> <span class="toc-text">Truffle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-1"><span class="toc-number">3.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-1"><span class="toc-number">3.2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-1"><span class="toc-number">3.2.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E8%AF%91-1"><span class="toc-number">3.2.3.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">3.2.4.</span> <span class="toc-text">部署</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Brownie"><span class="toc-number">4.</span> <span class="toc-text">Brownie</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-2"><span class="toc-number">4.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-2"><span class="toc-number">4.2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-2"><span class="toc-number">4.2.1.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-2"><span class="toc-number">4.2.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E8%AF%91-2"><span class="toc-number">4.2.3.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2-1"><span class="toc-number">4.2.4.</span> <span class="toc-text">部署</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Foundry"><span class="toc-number">5.</span> <span class="toc-text">Foundry</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-3"><span class="toc-number">5.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-3"><span class="toc-number">5.2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-3"><span class="toc-number">5.2.1.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-3"><span class="toc-number">5.2.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E8%AF%91-3"><span class="toc-number">5.2.3.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2-2"><span class="toc-number">5.2.4.</span> <span class="toc-text">部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%A4%E4%BA%92"><span class="toc-number">5.2.5.</span> <span class="toc-text">交互</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Web3 Development Toolkits
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-04-13T00:00:00.000Z" class="dt-published" itemprop="datePublished">2022-04-13 12:00:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-09T11:27:47.298Z" class="dt-updated" itemprop="dateModified">2023-10-09 11:27:47 AM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Blockchain/">Blockchain</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Blockchain/" rel="tag">Blockchain</a>, <a class="p-category" href="/tags/Ethereum/" rel="tag">Ethereum</a>, <a class="p-category" href="/tags/Web3/" rel="tag">Web3</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="序"><a href="#序" class="headerlink" title="序"></a>序</h2><p>智能合约，目前公认的是 Ethereum 上的定义，可以简单的理解为运行在 Ethereum 中 EVM 上的程序，<br>推广一下就是运行在分布式系统上的程序。</p>
+<p>而一个程序的开发过程，不外乎来说有三步：编写源代码，编译以及链接。</p>
+<p>通常来说，编译和链接都是由一个工具完成的，而对于区块链来说，链接对应的是上链（我喜欢这么叫，反正<br>就是将编译出来的 EVM 字节码发布到节点上），而上链设计到网络交互，这个差异就导致了编译和链接是<br>由不同的工具完成。</p>
+<p>当然，官方有提供 IDE —— Remix，使用也很简单，但是相信我，作为一个学习者，使用 IDE 不是个<br>好途径。（因为网络的原因，我经常会遇到要修改一个合约代码时加载不出来，然后又要重写。所以国内的<br>话，能不用 Remix 就不用）。出了网络的问题，还有一个就是 IDE 有时会掩盖掉一些细节，anyway，<br>IDE 这个问题只能说是见仁见智，反正我学习时是不喜欢。</p>
+<p>以下是我了解到的智能合约开发的 toolkits。</p>
+<blockquote>
+<p>P.S. 目前我所指得智能合约均指代的是 Etheruem 生态的智能合约，不涉及 NEAR 和 SOLONA 这<br>些链的智能合约开发（这两个链最好还是先把 Rust 学一遍吧，因为他们的合约使用 Rust 去写的）。</p>
+</blockquote>
+<p>NOTE: 因为区块链又和 “Web3” 紧密联系到一起了，所以，在开发智能合约时，最好还是先去学一下<br>JavaScript (或者 NodeJS)，不然就会像我一开始学开发智能合约一样，两眼懵逼，又要看 Solidity<br>的文档，还要去查 NodeJS 的文档。</p>
+<h2 id="Hardhat"><a href="#Hardhat" class="headerlink" title="Hardhat"></a>Hardhat</h2><p>这个 toolkit 使用起来很简单，我目前使用的就是这个，但是最近准备把 Rust 用起来，准备切换到<br>Foundry 开发了。首先，先将官方文档的链接放出来：<a target="_blank" rel="noopener" href="https://hardhat.org/getting-started">https://hardhat.org/getting-started</a><br>如果有条件的话，建议还是去看英文文档。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>安装有两种选择:</p>
+<ul>
+<li>安装在对应的项目，只有进入当前项目才能使用：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev hardhat</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>安装到系统环境中，可以在系统的任意目录下使用：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hardhat</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx hardhat</span><br></pre></td></tr></table></figure>
+
+<p>执行完这条有如下输出，会有一些配置选项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">888    888                      888 888               888</span><br><span class="line">888    888                      888 888               888</span><br><span class="line">888    888                      888 888               888</span><br><span class="line">8888888888  8888b.  888d888 .d88888 88888b.   8888b.  888888</span><br><span class="line">888    888     &quot;88b 888P&quot;  d88&quot; 888 888 &quot;88b     &quot;88b 888</span><br><span class="line">888    888 .d888888 888    888  888 888  888 .d888888 888</span><br><span class="line">888    888 888  888 888    Y88b 888 888  888 888  888 Y88b.</span><br><span class="line">888    888 &quot;Y888888 888     &quot;Y88888 888  888 &quot;Y888888  &quot;Y888</span><br><span class="line"></span><br><span class="line">👷 Welcome to Hardhat v2.9.3 👷‍</span><br><span class="line"></span><br><span class="line">? What do you want to do? …</span><br><span class="line">❯ Create a basic sample project</span><br><span class="line">  Create an advanced sample project</span><br><span class="line">  Create an advanced sample project that uses TypeScript</span><br><span class="line">  Create an empty hardhat.config.js</span><br><span class="line">  Quit</span><br></pre></td></tr></table></figure>
+
+<p>可以根据自己的需求进行选择，如果不知道该选哪个，直接一路按回车选默认的就好了。默认会创建一些基础<br>的文件（以下是除了 <code>node_modules</code> 的目录结构）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ tree -I node_module ./</span><br><span class="line">./</span><br><span class="line">├── README.md</span><br><span class="line">├── contracts</span><br><span class="line">│   └── Greeter.sol</span><br><span class="line">├── hardhat.config.js</span><br><span class="line">├── package-lock.json</span><br><span class="line">├── package.json</span><br><span class="line">├── scripts</span><br><span class="line">│   └── sample-script.js</span><br><span class="line">└── test</span><br><span class="line">    └── sample-test.js</span><br><span class="line"></span><br><span class="line">3 directories, 7 files</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>contracts</code> 目录：存放 solidity 源代码文件</li>
+<li><code>hardhat.config.js</code>: Hardhat 配置文件</li>
+<li><code>scripts</code>: 存放部署（上链）合约的 JS 脚本文件</li>
+<li><code>test</code>: 存放测试合约的 JS 脚本文件</li>
+</ul>
+<p>至于 <code>package-lock.json</code> 和 <code>package.json</code> 这两个文件是 npm 的配置文件。主要是因为<br><code>node_modules</code> 目录太大了，不会上传到 Github 上，所以别人使用你的代码时，只要执行<br><code>npm install</code> 就会把所有的依赖都安装好。</p>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>这里需要额外介绍一下 <code>hardhat.config.js</code> 文件，最初的文件内容为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">&quot;nomiclabs/hardhat-waffle&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// This is a sample Hardhat task. To learn how to create your own go to</span></span><br><span class="line"><span class="comment">// https://hardhat.org/guides/create-task.html</span></span><br><span class="line"><span class="title function_">task</span>(<span class="string">&quot;accounts&quot;</span>, <span class="string">&quot;Prints the list of accounts&quot;</span>, <span class="keyword">async</span> (taskArgs, hre) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> accounts = <span class="keyword">await</span> hre.<span class="property">ethers</span>.<span class="title function_">getSigners</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> account <span class="keyword">of</span> accounts) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(account.<span class="property">address</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// You need to export an object to set up your config</span></span><br><span class="line"><span class="comment">// Go to https://hardhat.org/config/ to learn more</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@type</span> import(&#x27;hardhat/config&#x27;).HardhatUserConfig</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">solidity</span>: <span class="string">&quot;0.8.4&quot;</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>其中配置中可以添加 <code>task</code>，上面代码中是一个打印当前配置所以的账户地址，名字叫 <code>accounts</code><br>—— <code>task</code> 函数中第一个参数。执行 <code>npx hardhat accounts</code> 就是执行这个 <code>task</code> 函数。<br>如果你喜欢的话，也可以添加一个部署（<code>deploy</code>）任务：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">task</span>(<span class="string">&quot;deploy&quot;</span>, <span class="string">&quot;Deploying the contract&quot;</span>, <span class="keyword">async</span> (taskArgs, hre) =&gt; &#123;</span><br><span class="line">  <span class="comment">// set the first account to deployer</span></span><br><span class="line">  <span class="keyword">const</span> [deployer] = <span class="keyword">await</span> hre.<span class="property">ethers</span>.<span class="title function_">getSigners</span>();</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Deploying contracts with account: &quot;</span>, deployer);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Account balance: &quot;</span>, (<span class="keyword">await</span> deployer.<span class="title function_">getBalance</span>()).<span class="title function_">toString</span>());</span><br><span class="line"></span><br><span class="line">  <span class="comment">// get contract instance</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title class_">Greeter</span> = <span class="keyword">await</span> hre.<span class="property">ethers</span>.<span class="title function_">getContractFactory</span>(<span class="string">&quot;Greeter&quot;</span>);</span><br><span class="line">  <span class="keyword">const</span> greeter = <span class="keyword">await</span> <span class="title class_">Greeter</span>.<span class="title function_">deploy</span>(<span class="string">&quot;Hello, world&quot;</span>);</span><br><span class="line">  <span class="keyword">await</span> greeter.<span class="title function_">deployed</span>();</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Greeter deployed to: &quot;</span>, greeter.<span class="property">address</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>保存后需要部署时直接执行：<code>npx hardhat deploy</code> 就可以将合约部署到链上了。不过我不推荐，<br>因为配置文件一旦设置好后，我基本不会去改，而部署的脚本经常要改动的，我更喜欢在 <code>scripts</code><br>目录下创建一个 <code>deploy.js</code> 的部署脚本。</p>
+<p>这里稍微讲解一下脚本里的一些方法和属性：</p>
+<ul>
+<li><code>hre.ethers.getContractFactory(Greeter&quot;</code> 函数中的参数是构造一个合约的对象，参数是<br><code>contracts</code> 目录下 <code>.sol</code> 的文件名，即合约的文件名。</li>
+<li><code>Greeter.deploy(&quot;Hello, world&quot;)</code>，是将合约部署到链上，其中参数就是合约构造函数的参数，<br>如果有多个参数的话，以逗号分隔。</li>
+<li><code>await greeter.deployed()</code>，是等待合约上链成功，因为区块打包需要一定时间。</li>
+<li><code>greeter.address</code>: 合约部署成功后的地址，可以去区块链的 scan 网站查看，Ethereum 的是<br> <a target="_blank" rel="noopener" href="https://etherscan.io./">https://etherscan.io。</a></li>
+</ul>
+<p>其实前两个方法可以合并成一段代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> greeter = <span class="keyword">await</span> hre.<span class="property">ethers</span>.<span class="title function_">getContractFactory</span>(<span class="string">&quot;Greeter&quot;</span>)</span><br><span class="line">                                .<span class="title function_">deploy</span>(<span class="string">&quot;Hello, world&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>不过这样看起来有点乱。不优雅。</p>
+<p>Whoo, 介绍完 <code>task</code> （其实也顺带介绍了部署），然后再介绍一下 <code>module.exports</code>。</p>
+<p>首先是其中的第一个 key&#x2F;value：<code>solidity: &quot;0.8.4&quot;</code>，这个是制定对应的 <code>solidity</code> 的版本，<br>有一点需要注意，不同版本的 <code>solidity</code> 所支持的特性有所不同。</p>
+<p>然后可以在其中添加 <code>network</code> 的配置，就是指定合约具体要部署到 Ethereum Ecosystem 上具体<br>的 Network，是 <code>mainnet</code>，还是 <code>testnet</code>，还是 <code>sidechain</code>，亦或是 <code>layer 2</code>？以下给出<br>一些对应的 network 的配置以供参考：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="comment">// solidity: &quot;0.8.4&quot;, // depends on your solidity version</span></span><br><span class="line">  <span class="attr">solidity</span>: &#123;</span><br><span class="line">    <span class="attr">version</span>: <span class="string">&quot;0.8.4&quot;</span>,</span><br><span class="line">    <span class="attr">settings</span>: &#123;</span><br><span class="line">      <span class="attr">optimizer</span>: &#123;</span><br><span class="line">        <span class="attr">enabled</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">runs</span>: <span class="number">200</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="attr">defaultNetwork</span>: <span class="string">&quot;rinkeby&quot;</span>, <span class="comment">// defined below</span></span><br><span class="line">  <span class="attr">networks</span>: &#123;</span><br><span class="line">    <span class="attr">mainnet</span>: &#123;</span><br><span class="line">      <span class="attr">url</span>: <span class="string">&quot;https://xxxxxxxxxxx&quot;</span>, <span class="comment">// your node provider link</span></span><br><span class="line">      <span class="attr">accounts</span>: [privateKey1, privateKey2, ...], <span class="comment">// this array stores your accounts&#x27; private key</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rinkeby</span>: &#123;</span><br><span class="line">      <span class="attr">url</span>: <span class="string">&quot;https://xxxxx&quot;</span>,</span><br><span class="line">      <span class="attr">accounts</span>: [privateKey1, privateKey2, ...],</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">mumbai</span>: &#123;</span><br><span class="line">      <span class="attr">url</span>: <span class="string">&quot;https://xxxxxxx&quot;</span>,</span><br><span class="line">      <span class="attr">accounts</span>: [privateKey1, privateKey2, ...],</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">paths</span>: &#123;</span><br><span class="line">    <span class="attr">sources</span>: <span class="string">&quot;./contracts&quot;</span>,</span><br><span class="line">    <span class="attr">tests</span>: <span class="string">&quot;./test&quot;</span>,</span><br><span class="line">    <span class="attr">cache</span>: <span class="string">&quot;./cache&quot;</span>,</span><br><span class="line">    <span class="attr">artifacts</span>: <span class="string">&quot;./artifacts&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">mocha</span>: &#123;</span><br><span class="line">    <span class="attr">timeout</span>: <span class="number">40000</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>networks</code>: <code>networks</code> 中每个网络的 <code>url</code> 的值是节点的链接，就是说你需要去连接一个<br><strong>全节点</strong>，通过这个全节点来对链进行操作，可以是第三方（如 Infura、Alchemy）提供的，<br>也可以是自己本地运行的，如果是本地运行的全节点，<code>url</code> 的值可以设置为:<br><code>http://127.0.0.1:8545</code>. 因为第三方提供的服务是有 api key 或是 token 的，所以呢，<br>需要进行一个封装，通用的做法是将一些私密性的配置单独存放在项目更目录下的一个文件中：<code>.env</code>.<br>然后代码就需要改一下，下面只展示需要修改的，若没有出现的，保持原有的不变：</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ..., the same as before</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;dotenv&#x27;</span>).<span class="title function_">config</span>();</span><br><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;@nomiclabs/hardhat-ethers&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> &#123; <span class="variable constant_">PROVIDER_URL</span>, <span class="variable constant_">PRIVATE_KEY</span> &#125; = process.<span class="property">env</span>;</span><br><span class="line"><span class="comment">// or you can write like this:</span></span><br><span class="line"><span class="comment">// const PROVIDER_URL = process.env.PROVIDER_URL;</span></span><br><span class="line"><span class="comment">// const PRIVATE_KEY = process.env.PRIVATE_KEY;</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  networks &#123;</span><br><span class="line">    <span class="attr">mainnet</span>: &#123;</span><br><span class="line">      <span class="attr">url</span>: <span class="variable constant_">PROVIDER_URL</span>, <span class="comment">// your node provider link</span></span><br><span class="line">      <span class="attr">accounts</span>: [<span class="string">`0x<span class="subst">$&#123;PRIVATE_KEY&#125;</span>`</span>], <span class="comment">// this array stores your accounts&#x27; private key</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rinkeby</span>: &#123;</span><br><span class="line">      <span class="attr">url</span>: <span class="variable constant_">PROVIDER_URL</span>,</span><br><span class="line">      <span class="attr">accounts</span>: [<span class="string">`0x<span class="subst">$&#123;PRIVATE_KEY&#125;</span>`</span>],</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">mumbai</span>: &#123;</span><br><span class="line">      <span class="attr">url</span>: <span class="variable constant_">PROVIDER_URL</span>,</span><br><span class="line">      <span class="attr">accounts</span>: [<span class="string">`0x<span class="subst">$&#123;PRIVATE_KEY&#125;</span>`</span>],</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>.env</code> 文件里的内容为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PROVIDER_URL=&quot;https://eth-rinkeby.alchemyapi.io/v2/123abc123abc123abc123abc123abcde&quot;</span><br><span class="line">PRIVATE_KEY=&quot;&quot; # fill your own private key</span><br></pre></td></tr></table></figure>
+
+<p>注：这里的 <code>PROVIDER_URL</code> 不同的网络对应不同的 URL，不能像上面示例一样使用同样的，否则无法<br>连上 full node。</p>
+<p><code>accounts</code> 字段的值是一个数组，数组中是账号的私钥，这里需要在导出的私钥前面添加<code>0x</code>字符串。<br>当然，如果代码要上传到 Github 上，私钥泄露的话，你这个地址基本也就废了，所以呢，也需要放在<br><code>.env</code> 文件中。</p>
+<ul>
+<li><code>solidity</code>: 除了可以指定版本外，还可以设置编译是是否进行优化。</li>
+<li><code>path</code>: 指定了对应的源代码文件路径，<code>sources</code> 指定合约代码路径，<code>tests</code> 指定测试代码<br>的路径，<code>cache</code> 指定缓存目录路径，<code>artifacts</code> 指定了合约代码编译后生成的 abi 文件的<br>存放路径。</li>
+<li><code>mocha</code>: 执行测试时的一些配置，上面只配置了超时时间，更多的配置参考：<br><a target="_blank" rel="noopener" href="https://mochajs.org/#command-line-usage">https://mochajs.org/#command-line-usage</a>, 其中的参数是一致的。</li>
+</ul>
+<p>更多相关的配置介绍，参考：<a target="_blank" rel="noopener" href="https://hardhat.org/config/#path-configuration">https://hardhat.org/config/#path-configuration</a></p>
+<h4 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx hardhat compile</span><br></pre></td></tr></table></figure>
+
+<p>编译没啥好介绍的，通过了就通过了，出错了就自己去修复。</p>
+<h4 id="上链（部署）"><a href="#上链（部署）" class="headerlink" title="上链（部署）"></a>上链（部署）</h4><p>在 <code>scripts</code> 目录下创建一个 <code>deploy.js</code>（或者你自己取个名字，我用 deploy 命名）的文件，<br>文件内容如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; ethers &#125; = <span class="built_in">require</span>(<span class="string">&quot;hardhat&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> [deployer] = <span class="keyword">await</span> ethers.<span class="title function_">getSigners</span>();</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Deploying contracts with the account: &quot;</span>, deployer.<span class="property">address</span>);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Account balance: &quot;</span>, (<span class="keyword">await</span> deployer.<span class="title function_">getBalance</span>()).<span class="title function_">toString</span>());</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title class_">Greeter</span> = <span class="keyword">await</span> ethers.<span class="title function_">getContractFactory</span>(<span class="string">&quot;Greeter&quot;</span>);</span><br><span class="line">  <span class="keyword">const</span> greeter = <span class="keyword">await</span> <span class="title class_">Greeter</span>.<span class="title function_">deploy</span>(<span class="string">&quot;Hello, world&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">await</span> greeter.<span class="title function_">deployed</span>();</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Contract deployed at: &quot;</span>, greeter.<span class="property">address</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">main</span>()</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">() =&gt;</span> process.<span class="title function_">exit</span>(<span class="number">0</span>))</span><br><span class="line">  .<span class="title function_">catch</span>(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(error);</span><br><span class="line">    process.<span class="title function_">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>然后执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx hardhat run scripts/deploy.js</span><br></pre></td></tr></table></figure>
+
+<p>正常的话你将你的合约部署好了。后面可以加一个 <code>--network=&lt;network-name&gt;</code> 用来指定对应的网络<br>的。</p>
+<p>Update[Fir Apr. 15 2022]: 这两天又仔细瞄了一眼 Hardhat 的文档，发现 <code>scripts</code> 目录下的<br>脚本是完全不依赖 Hardhat 的，如果使用 <code>web3.js</code>&#x2F;<code>etheres.js</code> 库的话，可以直接用 nodejs<br>执行。</p>
+<p>对了，忘了写怎么测试了，我测试的话直接是用的 <code>web3.js</code>，直接部署到测试网上测试的，反正不要钱。</p>
+<h2 id="Truffle"><a href="#Truffle" class="headerlink" title="Truffle"></a>Truffle</h2><p>今天试着用了一下 Truffle，发现是真的难用（可能是我水平不够），反正我不喜欢。Truffle 基础的<br>使用是真的简单，但是它的配置和部署不是很适合我。最主要的原因还是，在里面需要额外多加一个<br><code>Migrate.sol</code> 的合约，部署时也要先部署<code>Migrate</code>，官网的解释是说确保安全，同时说也可以自己<br>去修改 <code>Migrate.sol</code> 合约。我比较喜欢 KISS( Keep It Simple and Stupid) 的准则。额外<br>多加一个合约，部署时就得付 gas fee，安全的话直接使用 Openzeppelin 的库就好了。还有一个就是<br>如果合约要引用 npm 安装的库的话，不能使用通用的引用格式。这个也让我不太喜欢。</p>
+<p>当然也不是没有优点的，那就是 truffle 可以和 ganache 直接交互，使用命令 <code>truffle develop</code><br>或是 <code>truffle console</code> 就可以直接进入交互模式，前提是需要先启动 ganache。</p>
+<p>好了，介绍就说到这里了，下面简单介绍下怎么使用吧。</p>
+<h3 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h3><p>说到安装，在国内的环境是真的很痛苦，除非使用代理，不过代理最好是稳定一点的，我就是因为代理稍微有<br>点不稳定（可能是我用的设备比较多），导致出错好几次，浪费我将近一个小时的时间。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># configure your proxy first</span></span><br><span class="line"><span class="built_in">export</span> https_proxy=http://127.0.0.1:7890 \</span><br><span class="line">       http_proxy=http://127.0.0.1:7890 \</span><br><span class="line">       all_proxy=socks5://127.0.0.1:7890</span><br><span class="line">node install -g truffle</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h3><h4 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> my-project</span><br><span class="line">truffle init</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h4><p>编辑项目目录下的 <code>truffle-config.js</code>:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">networks</span>: &#123;</span><br><span class="line">    <span class="attr">development</span>: &#123;</span><br><span class="line">      <span class="attr">host</span>: <span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">      <span class="attr">port</span>: <span class="number">8545</span>,</span><br><span class="line">      <span class="attr">network_id</span>: <span class="string">&quot;*&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">test</span>: &#123;</span><br><span class="line">      <span class="attr">host</span>: <span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">      <span class="attr">port</span>: <span class="number">8545</span>,</span><br><span class="line">      <span class="attr">network_id</span>: <span class="string">&quot;*&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="attr">compilers</span>: &#123;</span><br><span class="line">    <span class="attr">solc</span>: &#123;</span><br><span class="line">      <span class="attr">version</span>: <span class="string">&quot;^0.8.0&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面只配置了测试开发的网络，主网的话需要配置一样，只不过是 <code>host</code> 的值设为全节点的 IP 或<br>URL，和 hardhat 配置中的网络配置的 <code>url</code> 参数去掉端口的值，然后 <code>port</code> 就写成对应的端口就<br>好，本地的 ganache-cli 的话是 8545，ganache GUI 版本的话端口就是 7545，如果是第三方提供<br>的全节点的话，那么就是 80&#x2F;443。或者是直接不使用 host 参数，而是使用 <code>provider</code> 参数，值<br>设置为 <code>new Web3.providers.HttpProvider(&quot;https://&lt;host&gt;:&lt;port&gt;)</code>。当然 <code>network</code><br>里面也可以设置 <code>gas</code>、<code>gasPrice</code>、<code>from</code> 等参数。详细的配置说明见：<br><a target="_blank" rel="noopener" href="https://trufflesuite.com/docs/truffle/reference/configuration">https://trufflesuite.com/docs/truffle/reference/configuration</a></p>
+<h4 id="编译-1"><a href="#编译-1" class="headerlink" title="编译"></a>编译</h4><p>编译很简单，直接执行 <code>truffle compile</code> 就可以了，编译好的 abi 文件默认存放在 <code>build</code> 目录<br>下。这个目录路径也可以在 <code>truffle-config.js</code> 中配置，在其中添加一行：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">contracts_build_directory</span>: <span class="string">&quot;/path/to/the/abi/output/director&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>路径自己定义，不要照抄。</p>
+<h4 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h4><p>首先要在 <code>migrations</code> 目录下创建一个对应的脚本，一般习惯命名为 <code>2_deploy_contracts.js</code>,<br>因为该目录下已经有一个 <code>1_initial_migration.js</code> 文件了。这里以官方给的例子讲解：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> MetaCoin</span><br><span class="line"><span class="built_in">cd</span> MetaCoin</span><br><span class="line">truffle unbox metacoin</span><br><span class="line">truffle migrate</span><br></pre></td></tr></table></figure>
+
+<p><code>truffle migrate</code> 会自动执行 <code>migrations</code> 目录下所有的脚本。MetaCoin 的目录结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ tree ./</span><br><span class="line">./</span><br><span class="line">├── LICENSE</span><br><span class="line">├── contracts</span><br><span class="line">│   ├── ConvertLib.sol</span><br><span class="line">│   ├── MetaCoin.sol</span><br><span class="line">│   └── Migrations.sol</span><br><span class="line">├── migrations</span><br><span class="line">│   ├── 1_initial_migration.js</span><br><span class="line">│   └── 2_deploy_contracts.js</span><br><span class="line">├── test</span><br><span class="line">│   ├── TestMetaCoin.sol</span><br><span class="line">│   └── metacoin.js</span><br><span class="line">└── truffle-config.js</span><br><span class="line"></span><br><span class="line">3 directories, 9 files</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>MetaCoin.sol</code> <code>import</code> 了 <code>ConvertLib.sol</code>。</p>
+<p>MetaCoin 的 <code>2_deploy_contracts.js</code> 如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">ConvertLib</span> =artifacts.<span class="built_in">require</span>(<span class="string">&quot;ConvertLib&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">MetaCoin</span> = artifacts.<span class="built_in">require</span>(<span class="string">&quot;MetaCoin&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span>(<span class="params">deployer</span>) &#123;</span><br><span class="line">  deployer.<span class="title function_">deploy</span>(<span class="title class_">ConvertLib</span>);</span><br><span class="line">  deployer.<span class="title function_">link</span>(<span class="title class_">ConvertLib</span>, <span class="title class_">MetaCoin</span>);</span><br><span class="line">  deployer.<span class="title function_">deploy</span>(<span class="title class_">MetaCoin</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>前两行没啥可讲的，就是导入合约的 abi，即 json 文件。然后先部署被 <code>import</code> 的合约<br>（<code>ConvertLib.sol</code>)，将两个合约链接到一起（<code>deployer.link(ConvertLib, MetaCoin)</code>，<br>最后在部署调用其他合约的合约。</p>
+<p>这里的部署函数被完全封装起来了，我也不想去扒其中的代码了，所以不要问 <code>deployer</code> 是什么了，具<br>体是什么我没去看源代码，不确定，但可以推测出 truffle 封装了一个根据配置文件中的一些配置生成了<br>个 <code>web3.eth.Contract</code> 对象传进去了。所以说我不太喜欢它，封装的有点过了，虽然可以完全用<br><code>web3.js</code> 写一个部署脚本，但那样的话我为什么不用 hardhat 呢？</p>
+<p>Truffle 介绍也就到这里了，最后再附上官方文档地址：<br><a target="_blank" rel="noopener" href="https://trufflesuite.com/docs/truffle/quickstart/">https://trufflesuite.com/docs/truffle/quickstart/</a></p>
+<blockquote>
+<p>P.S. truffle 还有一个槽点就是团队不怎么维护了，所以不推荐使用。</p>
+</blockquote>
+<p>Update[Sun Apr. 17 2020]: 忘了介绍怎么在 truffle 的项目中使用第三方的合约了，这也是我吐槽<br>的一个槽点，标准的 Solidity 语法是：<br><code>import &quot;@OpenZeppelin/contracts/token/ERC20/ERC20.sol&quot;;</code></p>
+<p>而到了 truffle 项目中，引用是这样的：<br><code>import &quot;openzeppelin-solidity/contracts/token/ERC20/ERC20.sol&quot;;</code></p>
+<p>所以 truffle 在引用三方的合约时，需要注意。</p>
+<h2 id="Brownie"><a href="#Brownie" class="headerlink" title="Brownie"></a>Brownie</h2><p>Brownie，一个由 python 和 web3.py 实现的一个 toolkit，或者说 framework 吧。怎么叫随你<br>了。其中 brownie 的优势是，其提供了 GUI 界面显示合约的 opcode，可以对合约进行 evm 级别的<br>优化。当然，前提是你要了解 evm 的 opcode 具体含义，这个有点 hardcore，因为 evm 的 opcode<br>类似于汇编语言，所以比较难写。</p>
+<h3 id="安装-2"><a href="#安装-2" class="headerlink" title="安装"></a>安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python3.9 -m pip install --user pipx</span><br><span class="line">python3.9 -m pipx ensurepath</span><br><span class="line"><span class="built_in">source</span> ~/.zshrcr</span><br><span class="line">pipx install eth-brownie</span><br></pre></td></tr></table></figure>
+
+<p><strong>注</strong>：这里需要使用 python3.9 或相近的版本，但不能高于 3.9，比如 3.10 安装会出错的。<br>我只验证过 python3.9，3.8 和 3.7 没有验证过。</p>
+<h3 id="使用-2"><a href="#使用-2" class="headerlink" title="使用"></a>使用</h3><h4 id="初始化-2"><a href="#初始化-2" class="headerlink" title="初始化"></a>初始化</h4><p>初始化项目很简单，基本命令都是通用的，就一句：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brownie init</span><br></pre></td></tr></table></figure>
+
+<p>执行后会在目录下自动生成一些目录，目录结构为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ tree ./</span><br><span class="line">./</span><br><span class="line">├── build</span><br><span class="line">│   ├── contracts</span><br><span class="line">│   ├── deployments</span><br><span class="line">│   └── interfaces</span><br><span class="line">├── contracts</span><br><span class="line">├── interfaces</span><br><span class="line">├── reports</span><br><span class="line">├── scripts</span><br><span class="line">└── tests</span><br><span class="line"></span><br><span class="line">9 directories, 0 files</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>contracts</code>：存放合约源代码</li>
+<li><code>interfaces</code>：存放合约的 interface 源代码</li>
+<li><code>scripts</code>：存放合约部署、交互的脚本</li>
+<li><code>tests</code>：存放测试脚本</li>
+<li><code>build</code>：存放编译后的文件代码以及测试结果</li>
+<li><code>reports</code>：可选的，这里放的是 JSON 报告文件，供 GUI 中使用</li>
+</ul>
+<h4 id="配置-2"><a href="#配置-2" class="headerlink" title="配置"></a>配置</h4><p><code>brownie init</code> 不会像 truffle 和 hardhat 那样提供一些初始的配置文件和示例代码，所以需要<br>自己手动创建配置文件，配置文件名为：<code>brownie-config.yaml</code>。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">dependencies:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">OpenZeppelin/openzeppelin-contracts@4.1.0</span></span><br><span class="line"></span><br><span class="line"><span class="attr">compiler:</span></span><br><span class="line">  <span class="attr">solc:</span></span><br><span class="line">    <span class="attr">version:</span> <span class="string">&#x27;0.8.4&#x27;</span></span><br><span class="line">    <span class="attr">optimizer:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">      <span class="attr">runs:</span> <span class="number">200</span></span><br><span class="line">    <span class="attr">remappings:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;@OpenZeppelin=OpenZeppelin/openzeppelin-contracts@4.1.0&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Automatically fetch contract sources from Etherscan</span></span><br><span class="line"><span class="attr">autofetch_sources:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">dotenv:</span> <span class="string">.env</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">defaults:</span> <span class="string">development</span></span><br><span class="line">  <span class="attr">development:</span></span><br><span class="line">    <span class="attr">verify:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">rinkeby:</span></span><br><span class="line">    <span class="attr">verify:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">ganache:</span></span><br><span class="line">    <span class="attr">verify:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">wallets:</span></span><br><span class="line">  <span class="attr">private_key:</span> <span class="string">$&#123;PRIVATE_KEY&#125;</span></span><br><span class="line">  <span class="attr">mnemonic:</span> <span class="string">$&#123;MNEMONIC&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>配置和前面的两个也是大同小异，基本的网络、编译器的配置参数基本一致，只要在 brownie 中的编译<br>的配置中，多了 <code>dependencies</code> 和 <code>remapping</code> 这两个参数，这里 <code>dependencies</code> 下值是<br><code>&lt;Github Name&gt;/&lt;repo-name&gt;@&lt;version&gt;</code>，通过这个配置 brownie 会自动去 Github 上拉取<br>对应的代码，然后通过 <code>remappings</code> 来映射成合约中的引用。</p>
+<p>因为 <code>solidity</code> 引用三方库的标准语法是 <code>@OpenZeppelin/.....</code>，所以就写成<br><code>@OpenZeppelin=OpenZeppelin/openzeppelin-contracts@4.1.0</code></p>
+<p>而 <code>networks</code> 中每个 network 的 <code>verify</code> 是用来是否是在 <code>etherscan.io</code> 上开源代码，<br>因为默认部署后并不是开源的，而是一堆 EVM 的 OP Code。</p>
+<p><code>dotenv</code> 业内通用，一些比较私密性的配置，都喜欢放到 <code>.env</code> 文件中，这里的也需要创建一个<br><code>.env</code> 文件，文件中一般需要设置为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export WEB3_INFURA_PROJECT_ID=&#x27;&#x27;</span><br><span class="line">export PRIVATE_KEY=&#x27;&#x27;</span><br><span class="line">export MNEMONIC=&#x27;&#x27;</span><br><span class="line">export ETHERSCAN_TOKEN=&#x27;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>首先是全节点的信息，如果你自己本地有全节点的话，可以不用配置，直接在部署测试中写就好了，毕竟<br>brownie 使用的是 <code>web3.py</code>，和 <code>web3.js</code> 基本没差。其他的配置都可以直接通过名字就知道其<br>配置是干啥的，私钥，助记词，etherscan 的 token。</p>
+<h4 id="编译-2"><a href="#编译-2" class="headerlink" title="编译"></a>编译</h4><p>编译和其他的一样，都是后面加个 <code>compile</code> 就好了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brownie compile</span><br></pre></td></tr></table></figure>
+
+<h4 id="部署-1"><a href="#部署-1" class="headerlink" title="部署"></a>部署</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brownie run scripts/deploy.py</span><br></pre></td></tr></table></figure>
+
+<p>部署命令都可以手动指定网络的，通过 <code>--network &lt;network-name&gt;</code>。这也是 brownie一个优点，<br>就是其默认内部集成了很多的网络，可以使用 <code>brownie networks list</code> 来查看。</p>
+<p>以合约源文件为 <code>Hello.sol</code> 为例，其中 <code>deploy.py</code> 的如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> brownie <span class="keyword">import</span> (</span><br><span class="line">  config,</span><br><span class="line">  network,</span><br><span class="line">  accounts,</span><br><span class="line">  Hello,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> eth_utils</span><br><span class="line"></span><br><span class="line">NON_FORKED_LOCAL_BLOCKCHAIN_ENVIROMENTS = [<span class="string">&quot;development&quot;</span>, <span class="string">&quot;ganache&quot;</span>]</span><br><span class="line">LOCAL_BLOCKCHAIN_ENVIROMENTS = NON_FORKED_LOCAL_BLOCKCHAIN_ENVIROMENTS + [</span><br><span class="line">  <span class="string">&quot;mainnet-fork&quot;</span>,</span><br><span class="line">  <span class="string">&quot;binance-fork&quot;</span>,</span><br><span class="line">  <span class="string">&quot;matic-fork&quot;</span>,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_account</span>(<span class="params">number=<span class="literal">None</span></span>):</span><br><span class="line">  <span class="keyword">if</span> network.show_active() <span class="keyword">in</span> LOCAL_BLOCKCHAIN_ENVIROMENTS:</span><br><span class="line">    <span class="keyword">return</span> accounts[<span class="number">0</span>]</span><br><span class="line">  <span class="keyword">if</span> number:</span><br><span class="line">    <span class="keyword">return</span> accounts[number]</span><br><span class="line">  <span class="keyword">if</span> network.show_active() <span class="keyword">in</span> config[<span class="string">&quot;networks&quot;</span>]:</span><br><span class="line">    <span class="keyword">return</span> accounts.add(config[<span class="string">&quot;wallets&quot;</span>][<span class="string">&quot;from_key&quot;</span>])</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">  account = get_account()</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">f&quot;Deploying to <span class="subst">&#123;network.show_active()&#125;</span>&quot;</span>)</span><br><span class="line">  hello = Hello.deploy(&#123;<span class="string">&quot;from&quot;</span>: account&#125;)</span><br><span class="line">  <span class="comment"># hello = Hello.deploy(</span></span><br><span class="line">  <span class="comment">#   &#123;&quot;from&quot;: account&#125;,</span></span><br><span class="line">  <span class="comment">#   publish_source=config[&quot;networks&quot;][network.show_active()][&quot;verify&quot;]</span></span><br><span class="line">  <span class="comment"># )</span></span><br><span class="line">  <span class="built_in">print</span>(<span class="string">f&quot;Deployed to: <span class="subst">&#123; hello.address &#125;</span>&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>Hello.deploy()</code> 中 <code>Hello</code> 为合约名，需要从 brownie 中导入，<code>deploy()</code> 中首先是要有<br>合约构造时的参数，如果构造函数没有参数那就不用写，然后后面就是跟对应的 transaction 中的属性<br>了，如果想部署时同时发布源代码，就使用 <code>publish_source</code> 来指定是否发布，<code>publish_source</code><br>的类型为 <code>boolean</code>，可以通过在配置文件中配置对应网络的值。</p>
+<blockquote>
+<p>P.S. 这里需要注意的是，因为 Github 增加了其安全性，所以需要自己到 Github 上生成一下<br>Token，然后在 <code>.zshrc</code> &#x2F; <code>.bashrc</code> 中添加 <code>GITHUB_TOKNE=&quot;&lt;your-github-token&gt;&quot;</code></p>
+</blockquote>
+<p>如果要与合约进行交互的话，就需要从 brownie 中导入 <code>Contract</code> 模块：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> brownie <span class="keyword">import</span> Contract</span><br></pre></td></tr></table></figure>
+
+<p>然后构建一个 Contract 的对象：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hello_contract = Contract.from_abi(<span class="string">&quot;Hello&quot;</span>, hello.address, Hello.abi)</span><br></pre></td></tr></table></figure>
+
+<p>部署后可以使用 <code>brownie gui</code> 查看对应合约的 opcode。这个我就看到文档可以这样做，但是具体<br>我没操作过，毕竟还没达到那个水平。</p>
+<p>最后同样是附上官方文档： <a target="_blank" rel="noopener" href="https://eth-brownie.readthedocs.io/en/stable/">https://eth-brownie.readthedocs.io/en/stable/</a></p>
+<h2 id="Foundry"><a href="#Foundry" class="headerlink" title="Foundry"></a>Foundry</h2><p>Foundry 是个用 rust 实现的 toolkit，用法和 Brownie 差不多。要注意的一点就是 Foundry<br>是这个 toolkit 的名字，但是内部命令不是 foundry，而是 <code>forge</code> 和 <code>cast</code> 两个命令。</p>
+<h3 id="安装-3"><a href="#安装-3" class="headerlink" title="安装"></a>安装</h3><p>官方提供的安装二进制的方法我在 M1 上失败了，所以我就从源代码直接编译出来了。</p>
+<p>官方的安装二进制的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://foundry.paradigm.xyz | bash</span><br></pre></td></tr></table></figure>
+
+<p>在从源代码编译安装之前，需要首先安装好 Rust 和 Cargo，不然你怎么编译呢？</p>
+<p>从源代码编译安装官方也提供了对应的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo install --git https://github.com/foundry-rs/foundry --bins --locked</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-3"><a href="#使用-3" class="headerlink" title="使用"></a>使用</h3><h4 id="初始化-3"><a href="#初始化-3" class="headerlink" title="初始化"></a>初始化</h4><p>这些 toolkits 的初始化命令大同小异，这个因为是 rust 开发的，所以就会继承 rust 的一些特性，<br>比如，创建新项目可以直接指定项目名。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">forge init hello</span><br></pre></td></tr></table></figure>
+
+<p>这条命令会在当前目录下创建一个 hello 的文件夹，文件夹的目录结构为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ cd hello</span><br><span class="line">$ tree ./</span><br><span class="line">./</span><br><span class="line">├── foundry.toml</span><br><span class="line">├── lib</span><br><span class="line">│   └── ds-test</span><br><span class="line">│       ├── LICENSE</span><br><span class="line">│       ├── Makefile</span><br><span class="line">│       ├── default.nix</span><br><span class="line">│       ├── demo</span><br><span class="line">│       │   └── demo.sol</span><br><span class="line">│       └── src</span><br><span class="line">│           └── test.sol</span><br><span class="line">├── src</span><br><span class="line">│   └── Contract.sol</span><br><span class="line">└── test</span><br><span class="line">    └── Contract.t.sol</span><br><span class="line"></span><br><span class="line">6 directories, 8 files</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>foundry.toml</code>：配置文件</li>
+<li><code>lib</code>：存放一些依赖库、模版</li>
+<li><code>src</code>：存放合约源代码文件</li>
+<li><code>test</code>：存放测试合约代码，一般都是 <code>ContractName.t.sol</code></li>
+</ul>
+<p>编译后会多出两个文件夹，一个是 <code>out</code>，里面存放的是合约的 abi等文件，<code>cache</code> 就是一些缓存，<br>重新编译时会检查里面的文件来进行对应的编译。</p>
+<h4 id="配置-3"><a href="#配置-3" class="headerlink" title="配置"></a>配置</h4><p>Foundry 的配置文件为 <code>foundry.toml</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">[default]</span><br><span class="line"># The source directory</span><br><span class="line">src = &#x27;src&#x27;</span><br><span class="line"># The test directory</span><br><span class="line">test = &#x27;test&#x27;</span><br><span class="line"># The artifact directory</span><br><span class="line">out = &#x27;out&#x27;</span><br><span class="line"># A list of paths to look for libraries in</span><br><span class="line">libs = [&#x27;lib&#x27;]</span><br><span class="line"># A list of remappings</span><br><span class="line">remappings = []</span><br><span class="line"># A list of deployed libraries to link against</span><br><span class="line">libraries = []</span><br><span class="line"># Whether to cache builds or not</span><br><span class="line">cache = true</span><br><span class="line"># Whether to ignore the cache</span><br><span class="line">force = false</span><br><span class="line"># The EVM version by hardfork name</span><br><span class="line">evm_version = &#x27;london&#x27;</span><br><span class="line"># Override the Solidity version (this overrides `auto_detect_solc`)</span><br><span class="line">#solc_version = &#x27;0.8.10&#x27;</span><br><span class="line"># Whether or not Forge should auto-detect the solc version to use</span><br><span class="line">auto_detect_solc = true</span><br><span class="line"># Disables downloading missing solc versions</span><br><span class="line">offline = false</span><br><span class="line"># Enables or disables the optimizer</span><br><span class="line">optimizer = true</span><br><span class="line"># The number of optimizer runs</span><br><span class="line">optimizer_runs = 200</span><br><span class="line"># The verbosity of tests</span><br><span class="line">verbosity = 0</span><br><span class="line"># A list of ignored solc error codes</span><br><span class="line">ignored_error_codes = []</span><br><span class="line"># The number of fuzz runs for fuzz tests</span><br><span class="line">fuzz_runs = 256</span><br><span class="line"># The max number of individual inputs that may be rejected before a fuzz test aborts</span><br><span class="line">fuzz_max_local_rejects = 65536</span><br><span class="line"># The max number of combined inputs that may be rejected before a fuzz test aborts</span><br><span class="line">fuzz_max_global_rejects = 1024</span><br><span class="line"># Whether or not to enable `cheats.ffi`</span><br><span class="line">ffi = false</span><br><span class="line"># The address of `msg.sender` in tests</span><br><span class="line">sender = &#x27;0x00a329c0648769a73afac7f9381e08fb43dbea72&#x27;</span><br><span class="line"># The address of `tx.origin` in tests</span><br><span class="line">tx_origin = &#x27;0x00a329c0648769a73afac7f9381e08fb43dbea72&#x27;</span><br><span class="line"># The initial balance of the test contract</span><br><span class="line">initial_balance = &#x27;0xffffffffffffffffffffffff&#x27;</span><br><span class="line"># The block number we are at in tests</span><br><span class="line">block_number = 0</span><br><span class="line"># The chain ID we are on in tests</span><br><span class="line">chain_id = 99</span><br><span class="line"># The gas limit in tests</span><br><span class="line">gas_limit = 9223372036854775807</span><br><span class="line"># The gas price in tests (in wei)</span><br><span class="line">gas_price = 0</span><br><span class="line"># The block basefee in tests (in wei)</span><br><span class="line">block_base_fee_per_gas = 0</span><br><span class="line"># The address of `block.coinbase` in tests</span><br><span class="line">block_coinbase = &#x27;0x0000000000000000000000000000000000000000&#x27;</span><br><span class="line"># The block timestamp in tests</span><br><span class="line">block_timestamp = 0</span><br><span class="line"># The block difficulty in tests</span><br><span class="line">block_difficulty = 0</span><br><span class="line"># A list of contracts to output gas reports for</span><br><span class="line">gas_reports = [&quot;*&quot;]</span><br><span class="line"># Enables or disables RPC caching when forking</span><br><span class="line">no_storage_caching = false</span><br><span class="line"># Caches storage retrieved locally for certain chains and endpoints</span><br><span class="line"># Can also be restricted to multiple chains</span><br><span class="line"># By default only remote endpoints will be cached</span><br><span class="line"># To disable storage caching, set `no_storage_caching = true`</span><br><span class="line">rpc_storage_caching = &#123; chains = &quot;all&quot;, endpoints = &quot;remote&quot; &#125;</span><br><span class="line"># Extra output to include in the contract&#x27;s artifact.</span><br><span class="line">extra_output = []</span><br><span class="line"># Extra output to write to separate files.</span><br><span class="line">extra_output_files = []</span><br><span class="line"># Use the given hash method for the metadata hash that is appended</span><br><span class="line"># to the bytecode.</span><br><span class="line"># The metadata hash can be removed from the bytecode by setting &quot;none&quot;</span><br><span class="line">bytecode_hash = &quot;ipfs&quot;</span><br><span class="line"># If enabled, the Solidity compiler is instructed to generate bytecode</span><br><span class="line"># only for the required contracts. This can reduce compile time</span><br><span class="line"># for `forge test`, but is experimental.</span><br><span class="line">sparse_mode = false</span><br></pre></td></tr></table></figure>
+
+<p>上面的配置文件包含了大部分参数，注意也讲解的很清楚，这里只想介绍一下 <code>remapping</code>。因为现在<br>大部分合约都会调用 <code>OpenZeppelin</code> 的库，所以本文档中的第三方库都是以 <code>OpenZeppelin</code> 的<br>为例。</p>
+<p>不同于上面三个 toolkit，foundry 安装三方库不是使用 npm 安装保存在项目目录下的，而是通过<br><code>forge</code> 进行安装的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">forge install openzeppelin/openzeppelin-contracts</span><br></pre></td></tr></table></figure>
+
+<p>然后再在配置文件中添加 <code>remmappings</code> 的配置:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">remappings= [&#x27;@openzeppelin=lib/openzeppelin-contracts&#x27;]</span><br></pre></td></tr></table></figure>
+
+<p>这个其实和 brownie 比较类似，都是去 Github 上下载源代码。当然，测试合约中就是这样调用的，<br>也可以将测试合约调用的库进行 <em>remapping</em> 一下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">remappings = [</span><br><span class="line">  &#x27;@openzeppelin=lib/openzeppelin-contracts&#x27;,</span><br><span class="line">  &#x27;@ds-test=lib/ds-test/src/&#x27;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>然后测试合约中的 <code>import &quot;ds-test/test.sol&quot;;</code> 就可以改写成<br><code>import &quot;@ds-test/test.sol&quot;;</code></p>
+<p>好像有点脱裤子放屁的感觉，因为测试合约中本生就是调用本地的，无所谓了，这样更符合标准一点，毕竟<br><code>ds-test</code> 是创建项目时默认添加的库，第三方库的引用还是统一用 Solidity 的标准的好。</p>
+<blockquote>
+<p>P.S. 就是不知道为什么 truffle 不支持 remapping。</p>
+</blockquote>
+<h4 id="编译-3"><a href="#编译-3" class="headerlink" title="编译"></a>编译</h4><p>和上面三个不同的是，foundry 的编译用的是 build 命令，这和其实现有关，毕竟是 rust 写的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">forge build</span><br></pre></td></tr></table></figure>
+
+<h4 id="部署-2"><a href="#部署-2" class="headerlink" title="部署"></a>部署</h4><p>Foundry 的部署上面三个要稍微繁琐一点，不支持脚本。没办法，编译型语言和解释型语言的差异。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ forge create --rpc-url &lt;your-rpc-url&gt; \</span><br><span class="line">    --constructor-args <span class="string">&quot;Arg1&quot;</span> <span class="string">&quot;Arg2&quot;</span> ... \</span><br><span class="line">    --private-key &lt;your-private-key&gt; \</span><br><span class="line">    src/&lt;ContractSourceFileName&gt;:&lt;ContractName&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这些关键信息需要自己手动指定，配置文件中也配置不了。</p>
+<p>如果要将合约代码开源的话，需要使用 <code>forge verify-contract</code> 命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ forge verify-contract --chain-id &lt;chainId&gt; \</span><br><span class="line">    --num-of-optimizations &lt;Optimization Number&gt; \</span><br><span class="line">    --constructor-args \</span><br><span class="line">    (cast abi-encode <span class="string">&quot;constructor(arg1, arg2, ...)&quot;</span> <span class="string">&quot;Arg1&quot;</span> <span class="string">&quot;Arg2&quot;</span>) \</span><br><span class="line">    --compiler-version &lt;solc version&gt; \</span><br><span class="line">    &lt;Contract Address&gt; \</span><br><span class="line">    src/&lt;ContractSourceFileName&gt;:&lt;ContractName&gt; \</span><br><span class="line">    &lt;your-etherscan-api-key&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Whoo, 这个参数有够多的，没有脚本语言舒服，希望后续可以放到配置文件中吧。</p>
+<h4 id="交互"><a href="#交互" class="headerlink" title="交互"></a>交互</h4><p>如果要与链进行交互的话，Foundry 使用的是另一个命令：<code>cast</code>。</p>
+<p>这种编译型语言就是这点不太方便，不能像解释型那样直接写一个脚本然后运行就完事。所以，如果要和链上<br>的合约交互的话，也需要指定一些信息（个人感觉这个可以通过 rust 的 web3 写个 lib 来调用，不过<br>这个库更新不是很频繁）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cast call &lt;contract-address&gt; &lt;contract-method-signature&gt; \</span><br><span class="line">    --rpc-url &lt;your-rpc-provider-url&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>cast</code> 还可以对 opcode 进行解码，不过前提是你要有合约中的方法的原型：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bash 4byte-decode &lt;op-code&gt; &lt;contract-method-signature&gt;</span><br></pre></td></tr></table></figure>
+
+<p>更多的去官方文档上查看吧。</p>
+<p>官网文档：<a target="_blank" rel="noopener" href="https://book.getfoundry.sh/getting-started/installation.html">https://book.getfoundry.sh/getting-started/installation.html</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面的使用中我都没有介绍怎么进行测试，因为我都是直接部署到测试网上，然后进行交互式的验证，反正<br>测试网上不要钱，直接测就好，或者本地起一个 ganache，也可以直接测试，至于具体怎么测，那肯定是看<br>具体的合约是什么了。你已经步入 web3 的开发了，是个成熟的开发者了，我相信你自己会对自己的合约<br>设计一些 TC（Test Case）的。你要是自己懒得测，被科学家们给割了那就只能是怪自己咯。</p>
+<p>以上，简单的介绍了一下目前我所接触的一些智能合约开发所用到的 toolkit，下面就做个简单的对比吧。</p>
+<table>
+<thead>
+<tr>
+<th align="left">Toolkits</th>
+<th align="center">实现语言</th>
+<th align="center">上手难度</th>
+<th>优点</th>
+<th>缺点</th>
+<th>总体评分</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Hardhat</td>
+<td align="center">JavaScript</td>
+<td align="center">1   星</td>
+<td>文档全，用户多</td>
+<td>无</td>
+<td>4</td>
+</tr>
+<tr>
+<td align="left">Truffle</td>
+<td align="center">JavaScript</td>
+<td align="center">1   星</td>
+<td>使用简单</td>
+<td>项目不再更新，可配置性不高</td>
+<td>3</td>
+</tr>
+<tr>
+<td align="left">Brownie</td>
+<td align="center">Python</td>
+<td align="center">2   星</td>
+<td>使用方便，集成功能较多</td>
+<td>Python 在速度上比较慢</td>
+<td>4</td>
+</tr>
+<tr>
+<td align="left">Foundry</td>
+<td align="center">Rust</td>
+<td align="center">2.5 星</td>
+<td>一个字，快</td>
+<td>部署和交互比较麻烦</td>
+<td>3.5</td>
+</tr>
+</tbody></table>
+<p>对于刚接触 Web3 的新手来说，最推荐的还是 Hardhat，如果是说有 Python 背景的人，那么 Brownie<br>是个很不错的选择，毕竟不用再去学习 JavaScript，直接上手。如果是有 Rust 背景，且比较在意速度<br>和只想用 Solidity 写合约已经测试，那么 Foundry 是你的不二之选。要知道，没有最好，只有最<br>适合，所以选择时不要过于纠结，选一个适合自己的，然后专注合约的开发就好了，毕竟工具只是辅助而已，<br>如果你想 hardcore 一点，那么不用这些 toolkit 也是可以的，直接手动编译成 abi，然后调用 web3<br>的库直接部署也是可以的。</p>
+<blockquote>
+<p>The choice is yours.</p>
+</blockquote>
+<p>好了，所有的介绍就到这里了。</p>
+<p><strong>Update from Jun. 8 2022</strong></p>
+<p>从最近使用 Foundry 的体验来看，foundry 的测试真的太爽了，尤其是其中的 cheetcodes，还有<br>Fuzzing，爽到起飞。具体参考：<a href="/2022/06/08/foundry101/" title="Foundry Tutorial">Foundry Tutorial</a></p>
+<p>One more thing，一个很不错的资源合集的链接：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/OpenZeppelin/awesome-openzeppelin">https://github.com/OpenZeppelin/awesome-openzeppelin</a></p>
+<p>Happy Crypting :)</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hardhat"><span class="toc-number">2.</span> <span class="toc-text">Hardhat</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">2.2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.2.1.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E8%AF%91"><span class="toc-number">2.2.3.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8A%E9%93%BE%EF%BC%88%E9%83%A8%E7%BD%B2%EF%BC%89"><span class="toc-number">2.2.4.</span> <span class="toc-text">上链（部署）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Truffle"><span class="toc-number">3.</span> <span class="toc-text">Truffle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-1"><span class="toc-number">3.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-1"><span class="toc-number">3.2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-1"><span class="toc-number">3.2.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E8%AF%91-1"><span class="toc-number">3.2.3.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">3.2.4.</span> <span class="toc-text">部署</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Brownie"><span class="toc-number">4.</span> <span class="toc-text">Brownie</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-2"><span class="toc-number">4.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-2"><span class="toc-number">4.2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-2"><span class="toc-number">4.2.1.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-2"><span class="toc-number">4.2.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E8%AF%91-2"><span class="toc-number">4.2.3.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2-1"><span class="toc-number">4.2.4.</span> <span class="toc-text">部署</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Foundry"><span class="toc-number">5.</span> <span class="toc-text">Foundry</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-3"><span class="toc-number">5.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-3"><span class="toc-number">5.2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-3"><span class="toc-number">5.2.1.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-3"><span class="toc-number">5.2.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E8%AF%91-3"><span class="toc-number">5.2.3.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2-2"><span class="toc-number">5.2.4.</span> <span class="toc-text">部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%A4%E4%BA%92"><span class="toc-number">5.2.5.</span> <span class="toc-text">交互</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&text=Web3 Development Toolkits"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&title=Web3 Development Toolkits"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&is_video=false&description=Web3 Development Toolkits"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Web3 Development Toolkits&body=Check out this article: https://oneforalone.github.io/2022/04/13/web3-development-toolkits/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&title=Web3 Development Toolkits"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&title=Web3 Development Toolkits"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&title=Web3 Development Toolkits"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&title=Web3 Development Toolkits"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&name=Web3 Development Toolkits&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/04/13/web3-development-toolkits/&t=Web3 Development Toolkits"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

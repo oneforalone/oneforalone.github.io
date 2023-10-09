@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="序由于官方文档质量不行，导致很多教程都遗漏了很多细节，导致大部分情况下需要去 Slack 中咨询和查找。本文将介绍如果使用已经封装好了的 CC 扇区存储真实数据。 前置要求 一台已经有封装好了 CC 扇区数据的 Miner 服务器 lotus&#x2F;lotus-miner 版本不低于 v1.16  真实数据存储概括的来说，真实数据存储的流程就有三大步：  snap-up make deal s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Filecoin Snap Deals">
+<meta property="og:url" content="https://oneforalone.github.io/2023/10/08/filecoin-store-data/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="序由于官方文档质量不行，导致很多教程都遗漏了很多细节，导致大部分情况下需要去 Slack 中咨询和查找。本文将介绍如果使用已经封装好了的 CC 扇区存储真实数据。 前置要求 一台已经有封装好了 CC 扇区数据的 Miner 服务器 lotus&#x2F;lotus-miner 版本不低于 v1.16  真实数据存储概括的来说，真实数据存储的流程就有三大步：  snap-up make deal s">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-07T18:30:29.083Z">
+<meta property="article:modified_time" content="2023-10-07T18:30:29.084Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Blockchain">
+<meta property="article:tag" content="Filecoin">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Filecoin Snap Deals</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/09/10/lisp101/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2023/10/08/filecoin-store-data/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&text=Filecoin Snap Deals"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&title=Filecoin Snap Deals"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&is_video=false&description=Filecoin Snap Deals"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Filecoin Snap Deals&body=Check out this article: https://oneforalone.github.io/2023/10/08/filecoin-store-data/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&title=Filecoin Snap Deals"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&title=Filecoin Snap Deals"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&title=Filecoin Snap Deals"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&title=Filecoin Snap Deals"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&name=Filecoin Snap Deals&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&t=Filecoin Snap Deals"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E8%A6%81%E6%B1%82"><span class="toc-number">2.</span> <span class="toc-text">前置要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%9F%E5%AE%9E%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="toc-number">3.</span> <span class="toc-text">真实数据存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">3.1.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#snap-up"><span class="toc-number">3.2.</span> <span class="toc-text">snap-up</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98"><span class="toc-number">3.3.</span> <span class="toc-text">存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96"><span class="toc-number">3.4.</span> <span class="toc-text">取</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Filecoin Snap Deals
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-10-07T18:30:29.083Z" class="dt-published" itemprop="datePublished">2023-10-07 06:30:29 PM</time>
+        
+        (Updated: <time datetime="2023-10-07T18:30:29.084Z" class="dt-updated" itemprop="dateModified">2023-10-07 06:30:29 PM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Blockchain/">Blockchain</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Blockchain/" rel="tag">Blockchain</a>, <a class="p-category" href="/tags/Filecoin/" rel="tag">Filecoin</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="序"><a href="#序" class="headerlink" title="序"></a>序</h2><p>由于官方文档质量不行，导致很多教程都遗漏了很多细节，导致大部分情况下<br>需要去 Slack 中咨询和查找。本文将介绍如果使用已经封装好了的 CC 扇区<br>存储真实数据。</p>
+<h2 id="前置要求"><a href="#前置要求" class="headerlink" title="前置要求"></a>前置要求</h2><ul>
+<li>一台已经有封装好了 CC 扇区数据的 Miner 服务器</li>
+<li>lotus&#x2F;lotus-miner 版本不低于 v1.16</li>
+</ul>
+<h2 id="真实数据存储"><a href="#真实数据存储" class="headerlink" title="真实数据存储"></a>真实数据存储</h2><p>概括的来说，真实数据存储的流程就有三大步：</p>
+<ul>
+<li>snap-up</li>
+<li>make deal</li>
+<li>seal</li>
+</ul>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>在开始之前，需要先修改一下 miner 的配置 (<code>config.toml</code>)，<br>将对应的配置给 enable。主要修改有:</p>
+<ul>
+<li>Libp2p</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[Libp2p]</span><br><span class="line">  ListenAddresses = [&quot;/ip4/0.0.0.0/tcp/24001&quot;, &quot;/ip6/::/tcp/24001&quot;]</span><br><span class="line">  AnnounceAddress = [&quot;/ip4/&lt;your-public-ip&gt;/tcp/24001&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>ListenAddresses</code> 可以直接 copy，<code>AnnounceAddress</code> 就是情况而定。<br>如果你只想你自己用，那么就填你的内网 IP，如果你想直接去外面接单，那么你就直接<br>填你服务器的外网 IP。</p>
+<ul>
+<li>Dealmaking</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[Dealmaking]</span><br><span class="line">  # When enabled, the miner can accept online deals</span><br><span class="line">  ConsiderOnlineStorageDeals = true</span><br><span class="line">  # When enabled, the miner can accept offline deals</span><br><span class="line">  ConsiderOfflineStorageDeals = true</span><br><span class="line">  # When enabled, the miner can accept retrieval deals</span><br><span class="line">  ConsiderOnlineRetrievalDeals = true</span><br><span class="line">  # When enabled, the miner can accept offline retrieval deals</span><br><span class="line">  ConsiderOfflineRetrievalDeals = true</span><br><span class="line">  # When enabled, the miner can accept verified deals</span><br><span class="line">  ConsiderVerifiedStorageDeals = true</span><br><span class="line">  # When enabled, the miner can accept unverified deals</span><br><span class="line">  ConsiderUnverifiedStorageDeals = true</span><br><span class="line">  # A list made of Data CIDs to reject when making deals</span><br><span class="line">  PieceCidBlocklist = []</span><br><span class="line">  # Maximum expected amount of time getting the deal into a sealed sector will take</span><br><span class="line">  # This includes the time the deal will need to get transferred and published</span><br><span class="line">  # before being assigned to a sector</span><br><span class="line">  # for more info, see below.</span><br><span class="line">  ExpectedSealDuration = &quot;24h0m0s&quot;</span><br><span class="line">  # When a deal is ready to publish, the amount of time to wait for more</span><br><span class="line">  # deals to be ready to publish before publishing them all as a batch</span><br><span class="line">  PublishMsgPeriod = &quot;1h0m0s&quot;</span><br><span class="line">  # The maximum number of deals to include in a single publish deals message</span><br><span class="line">  MaxDealsPerPublishMsg = 8</span><br></pre></td></tr></table></figure>
+
+<p>这个配置是开启接单，即开启真实数据存储，默认是 <code>false</code>，无法进行<br>真实数据的存储。</p>
+<ul>
+<li>Storage</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[Storage]</span><br><span class="line">  AllowAddPiece = true</span><br><span class="line">  AllowPreCommit1 = true</span><br><span class="line">  AllowPreCommit2 = true</span><br><span class="line">  AllowCommit = true</span><br><span class="line">  AllowUnseal = true</span><br><span class="line">  AllowReplicaUpdate = true</span><br><span class="line">  AllowProveReplicaUpdate2 = true</span><br><span class="line">  AllowRegenSectorKey = true</span><br></pre></td></tr></table></figure>
+
+<p>这个是配置 miner 是否自己对扇区进行封装，因为我就一台 miner 机，<br>所以我就让 miner 当 worker 用了。如果有 worker 的话，可以不<br>修改这个配置。值得注意的是，最好是将 miner 的 <code>AllowAddPiece</code><br>设置为 <code>true</code>，然后原有的 worker 执行命令也需要加上下面参数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">--addpiece                    enable addpiece (default: true)</span><br><span class="line">--precommit1                  enable precommit1 (32G sectors: 1 core, 128GiB RAM) (default: true)</span><br><span class="line">--unseal                      enable unsealing (32G sectors: 1 core, 128GiB RAM) (default: true)</span><br><span class="line">--precommit2                  enable precommit2 (32G sectors: multiple cores, 96GiB RAM) (default: true)</span><br><span class="line">--commit                      enable commit (32G sectors: multiple cores or GPUs, 128GiB RAM + 64GiB swap) (default: true)</span><br><span class="line">--replica-update              enable replica update (default: true)</span><br><span class="line">--prove-replica-update2       enable prove replica update 2 (default: true)</span><br><span class="line">--regen-sector-key            enable regen sector key (default: true)</span><br></pre></td></tr></table></figure>
+
+<p>修改完配置后将 miner 重启。</p>
+<p>miner 重启后需要对其 libp2p 进行设置。</p>
+<ul>
+<li>peer-id</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lotus-miner actor set-peer-id `lotus-miner net id`</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>multiaddr</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lotus-miner actor set-addrs &lt;NEW_MULTIADDR&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>&lt;NEW_MULTIADDR&gt;</code> 就是上面 miner 的配置文件中<br><code>AnnounceAddress</code> 设置的地址。</p>
+<ul>
+<li>sealing directory</li>
+</ul>
+<p>配置完 libp2p 后，需要配置一下 <code>sealing</code> 的目录，如果 miner<br>已经 attach 了 <code>sealing</code> 的目录可以略过这个配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># make the directory</span><br><span class="line">mkdir -pv /storage/sealing</span><br><span class="line"># attach to miner as sealing directory</span><br><span class="line">lotus-miner storage attach -init -seal /storage/sealing</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>/storage/sealing</code> 根据自己的系统进行配置。</p>
+<ul>
+<li>storage-deals</li>
+</ul>
+<p>storage-deals 是设置存数据是客户需要支付的费用。如果只是自己<br>使用，不对外开放接单，可以直接设置为 0。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lotus-miner storage-deals set-ask \</span><br><span class="line">    --price 0.0000000 \</span><br><span class="line">    --verified-price 0.0000000  \</span><br><span class="line">    --min-piece-size 256KiB \</span><br><span class="line">    --max-piece-size 32GB</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>--min-piece-size</code> 是接受的最小存储的大小，如果存储的<br>数据小于这个值的话，miner 会直接 reject 掉。同理，<br><code>max-piece-size</code> 就是接受的最大的存储的大小。</p>
+<p>验证是否设置成功：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lotus-miner storage-deals get-ask</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>retrieval-deals</li>
+</ul>
+<p>和上面的存储一样，filecoin 存和取都会收费。自己用的话当然是<br>直接设为 0 咯。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lotus-miner retrieval-deals set-ask \</span><br><span class="line">    --price 0.0000000 \</span><br><span class="line">    --unseal-price 0.0000000 \</span><br><span class="line">    --payment-interval 1GiB \</span><br><span class="line">    --payment-interval-increase 1GiB</span><br></pre></td></tr></table></figure>
+
+<p>其中的 <code>--payment-interval</code> 和 <code>--payment-interval-increase</code><br>就是字面意思。不懂就看下 help 然后翻译一下吧。</p>
+<p>验证的方法和上面一致：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lotus-miner retrieval-deals get-ask</span><br></pre></td></tr></table></figure>
+
+<h3 id="snap-up"><a href="#snap-up" class="headerlink" title="snap-up"></a>snap-up</h3><p>Phew! 总算是配置好了，那么接下来就很快了。</p>
+<p>先将 <code>proving</code> 的 cc 扇区给 <code>snap-up</code> 一下。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lotus-miner sectors list --fast</span><br><span class="line">lotus-miner sectors snap-up &lt;sector-id&gt;</span><br></pre></td></tr></table></figure>
+
+<p>执行完后对应的扇区的状态会变为 <code>Avaiable</code>。<br>查看扇区的状态：<code>lotus-miner sectors status &lt;sector-id&gt;</code></p>
+<h3 id="存"><a href="#存" class="headerlink" title="存"></a>存</h3><p>存数据的话分五步走：</p>
+<p>1). 生成 car</p>
+<p>这里介绍的是大文件 (&gt;1GiB)，如果文件比较小的话，可以跳过这一步。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lotus client generate-car &lt;/path/to/inputfile&gt; &lt;/path/to/outputfile&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注意，其中对应的文件路径需要是绝对路径，否则会报错。<code>outputfile</code><br>就是 <code>car</code> 格式的文件，推荐以 <code>.car</code> 为后缀。</p>
+<p>2). 生成 piece cid 和 piece size</p>
+<p>无论是 online deal，还是 offline deal，大文件的话都需要<br>做这一步，否则的话会出现 <code>commP mismatch</code> 的错误。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lotus client commP &lt;/path/to/car-file&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这个命令会输出一个 CID 和 Piece size，这个 CID 是 <code>piece-cid</code>，<br>需要记录下来，下面的 make deal 时需要用到。</p>
+<p>然后将得到的 Piece size 转换成字节。这里的转换不是简单的 GiB -&gt; bytes<br>的单位换算，而是需要用到特殊的公式来计算。有两种方法计算：</p>
+<p>a). 通过 shell 脚本</p>
+<p>脚本 (piece_size.sh) 代码如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Usage method：(bash ./piece_size.sh 3.969 GiB)</span> </span><br><span class="line"></span><br><span class="line">Size=$1</span><br><span class="line"></span><br><span class="line">Type=$2</span><br><span class="line"></span><br><span class="line">mm=`echo $Size|awk -F&quot;.&quot; &#x27;&#123;print $1&#125;&#x27;`</span><br><span class="line"></span><br><span class="line">for (( i=1;i&lt;=10;i++ )) ; do  let &quot;n=2**$i&quot; ; if [ $mm -le $n ] ; then PieceSize_=$n ; break ; fi ; done</span><br><span class="line"></span><br><span class="line">if [[ $Type == &quot;GiB&quot; ]];then let &quot;PieceSize=$PieceSize_*254*1024*1024*1024/256&quot; ; elif [[ $Type == &quot;MiB&quot; ]];then let &quot;PieceSize=$PieceSize_*254*1024*1024/256&quot; ; elif [[ $Type == &quot;KiB&quot; ]];then let &quot;PieceSize=$PieceSize_*254*1024/256&quot; ; else  echo &quot;Type is err&quot; ; fi</span><br><span class="line"></span><br><span class="line">echo manual-piece-size=$PieceSize</span><br></pre></td></tr></table></figure>
+
+<p>用法: <code>bash ./piece_size.sh 3.969 GiB</code></p>
+<p>b). 通过wolframalpha</p>
+<p>这个就更简单，访问下面这个链接：</p>
+<p><a target="_blank" rel="noopener" href="https://www.wolframalpha.com/input/?i=x+=+1024+*+1024+*+1;+127*(+2%5E(+ceil(+log2(+ceil+(+x+/127+)+)+)+)+)">https://www.wolframalpha.com/input/</a></p>
+<p>然后修改 <code>x</code> 的值，其中 <code>x</code> 就是正常的单位转换 (链接中是 1 GiB)。</p>
+<p>或者更加简单的做法是对 <code>Piece size</code> 向下取整，然后转换成字节。<br>至于为什么要这么做的原因，参考官方文档: <a target="_blank" rel="noopener" href="https://lotus.filecoin.io/tutorials/lotus/large-files/">https://lotus.filecoin.io/tutorials/lotus/large-files/</a></p>
+<p>3). 生成 data cid</p>
+<p>这里的生成 data cid 将 car 文件导入到 <code>client</code> 端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lotus client import --car &lt;car-file&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这个命令会输出 <code>Import xxx, Root xxxxx</code> 的结果，<br>将 <code>Root</code> 后面的那一串值记录下来。这个值就是 <code>data-cid</code>。<br>其中 <code>--car</code> 是导入 <code>car</code> 格式的文件，如果是小文件<br>且没有生成 car 文件，那么可以不加这个参数。</p>
+<p><strong>注</strong>：这个 <code>data-cid</code> 很重要，取数据时就看这个和<br><code>miner-id</code>，如果将 <code>data-cid</code> 弄丢了，那存进去的<br>数据就取不出来了。如果一时忘了记，可通过<br><code>lotus client local</code> 查看。</p>
+<p>4). make a deal</p>
+<p>deal 有两种，一种是 online，一种是 offline。<br>大文件最好还是走 offline 吧。</p>
+<p>a). online</p>
+<p>online 的比较适合小文件，比如说几十兆的文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lotus client deal &lt;data-cid&gt; &lt;miner-id&gt; &lt;price&gt; &lt;duration&gt;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>&lt;data-cid&gt;</code> 就是第 3 步中得到的 <code>Root</code> 后面的<br>那一串值。<code>&lt;miner-id&gt;</code> 和 <code>&lt;price&gt;</code> 字面意思，不讲。<br><code>duration</code> 是需要保存周期，单位是 <code>epoch</code> ，最小是<br> <code>518400</code>，即 180 天。这里要注意已封装好的扇区的时间<br>要大于这个周期，否则存不了。</p>
+<p>当然，如果不想记得这么清楚的话，直接输入 <code>lotus client deal</code>，<br>会出现交互的界面。</p>
+<p>b). offline</p>
+<p>个人是推荐 offline 的 deal 的，因为快。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lotus client deal \</span><br><span class="line">  --manual-piece-cid=&lt;piece-id&gt; \</span><br><span class="line">  --manual-piece-size=&lt;piece-size&gt; \</span><br><span class="line">  &lt;data-cid&gt; &lt;miner-id&gt; 0 518400</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>&lt;piece-id&gt;</code> 和 <code>&lt;piece-size&gt;</code> 是第二步得到的结果。</p>
+<p>操作完成后会返回一串字符，这串字符叫做 <code>Proposal CID</code>。<br>可以在通过 <code>lotus-miner storage-deals list -v</code> 查到。</p>
+<p>这部操作的关键是需要保证 <code>lotus client query-ask &lt;miner-id&gt;</code><br>这个命令执行成功，否则的话这个 deal 不能传到 miner 上，<br>也就无法进行后续操作。</p>
+<p>如果 <code>lotus client query-ask &lt;miner-id&gt;</code> 卡住了的话，最直接<br>有效的办法就是重启一下 miner，在重启后的一段时间内这个命令是可以<br>正常执行，这个问题来源于 libp2p 的连接，具体内部不是很清楚，但是<br>重启 miner 这个方法很管用。如果 miner 不好随便重启，那么就建议<br>将 miner 拆分出 market，然后只需要重启 market 就好。</p>
+<p>拆分 market 的操作链接：<a target="_blank" rel="noopener" href="https://lotus.filecoin.io/storage-providers/advanced-configurations/split-markets-miners/">https://lotus.filecoin.io/storage-providers/advanced-configurations/split-markets-miners/</a></p>
+<p>5). 导入数据</p>
+<p>如果 miner 和 node 是分开的，那么需要将 car 文件从 node<br>传到 miner 上。</p>
+<p>在导入数据之前，一定通过 <code>lotus-miner storage-deals list</code><br>确认 client 端的 deal 传给 miner 了，有时如果 client 上的<br>钱包余额不足的话，deal 是不会传给 miner 的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lotus-miner storage-deals import-data &lt;proposal-cid&gt; &lt;/path/to/car-file&gt;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>&lt;proposal-cid&gt;</code> 就是上一步 <code>lotus client deal</code> 得到的结果，<code>&lt;/path/to/car-file&gt;</code><br>就是 car 文件。</p>
+<p>导入后 deal 的状态就会变成 <code>StorageDealProviderFunding</code>，等待大概 10 mins 后，<br>deal 的状态会变成 <code>StorageDealPublish</code>。这个默认会等待 1 hr 或者是有 8 个 deal<br>了，才会发布。可以通过 <code>lotus-miner storage-deals pending-publish</code> 来查看在等待<br>发布的 deal，通过 <code>lotus-miner storage-deals pending-publish --publish-now=true</code><br>手动将 deal 发布。这时 deal 的状态就变成了 <code>StorageDealPublishing</code>，<br>再次等待 10 mins 左右，deal 发布成功后状态会变成 <code>StorageDealAwaitingPreCommit</code>。<br>最后手动 seal 扇区：<code>lotus-miner sectors seal &lt;sector-id&gt;</code>。至此，就开始将真实<br>数据替换 cc 数据。等待大概 1 hr 后，扇区状态就会变成 <code>UpdateActivating</code>。</p>
+<p>具体 seal 过程中扇区的各个阶段在干啥，参考：<a target="_blank" rel="noopener" href="https://github.com/filecoin-project/lotus/discussions/8141">https://github.com/filecoin-project/lotus/discussions/8141</a></p>
+<p>不同配置机器 snap deal 的 benchmark 数据参考：<a target="_blank" rel="noopener" href="https://github.com/filecoin-project/lotus/discussions/8127">https://github.com/filecoin-project/lotus/discussions/8127</a></p>
+<h3 id="取"><a href="#取" class="headerlink" title="取"></a>取</h3><p>取文件的话很简单，一条命令搞定：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lotus client retrieve --provider &lt;miner-id&gt; &lt;data-cid&gt; &lt;/path/to/outputfile&gt;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E8%A6%81%E6%B1%82"><span class="toc-number">2.</span> <span class="toc-text">前置要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%9F%E5%AE%9E%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="toc-number">3.</span> <span class="toc-text">真实数据存储</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">3.1.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#snap-up"><span class="toc-number">3.2.</span> <span class="toc-text">snap-up</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98"><span class="toc-number">3.3.</span> <span class="toc-text">存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96"><span class="toc-number">3.4.</span> <span class="toc-text">取</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2023/10/08/filecoin-store-data/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&text=Filecoin Snap Deals"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&title=Filecoin Snap Deals"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&is_video=false&description=Filecoin Snap Deals"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Filecoin Snap Deals&body=Check out this article: https://oneforalone.github.io/2023/10/08/filecoin-store-data/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&title=Filecoin Snap Deals"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&title=Filecoin Snap Deals"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&title=Filecoin Snap Deals"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&title=Filecoin Snap Deals"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&name=Filecoin Snap Deals&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2023/10/08/filecoin-store-data/&t=Filecoin Snap Deals"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

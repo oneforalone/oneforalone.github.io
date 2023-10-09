@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="So, you want to write some Lisp codes? Lisp’s syntax is simple, just parentheses and space. However, there’s few documents for how to start it like other languages, such asC&#x2F;C++, Python, Java, an">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lisp 101">
+<meta property="og:url" content="https://oneforalone.github.io/2023/09/10/lisp101/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="So, you want to write some Lisp codes? Lisp’s syntax is simple, just parentheses and space. However, there’s few documents for how to start it like other languages, such asC&#x2F;C++, Python, Java, an">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-09-10T04:05:00.000Z">
+<meta property="article:modified_time" content="2023-10-09T11:26:25.478Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Lisp">
+<meta property="article:tag" content="Programming">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Lisp 101</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2023/10/08/filecoin-store-data/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/02/18/R20230218/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2023/09/10/lisp101/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2023/09/10/lisp101/&text=Lisp 101"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2023/09/10/lisp101/&title=Lisp 101"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2023/09/10/lisp101/&is_video=false&description=Lisp 101"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Lisp 101&body=Check out this article: https://oneforalone.github.io/2023/09/10/lisp101/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2023/09/10/lisp101/&title=Lisp 101"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2023/09/10/lisp101/&title=Lisp 101"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2023/09/10/lisp101/&title=Lisp 101"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2023/09/10/lisp101/&title=Lisp 101"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2023/09/10/lisp101/&name=Lisp 101&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2023/09/10/lisp101/&t=Lisp 101"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-start"><span class="toc-number">1.</span> <span class="toc-text">Before start</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Start"><span class="toc-number">2.</span> <span class="toc-text">Start</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Projecting"><span class="toc-number">3.</span> <span class="toc-text">Projecting</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Lisp 101
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-09-10T04:05:00.000Z" class="dt-published" itemprop="datePublished">2023-09-10 04:05:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-09T11:26:25.478Z" class="dt-updated" itemprop="dateModified">2023-10-09 11:26:25 AM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Programming/">Programming</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Lisp/" rel="tag">Lisp</a>, <a class="p-category" href="/tags/Programming/" rel="tag">Programming</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>So, you want to write some Lisp codes?</p>
+<p>Lisp’s syntax is simple, just parentheses and space.</p>
+<p>However, there’s few documents for how to start it like other languages, such as<br>C&#x2F;C++, Python, Java, and ect. Even in <a target="_blank" rel="noopener" href="https://lispcookbook.github.io/cl-cookbook/">The Commonlisp Cookbook</a>, it’s<br>kinda vague. So, that why I wrote this blog for.</p>
+<p>This article is complete for those who are new to Lisp&#x2F;Programming. Just keep<br>in mind, Lisp has some dialects: Common Lisp, Scheme, Clojure and etc. In the<br>rest of this page, Lisp is stands for Common Lisp.</p>
+<h2 id="Before-start"><a href="#Before-start" class="headerlink" title="Before start"></a>Before start</h2><p>Generally speaking, programming is just write some codes(i.e. source codes) in<br>a specific language(i.e. programming language), and translate these source codes<br>to machine code or binary code for specific operating system (OS) and hardwares(<br>mainly for CPU architectures).</p>
+<p>More briefly, thers are three steps for programming: coding, compling, running.</p>
+<p>For coding, you can choose any text editor you want. However, there’re some<br>popular editors for coding: Vim, Emacs, Visual Studio Code, Sublime, Atom and<br>so on. Just do some researches before you move on. For a new starter, I would<br>recommand Visual Studio Code. It’s easy to using, and has lots of extensions.</p>
+<p>For compling, you need a compiler&#x2F;interpreter, or let’s say implementation in<br>Lisp. There also are some implementations for Lisp. The common used is<br><a target="_blank" rel="noopener" href="https://www.sbcl.org/">SBCL</a>. For a complete list for Lisp’s implementation, please refer to:<br><a target="_blank" rel="noopener" href="https://common-lisp.net/implementations">https://common-lisp.net/implementations</a></p>
+<p>As for running, I assume that everyone who knows how to use computer know how<br>to run a program.</p>
+<p>Also, for convinience, there’s also tools called Integrated Development<br>Environment (IDE). For a beginner, I don’t suggest using an IDE, but if you<br>were super lazy or have a hard time with setting up a programming environment,<br>just use it as needed. <a target="_blank" rel="noopener" href="https://portacle.github.io/">Portacle</a> is the one you may looking for. If<br>you don’t care about performance or got enough money, you can try<br><a target="_blank" rel="noopener" href="http://www.lispworks.com/">Lispworks</a>.</p>
+<p>Here, I choose SBCL + Emacs. And my daily operating system is *nix: MaoOS and<br>Linux.</p>
+<p>Just a remaind: <strong>DO NOT</strong> spend too much time on Emacs configuration.<br><a target="_blank" rel="noopener" href="https://github.com/slime/slime">Slime</a> is just enough.</p>
+<h2 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h2><p>If you have other programming language exprience, you may know how to run the<br>source codes properly. For C&#x2F;C++&#x2F;Java, just compile it to binary file, and run<br>it. For Python&#x2F;Ruby&#x2F;Perl&#x2F;Lua&#x2F;Shell, just edit the source codes, save it to a<br>file, and run it with <code>python &lt;filename&gt;</code> (Python for example). But in Lisp,<br>things are different, you may know how to run Lisp codes in SBCL, but don’t know<br>how to compile it to binary file. Let’s using a very basic “hello world!”<br>programming for illustration.</p>
+<p>In C, you just create a <code>.c</code> file, let’s say it <code>hello.c</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span> &#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Hello, World!\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>and then compile it: <code>gcc -o hello hello.c</code> and run it: <code>./hello</code>. Then you will<br>see the “Hello, World” string on you screen.</p>
+<p>In Python, create a <code>hello.py</code>:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Hello, World&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>and run it: <code>python3 hello.py</code> or if you’re on *nix system, you can run<br>following commands:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod +x hello.py</span><br><span class="line">./hello.py</span><br></pre></td></tr></table></figure>
+
+<p>and bang, the terminal will output “Hello, World” characters.</p>
+<p>But how to make it in Lisp. Well, if you just want to write some simple codes,<br>you can just start sbcl and write you codes:</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> hello ()</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot;Hello, World~%&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>then input:<br><code>(sb-ext:save-lisp-and-die #p&quot;hello&quot; :toplevel #&#39;hello :executable t)</code>.<br>After running this form (i.e. Lisp codes), SBCL will exit and compile the lisp<br>codes which called Lisp image into an file named <code>hello</code> in current directory.<br>You can change the binary file with modifing <code>#p&quot;hello&quot;</code>, and <code>:toplevel</code><br>specify which function would evaluate when running <code>hello</code> binary file.</p>
+<p>So, how can we compile a lisp file to binary?</p>
+<p>We can utilize <a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/">GNU Make</a> and <a target="_blank" rel="noopener" href="https://www.quicklisp.org/beta/">quicklisp</a>, and let’s continue<br>it in next section, which I call projecting.</p>
+<h2 id="Projecting"><a href="#Projecting" class="headerlink" title="Projecting"></a>Projecting</h2><p>Before projecting, make sure you’ve installed <code>GNU Make</code> and <code>quicklisp</code> on your<br>OS.</p>
+<p><strong>NOTE</strong>: The following steps are running on macOS Ventura 13.5.2, it’s just the<br>same if you are on a Linux Distribution. On Windows, you should to adjust some<br>commands.</p>
+<p>Firstly, create a directory named <code>hello</code> and switch to it.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> hello</span><br><span class="line"><span class="built_in">cd</span> hello</span><br></pre></td></tr></table></figure>
+
+<p>Then create <code>hello.lisp</code> with command <code>touch hello.lisp</code>.</p>
+<p>After that, edit <code>hello.lisp</code> with following content:</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defpackage</span> #<span class="symbol">:hello</span></span><br><span class="line">  (<span class="symbol">:use</span> <span class="symbol">:cl</span>)</span><br><span class="line">  (<span class="symbol">:export</span> <span class="symbol">:hello</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">in-package</span> <span class="symbol">:hello</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> hello ()</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">&quot;Hello, World~%&quot;</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>A <code>.asd</code> file <code>hello.asd</code>:</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">in-package</span> #<span class="symbol">:asdf-user</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defsystem</span> <span class="symbol">:hello</span></span><br><span class="line">  <span class="symbol">:components</span> ((<span class="symbol">:file</span> <span class="string">&quot;hello&quot;</span>))</span><br><span class="line">  <span class="symbol">:build-operation</span> <span class="string">&quot;program-op&quot;</span></span><br><span class="line">  <span class="symbol">:build-pathname</span> <span class="string">&quot;bin/hello&quot;</span></span><br><span class="line">  <span class="symbol">:entry-point</span> <span class="string">&quot;hello:hello&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>In <code>hello.asd</code>, you may add as many <code>.lisp</code> files as you want after <code>:components</code><br>keywords. You may also add sub-directory file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">:components ((:module &quot;src&quot;</span><br><span class="line">              :components ((:file &quot;file1&quot;)</span><br><span class="line">                           (:file &quot;file2&quot;))))</span><br></pre></td></tr></table></figure>
+
+<p>to add a readme file, use <code>:static-file</code> keyword:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">:components ((:file &quot;hello&quot;)</span><br><span class="line">             (:static-file &quot;README.md&quot;))</span><br></pre></td></tr></table></figure>
+
+<p>and then create a file named <code>Makefile</code> with:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">LISP ?= sbcl</span><br><span class="line"></span><br><span class="line"><span class="section">build:</span></span><br><span class="line">  <span class="variable">$(LISP)</span> --load hello.asd \</span><br><span class="line">  --eval &#x27;(ql:quickload :hello)&#x27; \</span><br><span class="line">  --eval &#x27;(asdf:make :hello)&#x27; \</span><br><span class="line">  --eval &#x27;(quit)&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>finally, run <code>make</code> command, and it would compile the <code>hello.lisp</code> file, save<br>the binary file into <code>bin/hello</code> file. Now, you can get the “Hello, World”<br>outputs with <code>./bin/hello</code> command.</p>
+<p>Congratuates, you now know how to compile Lisp codes to binary file. All you<br>should do next is to grabe a book and dive in. Here are some awesome Lisp books:</p>
+<ul>
+<li>The Common Lisp Cookbook: <a target="_blank" rel="noopener" href="https://lispcookbook.github.io/cl-cookbook/">https://lispcookbook.github.io/cl-cookbook/</a></li>
+<li>Successful Lisp: <a target="_blank" rel="noopener" href="https://dept-info.labri.fr/~strandh/Teaching/MTP/Common/David-Lamkins/cover.html">https://dept-info.labri.fr/~strandh/Teaching/MTP/Common/David-Lamkins/cover.html</a></li>
+<li>On Lisp: <a target="_blank" rel="noopener" href="http://www.paulgraham.com/onlisptext.html">http://www.paulgraham.com/onlisptext.html</a></li>
+<li>Let Over Lambda: <a target="_blank" rel="noopener" href="https://letoverlambda.com/">https://letoverlambda.com/</a></li>
+</ul>
+<p>For specification&#x2F;reference:</p>
+<ul>
+<li>The Common Lisp HyperSpec: <a target="_blank" rel="noopener" href="http://www.lispworks.com/documentation/HyperSpec/Front/index.htm">http://www.lispworks.com/documentation/HyperSpec/Front/index.htm</a></li>
+</ul>
+<p>That’s it. Happy Lisping ^_^</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-start"><span class="toc-number">1.</span> <span class="toc-text">Before start</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Start"><span class="toc-number">2.</span> <span class="toc-text">Start</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Projecting"><span class="toc-number">3.</span> <span class="toc-text">Projecting</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2023/09/10/lisp101/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2023/09/10/lisp101/&text=Lisp 101"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2023/09/10/lisp101/&title=Lisp 101"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2023/09/10/lisp101/&is_video=false&description=Lisp 101"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Lisp 101&body=Check out this article: https://oneforalone.github.io/2023/09/10/lisp101/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2023/09/10/lisp101/&title=Lisp 101"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2023/09/10/lisp101/&title=Lisp 101"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2023/09/10/lisp101/&title=Lisp 101"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2023/09/10/lisp101/&title=Lisp 101"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2023/09/10/lisp101/&name=Lisp 101&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2023/09/10/lisp101/&t=Lisp 101"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="声明：因为用的是 Rapsberry Pi，Arm 架构的，所以就直接从源代码编译，官网有编译好了 ARM版本的二进制，如果懒得去编译可以直接下载去官网下载就好了，官网下载链接：https:&#x2F;&#x2F;bitcoin.org&#x2F;en&#x2F;download 本文主要是记录 ARM 版从源码编译安装 bitcoin 命令行的记录。 EnviromentRaspberry Pi 4 Modle B @2018:  O">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Raspberry Pi 安装 bitcoin">
+<meta property="og:url" content="https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="声明：因为用的是 Rapsberry Pi，Arm 架构的，所以就直接从源代码编译，官网有编译好了 ARM版本的二进制，如果懒得去编译可以直接下载去官网下载就好了，官网下载链接：https:&#x2F;&#x2F;bitcoin.org&#x2F;en&#x2F;download 本文主要是记录 ARM 版从源码编译安装 bitcoin 命令行的记录。 EnviromentRaspberry Pi 4 Modle B @2018:  O">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-09T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-09T11:26:48.078Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Blockchain">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Raspberry Pi">
+<meta property="article:tag" content="Bitcoin">
+<meta property="article:tag" content="Ubuntu">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Raspberry Pi 安装 bitcoin</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/04/10/hacking-in-lisp/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/01/15/raspberry-pi-4b/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&text=Raspberry Pi 安装 bitcoin"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&title=Raspberry Pi 安装 bitcoin"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&is_video=false&description=Raspberry Pi 安装 bitcoin"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Raspberry Pi 安装 bitcoin&body=Check out this article: https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&title=Raspberry Pi 安装 bitcoin"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&title=Raspberry Pi 安装 bitcoin"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&title=Raspberry Pi 安装 bitcoin"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&title=Raspberry Pi 安装 bitcoin"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&name=Raspberry Pi 安装 bitcoin&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&t=Raspberry Pi 安装 bitcoin"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Enviroment"><span class="toc-number">1.</span> <span class="toc-text">Enviroment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Installation"><span class="toc-number">2.</span> <span class="toc-text">Installation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96%E5%BA%93"><span class="toc-number">2.1.</span> <span class="toc-text">1. 安装依赖库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85-berkeley-db-4-8"><span class="toc-number">2.2.</span> <span class="toc-text">2. 安装 berkeley-db 4.8</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%8E%B7%E5%8F%96%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="toc-number">2.3.</span> <span class="toc-text">3. 获取源代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="toc-number">2.4.</span> <span class="toc-text">4. 编译安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%85%8D%E7%BD%AE"><span class="toc-number">2.5.</span> <span class="toc-text">5. 配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-%E4%B8%AA%E4%BA%BA%E9%85%8D%E7%BD%AE"><span class="toc-number">2.5.1.</span> <span class="toc-text">5.1. 个人配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">3.</span> <span class="toc-text">Reference</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Raspberry Pi 安装 bitcoin
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-04-09T00:00:00.000Z" class="dt-published" itemprop="datePublished">2022-04-09 12:00:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-09T11:26:48.078Z" class="dt-updated" itemprop="dateModified">2023-10-09 11:26:48 AM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Raspberry-Pi/">Raspberry Pi</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Bitcoin/" rel="tag">Bitcoin</a>, <a class="p-category" href="/tags/Blockchain/" rel="tag">Blockchain</a>, <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>, <a class="p-category" href="/tags/Raspberry-Pi/" rel="tag">Raspberry Pi</a>, <a class="p-category" href="/tags/Ubuntu/" rel="tag">Ubuntu</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><strong>声明</strong>：因为用的是 Rapsberry Pi，Arm 架构的，所以就直接从源代码编译，官网有编译好了 ARM<br>版本的二进制，如果懒得去编译可以直接下载去官网下载就好了，官网下载链接：<br><a target="_blank" rel="noopener" href="https://bitcoin.org/en/download">https://bitcoin.org/en/download</a></p>
+<p>本文主要是记录 ARM 版从源码编译安装 bitcoin 命令行的记录。</p>
+<h2 id="Enviroment"><a href="#Enviroment" class="headerlink" title="Enviroment"></a>Enviroment</h2><p>Raspberry Pi 4 Modle B @2018:</p>
+<ul>
+<li>OS: Ubuntu 22.04.3 LTS (Jammy Jellyfish)</li>
+<li>Mem: 4GiB</li>
+<li>Disk: 128GiB(TF) + 1 TiB(WD HDD)</li>
+</ul>
+<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><h3 id="1-安装依赖库"><a href="#1-安装依赖库" class="headerlink" title="1. 安装依赖库"></a>1. 安装依赖库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt -y install build-essential autoconf libtool pkg-config \</span><br><span class="line">  libdb++-dev libboost-all-dev</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>pkg-config</code> 对应报错：<code>configure: error: possibly undefined macro: AC_MSG_ERROR</code></li>
+<li><code>libdb++-dev</code> 对应报错：<code>configure: error: libdb_cxx headers missing (netbsd)</code></li>
+<li><code>libboost-all-dev</code> 对应报错：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">checking for boostlib &gt;= 1.47.0 (104700)... configure: We could not detect the</span><br><span class="line">boost libraries (version MINIMUM_REQUIRED_BOOST or higher). If you have a staged</span><br><span class="line">boost library (still not installed) please specify $BOOST_ROOT in your environment</span><br><span class="line">and do not give a PATH to --with-boost option. If you are sure you have boost</span><br><span class="line">installed, then check your version number looking in &lt;boost/version.hpp&gt;.</span><br><span class="line">See http://randspringer.de/boost for more documentation.</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="2-安装-berkeley-db-4-8"><a href="#2-安装-berkeley-db-4-8" class="headerlink" title="2. 安装 berkeley-db 4.8"></a>2. 安装 berkeley-db 4.8</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz</span><br><span class="line">tar -xf db-4.8.30.NC.tar.gz</span><br><span class="line"><span class="built_in">cd</span> db-4.8.30.NC/build_unix</span><br><span class="line">../dist/configure --enable-cxx \</span><br><span class="line">  --build=aarch64-unknown-linux-gnu</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<p>berkeley-db 也是一个依赖，只不过因为被 Oracle 收购了，所以软件源里面没有这个版本的，<br>需要自己手动进行编译。官方也有一个脚本来安装 berkeley-db（<code>bitcoin/contrib/install_db4.sh</code>)，<br>这里我是自己手动去编译安装的。</p>
+<p>这里如果没有安装的话对应的报错是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">configure: error: Found Berkeley DB other than 4.8, required for portable wallets</span><br><span class="line">(--with-incompatible-bdb to ignore or --disable-wallet to disable wallet functionality)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-获取源代码"><a href="#3-获取源代码" class="headerlink" title="3. 获取源代码"></a>3. 获取源代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/bitcoin/bitcoin.git</span><br><span class="line"><span class="built_in">cd</span> bitcoin</span><br><span class="line">git checkout v25.0.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-编译安装"><a href="#4-编译安装" class="headerlink" title="4. 编译安装"></a>4. 编译安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./configure CPPFLAGS=<span class="string">&quot;-I/usr/local/BerkeleyDB.4.8/include -O2&quot;</span> \</span><br><span class="line">            LDFLAGS=<span class="string">&quot;-L/usr/local/BerkeleyDB.4.8/lib&quot;</span> \</span><br><span class="line">            --build=aarch64-unknown-linux-gnu \</span><br><span class="line">            --with-gui=no</span><br><span class="line">make -j4 &amp;&amp; sudo make install</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-配置"><a href="#5-配置" class="headerlink" title="5. 配置"></a>5. 配置</h3><p>安装好后先生成一下 rpc 的访问认证：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> bitcoin/share/rpcauth/</span><br><span class="line">./rpcauth.py your-name</span><br></pre></td></tr></table></figure>
+
+<p>执行后会有一个输出，类似于（以用户名 <code>Alice</code> 为例）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./rpcauth.py alice</span><br><span class="line">String to be appended to bitcoin.conf:</span><br><span class="line">rpcauth=alice:c7659b139bd5850a2d12eb205d7f0a45<span class="variable">$83619ae5dfa9819dfdb01af41fcd95fbc3cb3fb75e9b7a2fb614351dbf0b5bb8</span></span><br><span class="line">Your password:</span><br><span class="line">mwO7F-1njVd3ToTQpLPNHNWe3HxmXYNSuQSPTi6aDzQ=</span><br></pre></td></tr></table></figure>
+
+<p>将其中的第二行 <code>rpcauth=alice:xxxxxx</code> 添加到 <code>~/.bitcoin/bitcoin.conf</code> 中，<br>若是没有 <code>~/.bitcoin/bitcoin.conf</code> 文件，直接复制 Reference 7 链接中的文件，然后<br>将这一句添加进去就好，同时在里面也可以指定对应的 bitcoin block 的存储目录，关键词为 <code>datadir</code>。</p>
+<p>之后运行 <code>bitcoind -daemon</code> node 就会在后台自动同步。</p>
+<p>设置开机自启：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure>
+
+<p>在文件最后添加一行 <code>@reboot bitcoind -daemon</code>。</p>
+<p>bitcoind 的数据默认保存在 <code>~/.bitcoin</code> 路径下，可以在配置文件中修改将数据保存在其他位置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">datadir=/data/bitcion/data</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-1-个人配置"><a href="#5-1-个人配置" class="headerlink" title="5.1. 个人配置"></a>5.1. 个人配置</h4><p>以下是我个人的一些配置:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># enable transaction index</span><br><span class="line">txindex=1</span><br><span class="line"></span><br><span class="line"># chain data</span><br><span class="line">datadir=/data/bitcoin/data</span><br><span class="line"></span><br><span class="line"># RPC auth</span><br><span class="line">&lt;your-own-auth-configure&gt;</span><br><span class="line"># allow connect from other machine</span><br><span class="line">rpcallowip=0.0.0.0/0</span><br><span class="line"># RPC address</span><br><span class="line">rpcbind=0.0.0.0:8332</span><br><span class="line"># Listen for RPC connection on this TCP port:</span><br><span class="line">rpcport=8332</span><br><span class="line"></span><br><span class="line"># connet to Tor proxy</span><br><span class="line">proxy=127.0.0.1:9050</span><br></pre></td></tr></table></figure>
+
+<p>同时，因为我喜欢将配置和数据都放在一起，所以我每次启动需要指定配置文件的位置:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bitcoind -conf=&lt;/path/to/config&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如果配置文件不在默认路径 <code>~/.bitcoin/bitcoin.conf</code>, 那么每次执行 <code>bitcoin-cli</code> 命令时需<br>要执行一些参数：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">bitcoin-cli -rpcconnect=127.0.0.1 \</span><br><span class="line">  -rpcport=8332 \</span><br><span class="line">  -rpcuser=&lt;username&gt; \</span><br><span class="line">  -rpcpassword=&lt;password&gt;</span><br></pre></td></tr></table></figure>
+
+<p>嫌麻烦可以对这个命令进行 <code>alias</code>, 在 <code>~/.bashrc</code> 或 <code>~/.zshrc</code> 中加入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alias bitcoin-cli=&quot;bitcoin-cli -rpcconnect=127.0.0.1 -rpcport=8332 \</span><br><span class="line">  -rpcuser=&lt;username&gt; --rpcpassword=&lt;password&gt;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>当然觉得麻烦的话可以将配置放在 <code>~/.bitcoin/bitcoin.conf</code> 路径。</p>
+<p>OK，以上 Pi 就能跑 bitcoin 的 full node 了。</p>
+<p>同步需要时间，Just wait。</p>
+<p>Happy hacking。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/8811381/possibly-undefined-macro-ac-msg-error">https://stackoverflow.com/questions/8811381/possibly-undefined-macro-ac-msg-error</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/bitcoin/bitcoin/issues/2998">https://github.com/bitcoin/bitcoin/issues/2998</a></li>
+<li><a target="_blank" rel="noopener" href="https://bitcoin.stackexchange.com/questions/91901/how-to-install-berkeley-db-4-8-on-linux">https://bitcoin.stackexchange.com/questions/91901/how-to-install-berkeley-db-4-8-on-linux</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4810996/how-to-resolve-configure-guessing-build-type-failure">https://stackoverflow.com/questions/4810996/how-to-resolve-configure-guessing-build-type-failure</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/jimaojin/p/13211359.html">https://www.cnblogs.com/jimaojin/p/13211359.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/bitcoinbook/bitcoinbook/blob/develop/ch03.asciidoc">https://github.com/bitcoinbook/bitcoinbook/blob/develop/ch03.asciidoc</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/bitcoin/bitcoin/blob/v0.16.0/contrib/debian/examples/bitcoin.conf">https://github.com/bitcoin/bitcoin/blob/v0.16.0/contrib/debian/examples/bitcoin.conf</a></li>
+<li><a target="_blank" rel="noopener" href="https://bitcoin.org/en/full-node#other-linux-daemon">https://bitcoin.org/en/full-node#other-linux-daemon</a></li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Enviroment"><span class="toc-number">1.</span> <span class="toc-text">Enviroment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Installation"><span class="toc-number">2.</span> <span class="toc-text">Installation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96%E5%BA%93"><span class="toc-number">2.1.</span> <span class="toc-text">1. 安装依赖库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85-berkeley-db-4-8"><span class="toc-number">2.2.</span> <span class="toc-text">2. 安装 berkeley-db 4.8</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%8E%B7%E5%8F%96%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="toc-number">2.3.</span> <span class="toc-text">3. 获取源代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="toc-number">2.4.</span> <span class="toc-text">4. 编译安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%85%8D%E7%BD%AE"><span class="toc-number">2.5.</span> <span class="toc-text">5. 配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-%E4%B8%AA%E4%BA%BA%E9%85%8D%E7%BD%AE"><span class="toc-number">2.5.1.</span> <span class="toc-text">5.1. 个人配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">3.</span> <span class="toc-text">Reference</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&text=Raspberry Pi 安装 bitcoin"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&title=Raspberry Pi 安装 bitcoin"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&is_video=false&description=Raspberry Pi 安装 bitcoin"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Raspberry Pi 安装 bitcoin&body=Check out this article: https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&title=Raspberry Pi 安装 bitcoin"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&title=Raspberry Pi 安装 bitcoin"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&title=Raspberry Pi 安装 bitcoin"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&title=Raspberry Pi 安装 bitcoin"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&name=Raspberry Pi 安装 bitcoin&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/04/09/bitcoin-on-pi/&t=Raspberry Pi 安装 bitcoin"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

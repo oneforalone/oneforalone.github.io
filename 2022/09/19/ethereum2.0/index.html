@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Introduction最近这段时间区块链内比较大的消息就是 Ethereum 2.0 的 The Merge 了。本文将介绍一下Ethereum 2.0。 Ethereum 2.0，即 Ethereum 的升级版，其主要目的主要有两个：  降低能源消耗，即共识从 PoW 转为 PoS； 扩容，也称为分片（sharding），即提高 Ethereum 的 TPS（Transactions Per">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ethereum 2.0">
+<meta property="og:url" content="https://oneforalone.github.io/2022/09/19/ethereum2.0/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="Introduction最近这段时间区块链内比较大的消息就是 Ethereum 2.0 的 The Merge 了。本文将介绍一下Ethereum 2.0。 Ethereum 2.0，即 Ethereum 的升级版，其主要目的主要有两个：  降低能源消耗，即共识从 PoW 转为 PoS； 扩容，也称为分片（sharding），即提高 Ethereum 的 TPS（Transactions Per">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/eth2-node.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/eth2-block.png">
+<meta property="article:published_time" content="2022-09-19T13:47:59.000Z">
+<meta property="article:modified_time" content="2023-10-09T07:56:35.717Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Blockchain">
+<meta property="article:tag" content="Ethereum">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oneforalone.github.io/images/ethereum/eth2-node.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Ethereum 2.0</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/10/23/digital-resistance/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/09/08/defi-uniswap/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/09/19/ethereum2.0/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&text=Ethereum 2.0"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&title=Ethereum 2.0"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&is_video=false&description=Ethereum 2.0"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ethereum 2.0&body=Check out this article: https://oneforalone.github.io/2022/09/19/ethereum2.0/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&title=Ethereum 2.0"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&title=Ethereum 2.0"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&title=Ethereum 2.0"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&title=Ethereum 2.0"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&name=Ethereum 2.0&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/09/19/ethereum2.0/&t=Ethereum 2.0"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Beacon-Chain"><span class="toc-number">2.</span> <span class="toc-text">The Beacon Chain</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Merge"><span class="toc-number">3.</span> <span class="toc-text">The Merge</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ETH-%E9%80%9A%E7%BC%A9"><span class="toc-number">3.1.</span> <span class="toc-text">ETH 通缩</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E6%9E%B6%E6%9E%84%E6%94%B9%E5%8F%98"><span class="toc-number">3.2.</span> <span class="toc-text">节点架构改变</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E8%80%85%E9%A1%BB%E7%9F%A5"><span class="toc-number">3.3.</span> <span class="toc-text">开发者须知</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Block-%E7%BB%93%E6%9E%84"><span class="toc-number">3.3.1.</span> <span class="toc-text">Block 结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OPCODEs"><span class="toc-number">3.3.2.</span> <span class="toc-text">OPCODEs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Block-Time-and-states"><span class="toc-number">3.3.3.</span> <span class="toc-text">Block Time and states</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA"><span class="toc-number">3.4.</span> <span class="toc-text">常见误区</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sharding"><span class="toc-number">4.</span> <span class="toc-text">Sharding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">5.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Appendix"><span class="toc-number">7.</span> <span class="toc-text">Appendix</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Appendix-A-Shanghai-Upgrade"><span class="toc-number">7.1.</span> <span class="toc-text">Appendix A. Shanghai Upgrade</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Ethereum 2.0
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-09-19T13:47:59.000Z" class="dt-published" itemprop="datePublished">2022-09-19 01:47:59 PM</time>
+        
+        (Updated: <time datetime="2023-10-09T07:56:35.717Z" class="dt-updated" itemprop="dateModified">2023-10-09 07:56:35 AM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Blockchain/">Blockchain</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Blockchain/" rel="tag">Blockchain</a>, <a class="p-category" href="/tags/Ethereum/" rel="tag">Ethereum</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>最近这段时间区块链内比较大的消息就是 Ethereum 2.0 的 The Merge 了。本文将介绍一下<br>Ethereum 2.0。</p>
+<p>Ethereum 2.0，即 Ethereum 的升级版，其主要目的主要有两个：</p>
+<ol>
+<li>降低能源消耗，即共识从 PoW 转为 PoS；</li>
+<li>扩容，也称为分片（sharding），即提高 Ethereum 的 TPS（Transactions Per Second）。</li>
+</ol>
+<p>目前（2022-09-15），The Merge 完成了第一个目标，第二个目标预计是在 2023 年完成。</p>
+<h2 id="The-Beacon-Chain"><a href="#The-Beacon-Chain" class="headerlink" title="The Beacon Chain"></a>The Beacon Chain</h2><p>The Beacon Chain 于 2020 年 12 月 01 日上线，简单的来说就是 Ethereum 2.0 的先行网，<br>PoW 转 PoS 以及 sharding 都先在 Beacon Chain 上测试，最终于 2022 年 09 月 15 日和<br>Ethereum 主网合并，即 The Merge。</p>
+<h2 id="The-Merge"><a href="#The-Merge" class="headerlink" title="The Merge"></a>The Merge</h2><p>北京时间 2022 年 09 月 15 日下午 03:00，Ethereum 合并成功， 即 Beacon Chain 和之前的<br>PoW 的 Ethereum 合并成功，Ethereum 正式从 PoW 转为了 PoS。这就是 The Merge 带来的<br>改变，Ethereum 不再需要消耗比较多的的能源来进行挖矿了，由 PoW 共识转为了 PoS 共识，大概减少<br>了 99.95% 的能源消耗。</p>
+<p>这次升级，除了降低了挖矿的能源消耗，还带来了以下两个改变：</p>
+<ol>
+<li>ETH token 开始进入通缩</li>
+<li>节点架构改变</li>
+</ol>
+<h3 id="ETH-通缩"><a href="#ETH-通缩" class="headerlink" title="ETH 通缩"></a>ETH 通缩</h3><p>在 The Merge 前，每天 PoW（Ethereum Mainnet）上大概可以挖出 13,000 ETH，PoS（Beacon<br>Chain）大概可以挖出 1,600 ETH。 Merge 之后，PoW 去除，只保留了 PoS 上的奖励，即每天 ETH<br>的新增量变为原来的 $\frac{1600}{13000 + 16000} \approx 10.96%$， 减少了<br>$\frac{13000}{13000 + 16000} \approx 89.04%$。而 London Upgrade 之后，即<br><a target="_blank" rel="noopener" href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md">EIP-1159</a> 之后，每个 tx 都会销毁一定数量的 ETH。假设 gas 的平均价格最低为<br>16 gwei，那么一天销毁的 gas 会大于或等于 1,600 ETH，即每天销毁的 ETH 会大于或等于新增的<br>ETH。所以 The Merge 之后 ETH 会进入通缩的阶段，如果 gas 的平均价格超过 16 gwei 的话，<br>那么ETH 的通缩就会加速。</p>
+<blockquote>
+<p>P.S 通过 <a target="_blank" rel="noopener" href="https://ultrasound.money/#burn">https://ultrasound.money/#burn</a> 的数据来看，在 gas 的平均价格为 11 gwei<br>时，每分钟会销毁大概 0.80 ETH，即一天大概会销毁 0.80 * 60 * 24 &#x3D; 1,152 ETH。如果 gas<br>的平均价格为 16 gwei 的话，则 ETH 一天的销毁量大概为：1,152 * (16 &#x2F; 11) &#x3D; 1,675。</p>
+</blockquote>
+<p>具体详细的数据都可以在 <a target="_blank" rel="noopener" href="https://ultrasound.money/">https://ultrasound.money</a> 这个网站上查看。</p>
+<h3 id="节点架构改变"><a href="#节点架构改变" class="headerlink" title="节点架构改变"></a>节点架构改变</h3><p>因为共识机制的改变，所以节点架构也就不得不变了。The Merge 前只需要执行一个程序，就能进行挖矿。<br>The Merge 后需要执行两个程序：一个执行层，一个共识层。其中执行层的是原有的 PoW 的软件的，<br>用来执行验证 tx，公式层是新增的，用来出块的。如下图：</p>
+<p><img src="/images/ethereum/eth2-node.png" alt="eth2-node.png"></p>
+<p>以下是对应的节点的软件：</p>
+<ul>
+<li>执行层：<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/hyperledger/besu/releases">Besu</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ledgerwatch/erigon#usage">Erigon</a></li>
+<li><a target="_blank" rel="noopener" href="https://geth.ethereum.org/downloads/">Geth</a></li>
+<li><a target="_blank" rel="noopener" href="https://downloads.nethermind.io/">Nethermind</a></li>
+</ul>
+</li>
+<li>共识层：<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/sigp/lighthouse/releases/latest">Lighthouse</a></li>
+<li><a target="_blank" rel="noopener" href="https://chainsafe.github.io/lodestar/install/source/">Lodestar</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/status-im/nimbus-eth2/releases/latest">Nimbus</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/prysmaticlabs/prysm/releases/latest">Prysm</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ConsenSys/teku/releases">Teku</a></li>
+</ul>
+</li>
+</ul>
+<p>各个软件的使用占比参考：<a target="_blank" rel="noopener" href="https://clientdiversity.org/#distribution">https://clientdiversity.org/#distribution</a></p>
+<blockquote>
+<p><strong>NOTE</strong>：如果自己不想跑节点的话，可以直接使用第三方的节点，比较知名的有三个：<br><a target="_blank" rel="noopener" href="https://infura.io/">Infura</a>，<a target="_blank" rel="noopener" href="https://www.alchemy.com/">Alchemy</a> 和 <a target="_blank" rel="noopener" href="https://www.quiknode.io/">QuickNode</a>。其中 Infura<br>支持主网和所有的测试网，但 Alchemy 只支持主网和 Goerli 测试网。更多三方的节点供应商可到<br><a target="_blank" rel="noopener" href="https://ethereumnodes.com/">https://ethereumnodes.com/</a> 查看。</p>
+<p>如果想自己跑节点的话，现在也有集成的环境，<a target="_blank" rel="noopener" href="https://github.com/dappnode/DAppNode">DappNode</a> 和 <a target="_blank" rel="noopener" href="https://ava.do/">Avado</a>。<br>其中 DappNode 可以自己安装，也可以直接购买预装好的硬件，Avado 是软硬件一体化，只能购买，<br>不能自己安装配置。</p>
+</blockquote>
+<h3 id="开发者须知"><a href="#开发者须知" class="headerlink" title="开发者须知"></a>开发者须知</h3><p>既然共识变了，block 也会做出对应的改变。The Merge 后区块主要有三个变化：block 结构，OPCODE<br>和区块的出块时间与状态。</p>
+<h4 id="Block-结构"><a href="#Block-结构" class="headerlink" title="Block 结构"></a>Block 结构</h4><p>The Merge 后，区块结构变得更复杂了，增加了以共识层的一些字段，同时对于原有的共识层（现在的<br>执行层）的一些字段做了一些改变。下图是 The Merge 之后一个区块的结构图：</p>
+<p><img src="/images/ethereum/eth2-block.png" alt="eth2-block"></p>
+<p>在 PoW 的共识中，是有一定的概率出现叔块（ommer&#x2F;uncle block）的，所以之前的区块结构中会有<br>ommer block 的相关字段。但是在 PoS 中，出块是确定的，不可能出现 ommer block，因此 The<br>Merge 之后区块执行层生成的区块的中 <code>ommers</code> 为空数组 <code>[]</code>，封装成 tx 就是：<br><code>RLP([]) = 0xc0</code>，即 <code>ommers</code> 字段的值为 <code>0xc0</code>。因此 <code>ommersHash</code> 的值为<br><code>0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347</code><br>（<code>Keccak256(RLP([]))</code>）。</p>
+<p>同时，PoW 中最关键的两个字段 <code>difficulty</code> 和 <code>nonce</code> 也都设置为零，即 <code>difficulty</code><br>的值为 0，<code>nonce</code> 的值为 <code>0x0000000000000000</code>（<code>nonce</code> 类型为<code>uint64</code>，8 bytes）。<br>汇总起来如下表：</p>
+<table>
+<thead>
+<tr>
+<th align="left">FIELD</th>
+<th align="left">CONSTANT VALUE</th>
+<th align="left">COMMENT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>ommers</code></td>
+<td align="left"><code>[]</code>&#x2F; <code>0xc0</code></td>
+<td align="left"><code>RPL([]) = 0xc0</code></td>
+</tr>
+<tr>
+<td align="left"><code>ommersHash</code></td>
+<td align="left"><code>0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347</code></td>
+<td align="left"><code>= Keccak256(RLP([]))</code></td>
+</tr>
+<tr>
+<td align="left"><code>difficulty</code></td>
+<td align="left"><code>0</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>nonce</code></td>
+<td align="left"><code>0x0000000000000000</code></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>又因为出块由共识层出，所以在 PoW 中用来验证是否具有出块权的 <code>mixHash</code> 字段用来存储上一个<br>出块者选出的这一轮的出块者，用来证明自己有出块权，并命名为 <code>prevRandao</code>。<code>prevRandao</code><br>是根据 slot number 算出来的随机数。具体的可参见：<a target="_blank" rel="noopener" href="https://eips.ethereum.org/EIPS/eip-4399">EIP-4399</a> 及其讨论<br><a target="_blank" rel="noopener" href="https://ethereum-magicians.org/t/eip-4399-supplant-difficulty-opcode-with-random/7368">EIP-4399: Supplant DIFFICULTY opcode with RANDOM</a><br>和 <a target="_blank" rel="noopener" href="https://ethereum-magicians.org/t/eip-4788-beacon-state-root-in-evm/8281">EIP-4788</a>。</p>
+<p><strong>注</strong>：Ethereum 2.0 中 slot 可对应 1.0 中的 block，但严格来说 slot 是 block 的超集，<br>因为 slot 可以包含 block，也可以没有 block。32Slots &#x3D; 1Epoch，这是在为后续的sharding<br>做准备。</p>
+<h4 id="OPCODEs"><a href="#OPCODEs" class="headerlink" title="OPCODEs"></a>OPCODEs</h4><p>The Merge 只改动了两个 OPCODE：</p>
+<ul>
+<li><code>BLOCKHASH(0x40)</code>：准备弃用，虽然还可以正常执行，但是其安全程度变得很低，因为不是由 PoW<br>来算 Hash 了。</li>
+<li><code>DIFFICULTY(0x44)</code>：改名为 <code>PREVRANDAO</code>，可以用来获取随机数。</li>
+</ul>
+<h4 id="Block-Time-and-states"><a href="#Block-Time-and-states" class="headerlink" title="Block Time and states"></a>Block Time and states</h4><p>因为 PoS 出块时就是由一个质押者（Staker）来出，所以时间 PoW 的更具有确定性，PoS 每 12s<br>出一个块，PoW 是平均 13s 出一个块。</p>
+<p>同时 PoS 中没有 PoW 的 confirm 状态，而是将区块分为四种：</p>
+<ul>
+<li>head，就是刚出的块，状态为 <code>unfinalized</code></li>
+<li>safe head，出块一段时间后，有超过 2&#x2F;3 的验证者验证过，状态为 <code>safe</code></li>
+<li>confirmed，由 <code>safe</code> 状态转为 <code>finalized</code> 过渡类型，在被其他的节点添加到链上</li>
+<li>finalized，有超过 2&#x2F;3 的验证者将这个区块添加到链上，状态变为 <code>finalized</code></li>
+</ul>
+<p>状态为 <code>finalized</code> 的区块被视为可信任区块，即对应 PoW 中的 <code>confirmed</code> 的区块。</p>
+<h3 id="常见误区"><a href="#常见误区" class="headerlink" title="常见误区"></a>常见误区</h3><ul>
+<li>Ethereum 2.0 的 token 为 ETH2：错。不论是 PoW 的 Ethereum 和 PoS 的 Ethereum，其<br>token 都是 ETH，从来都没有 ETH2 的 token，ETHW 也不是 Ethereum 之前的 token，而是<br>有人在 The Merge 时进行分叉，利用大量矿工手里的显卡。在术语中，eth1 指代的是 Ethereum<br>中的执行层（execution layer），eth2 指代的是 Ethereum 中的共识层（consensus<br>layer）。</li>
+<li>运行一个节点需要质押 32 ETH：错。不质押 ETH 也可以运行一个节点，只是没有出块权。</li>
+<li>The Merge 降低了 gas fee：错。The Merge 是共识的替换，并没有降低 gas fee。</li>
+<li>The Merge 提高了 TPS：错。The Merge 后 Ethereum 的 TPS 并没有显著的提高，出块的速度<br>只是从原来的平均 13s 一个块到每 12s 一个块。提高 TPS 是 sharding的目标，而不是 The<br>Merge 的目标。</li>
+<li>The Merge enabled staking withdrawal：错。取消质押需要等 Shanghai Upgrade 后才能<br>操作。The Merge 时 Shanghai Upgrade 还没完成，所以 The Merge 后不能马上取消质押。</li>
+<li>验证者不能收到出块奖励直到 Shanghai Upgrade：错。只要出块，就能得到出块奖励。</li>
+<li>如果可以取消质押，所以的质押者（验证者）会同时取消质押：错。每个 epoch（6.4 mins）内最多<br>允许 6 个质押者退出，如果退出者过多，会动态调节每个 epoch 的最大退出数，同时还在质押的人<br>的 APR 提高，以吸引更多的人进行质押。</li>
+</ul>
+<h2 id="Sharding"><a href="#Sharding" class="headerlink" title="Sharding"></a>Sharding</h2><p>Sharding，称为分片，即在水平方向拆分数据库，分散数据库的负载，以达到扩容的目的。Ethereum 2.0<br>的 sharding 和 Layer 2 一起来分摊负载，这样就可以减少网络拥堵，提高 Ethereum 的 TPS。</p>
+<p>Sharding 的特性可以让运行 Ethereum 节点的门槛降低，让更多的人运行节点，构建更稳定的共识<br>网络。</p>
+<p>Sharding 的实现分两步：</p>
+<ol>
+<li>Data availability</li>
+<li>Code execution</li>
+</ol>
+<p>Data availability 是在提高 TPS 的同时，保证之前的数据（即 state）是可用的；Code<br>execution 是在 state 都可用的情况下执行执行智能合约（Smart Contract），这一步需要引入<br>zk-snarks（零知识证明）。</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>总的来说，这次 Ethereum 的 Merge 并没有完全的升级为 Ethereum 2.0，最多算是 Ethereum<br>1.5，毕竟目前 Ethereum 或者说整个区块链都在突破“不可能三角”<a href="%E5%8C%BA%E5%9D%97%E9%93%BE%E4%B8%8D%E5%8F%AF%E8%83%BD%E4%B8%89%E8%A7%92%E6%8C%87%E7%9A%84%E6%98%AF%E7%9B%AE%E5%89%8D%E5%8C%BA%E5%9D%97%E9%93%BE%E4%B8%8D%E8%83%BD%E5%90%8C%E6%97%B6%E5%AE%9E%E7%8E%B0%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E3%80%81%E5%8F%AF%E6%8B%93%E5%B1%95%E6%80%A7%E5%92%8C%E5%AE%89%E5%85%A8%E6%80%A7%E3%80%82">^impossible-triangle</a>，<br>其中已经有其他的公链走在 Ethereum 前面。但是只能说 Ethereum 在前期积累了较多的 dapp 和<br>用户，形成了聚集效应，但是 Ethereum 能否赶在其他新的公链之前突破这个三角，这个没人能预测。<br>从这次 Merge 来看，我们能知道的是 ETH 的供应有通缩的趋势，同时 PoW 转为 PoS 变成了有钱的<br>更有钱，没钱的会更没钱，会逐渐形成两极分化。而且因为 PoS，运行节点的矿工会减少，虽然有机制<br>来保证质押者不会一次性大量撤出，但是没有质押的人不太会去维护一个节点。</p>
+<p>Anyway，去中心化是一种趋势，最终谁能胜出，让我们拭目以待吧。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li>The Beacon Chain. <a target="_blank" rel="noopener" href="https://ethereum.org/en/upgrades/beacon-chain/">https://ethereum.org/en/upgrades/beacon-chain/</a></li>
+<li>The Merge. <a target="_blank" rel="noopener" href="https://ethereum.org/en/upgrades/merge/">https://ethereum.org/en/upgrades/merge/</a></li>
+<li>How The Merge impacts ETH supply. <a target="_blank" rel="noopener" href="https://ethereum.org/en/upgrades/merge/issuance/">https://ethereum.org/en/upgrades/merge/issuance/</a></li>
+<li>Tim Beiko. 2021. How The Merge Impacts Ethereum’s Application Layer. <a target="_blank" rel="noopener" href="https://blog.ethereum.org/2021/11/29/how-the-merge-impacts-app-layer">https://blog.ethereum.org/2021/11/29/how-the-merge-impacts-app-layer</a></li>
+<li>Tim Beiko. 2022. Shanghai Planning. <a target="_blank" rel="noopener" href="https://github.com/ethereum/pm/issues/450">https://github.com/ethereum/pm/issues/450</a></li>
+<li>Wackerow. 2022. SPIN UP YOUR OWN ETHERUM NODE. <a target="_blank" rel="noopener" href="https://ethereum.org/en/developers/docs/nodes-and-clients/run-a-node/">https://ethereum.org/en/developers/docs/nodes-and-clients/run-a-node/</a></li>
+<li>Ethereum 2.0 Knowledge Base. <a target="_blank" rel="noopener" href="https://kb.beaconcha.in/glossary">https://kb.beaconcha.in/glossary</a></li>
+</ol>
+<h2 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h2><h3 id="Appendix-A-Shanghai-Upgrade"><a href="#Appendix-A-Shanghai-Upgrade" class="headerlink" title="Appendix A. Shanghai Upgrade"></a>Appendix A. Shanghai Upgrade</h3><p>Shanghai Upgrade 需要实现以下的 EIP：</p>
+<ul>
+<li>EIP-1153: Transient storage opcodes</li>
+<li>EIP-2537: Precompile for BLS12-381 curve operations</li>
+<li>EIP-2935: Save historical block hashes in state</li>
+<li>EIP-3651: Warm COINBASE</li>
+<li>EIP-3540: EVM Object Format (EOF) v1 + EIP-3670, EIP-3690, EIP-4200</li>
+<li>EIP-3855: PUSH0 instruction</li>
+<li>EIP-3860: Limit and meter initcode</li>
+<li>EIP-4396: Time-Aware Base Fee Calculation</li>
+<li>EIP-4444: Bound Historical Data in Execution Clients</li>
+<li>EIP-4488: Transaction calldata gas cost reduction with total calldata limit</li>
+<li>Statelessness gas cost changes (Verkle Tree HF1) and the groundwork necessary for it (unhashed state + sync)</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Beacon-Chain"><span class="toc-number">2.</span> <span class="toc-text">The Beacon Chain</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Merge"><span class="toc-number">3.</span> <span class="toc-text">The Merge</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ETH-%E9%80%9A%E7%BC%A9"><span class="toc-number">3.1.</span> <span class="toc-text">ETH 通缩</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E6%9E%B6%E6%9E%84%E6%94%B9%E5%8F%98"><span class="toc-number">3.2.</span> <span class="toc-text">节点架构改变</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E8%80%85%E9%A1%BB%E7%9F%A5"><span class="toc-number">3.3.</span> <span class="toc-text">开发者须知</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Block-%E7%BB%93%E6%9E%84"><span class="toc-number">3.3.1.</span> <span class="toc-text">Block 结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OPCODEs"><span class="toc-number">3.3.2.</span> <span class="toc-text">OPCODEs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Block-Time-and-states"><span class="toc-number">3.3.3.</span> <span class="toc-text">Block Time and states</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA"><span class="toc-number">3.4.</span> <span class="toc-text">常见误区</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sharding"><span class="toc-number">4.</span> <span class="toc-text">Sharding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">5.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Appendix"><span class="toc-number">7.</span> <span class="toc-text">Appendix</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Appendix-A-Shanghai-Upgrade"><span class="toc-number">7.1.</span> <span class="toc-text">Appendix A. Shanghai Upgrade</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/09/19/ethereum2.0/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&text=Ethereum 2.0"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&title=Ethereum 2.0"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&is_video=false&description=Ethereum 2.0"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ethereum 2.0&body=Check out this article: https://oneforalone.github.io/2022/09/19/ethereum2.0/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&title=Ethereum 2.0"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&title=Ethereum 2.0"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&title=Ethereum 2.0"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&title=Ethereum 2.0"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/09/19/ethereum2.0/&name=Ethereum 2.0&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/09/19/ethereum2.0/&t=Ethereum 2.0"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

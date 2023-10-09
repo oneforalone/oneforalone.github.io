@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="今天在 Windows 机子上打开虚拟机时突然报 VT-x is not available (VERR_VMX_NO_VMX)，一开始下意识以为是 BIOS 没有开启虚拟化选项，检查后发现一切设置正常。上网查了下发现，是 Docker和 VirtualBox 有冲突了，因为 Docker 使用了 Windows 自带的 Hyper-v，而 VirtualBox 和Heyper-v 是无法同时运行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Win 上 VB 与 Docker 冲突问题">
+<meta property="og:url" content="https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="今天在 Windows 机子上打开虚拟机时突然报 VT-x is not available (VERR_VMX_NO_VMX)，一开始下意识以为是 BIOS 没有开启虚拟化选项，检查后发现一切设置正常。上网查了下发现，是 Docker和 VirtualBox 有冲突了，因为 Docker 使用了 Windows 自带的 Hyper-v，而 VirtualBox 和Heyper-v 是无法同时运行">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-30T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-07T18:30:29.082Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="VirtualBox">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Win 上 VB 与 Docker 冲突问题</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2020/07/02/freebsd-install-x11/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&text=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&title=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&is_video=false&description=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Win 上 VB 与 Docker 冲突问题&body=Check out this article: https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&title=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&title=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&title=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&title=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&name=Win 上 VB 与 Docker 冲突问题&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&t=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">1.</span> <span class="toc-text">Reference</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Win 上 VB 与 Docker 冲突问题
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-06-30T00:00:00.000Z" class="dt-published" itemprop="datePublished">2020-06-30 12:00:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-07T18:30:29.082Z" class="dt-updated" itemprop="dateModified">2023-10-07 06:30:29 PM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Windows/">Windows</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Docker/" rel="tag">Docker</a>, <a class="p-category" href="/tags/VirtualBox/" rel="tag">VirtualBox</a>, <a class="p-category" href="/tags/Windows/" rel="tag">Windows</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>今天在 Windows 机子上打开虚拟机时突然报 <code>VT-x is not available (VERR_VMX_NO_VMX)</code>，<br>一开始下意识以为是 BIOS 没有开启虚拟化选项，检查后发现一切设置正常。上网查了下发现，是 Docker<br>和 VirtualBox 有冲突了，因为 Docker 使用了 Windows 自带的 Hyper-v，而 VirtualBox 和<br>Heyper-v 是无法同时运行的，只能二选一。</p>
+<p>既然发现了问题所在，那么就解决呗。根据问题的原因，那么解决办法只能是 VB 和 Docker 二选一咯。</p>
+<p>不管是选择哪个，都需要以管理员权限运行命令行提示符（即 CMD）。</p>
+<ul>
+<li><p>VirtualBox</p>
+<p>在 CMD 中输入 <code>bcdedit /set hypervisorlaunchtype off</code>，重启电脑。</p>
+</li>
+<li><p>Docker</p>
+<p>在 CMD 中输入 <code>bcdedit /set hypervisorlaunchtype auto</code>，重启电脑。</p>
+</li>
+</ul>
+<p>注：如果要查看 Hyper-v 是否启动，在 CMD 中输入 <code>bcdedit | findstr hyperv</code>，输出结果是<br><code>hypervisorlaunchtype Auto</code> 时表示 Hyper-v 已经开启， <code>hypervisorlaunchtype off</code><br>表示 Hyper-v 已禁用。</p>
+<p>当然，作为全都要的成年人来说，可以参考国外哥们的做法，设置两个启动项，一个使用 Hyper-v，一个不<br>使用 Hyper-v，文章链接为：<br><a target="_blank" rel="noopener" href="https://marcofranssen.nl/switch-between-hyper-v-and-virtualbox-on-windows/">https://marcofranssen.nl/switch-between-hyper-v-and-virtualbox-on-windows/</a></p>
+<p><strong>Update From 2020-12-20</strong></p>
+<p>最近启动了下 VirtualBox 的一台虚拟机，发现后台 Docker 在运行。回想了一下，是因为我启用了<br>WSL（Windows Subsystem Linux），更新 Docker 时默认选了 WSL 作为 Docker 后台支持。<br>虽然可以同时支持 VB 和 Docker，但还是不是很完美，因为我在新建一个 Win 虚拟机时发现安装系统时<br>会失败，换到 Mac 上就很正常。</p>
+<p>That’s it.</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://forums.virtualbox.org/viewtopic.php?f=38&t=89791">https://forums.virtualbox.org/viewtopic.php?f=38&t=89791</a></li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">1.</span> <span class="toc-text">Reference</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&text=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&title=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&is_video=false&description=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Win 上 VB 与 Docker 冲突问题&body=Check out this article: https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&title=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&title=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&title=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&title=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&name=Win 上 VB 与 Docker 冲突问题&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2020/06/30/vb-docker-conflicts/&t=Win 上 VB 与 Docker 冲突问题"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

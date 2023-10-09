@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="序最近看 Obsidian 越来越不错，加上最近也比较空闲，就准备将之前 Onenote 上的笔记全部整理成Markdown 模式。结果仔细一看，发现上面的笔记很零碎——部分是在之前公司用英文写的工作相关的文档，其他的要么是摘抄的文档，要么干脆就是直接写个标题，贴个链接，并没有太多价值。基于职业道德，加上最近看了下山下英子的断舍离系列书，就直接把工作文档给删掉了。然后呢，发现另外一个文件夹也有一些">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我与 Linux 的那些事01：初识">
+<meta property="og:url" content="https://oneforalone.github.io/2021/01/09/linux-staffs-01/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="序最近看 Obsidian 越来越不错，加上最近也比较空闲，就准备将之前 Onenote 上的笔记全部整理成Markdown 模式。结果仔细一看，发现上面的笔记很零碎——部分是在之前公司用英文写的工作相关的文档，其他的要么是摘抄的文档，要么干脆就是直接写个标题，贴个链接，并没有太多价值。基于职业道德，加上最近看了下山下英子的断舍离系列书，就直接把工作文档给删掉了。然后呢，发现另外一个文件夹也有一些">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-01-09T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-07T18:30:29.096Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>我与 Linux 的那些事01：初识</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2021/01/10/linux-staffs-02/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2020/07/03/dual-os-date-issue/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2021/01/09/linux-staffs-01/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&text=我与 Linux 的那些事01：初识"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&title=我与 Linux 的那些事01：初识"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&is_video=false&description=我与 Linux 的那些事01：初识"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=我与 Linux 的那些事01：初识&body=Check out this article: https://oneforalone.github.io/2021/01/09/linux-staffs-01/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&title=我与 Linux 的那些事01：初识"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&title=我与 Linux 的那些事01：初识"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&title=我与 Linux 的那些事01：初识"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&title=我与 Linux 的那些事01：初识"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&name=我与 Linux 的那些事01：初识&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&t=我与 Linux 的那些事01：初识"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E8%AF%86-Linux"><span class="toc-number">2.</span> <span class="toc-text">初识 Linux</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%B7%E5%9B%A0"><span class="toc-number">2.1.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VMWare-%E5%92%8C-Ubuntu"><span class="toc-number">2.2.</span> <span class="toc-text">VMWare 和 Ubuntu</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ubuntu-%E5%88%9D%E4%BD%93%E9%AA%8C"><span class="toc-number">2.3.</span> <span class="toc-text">Ubuntu 初体验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ubuntu-%E5%8F%8C%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.4.</span> <span class="toc-text">Ubuntu 双系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-Distros"><span class="toc-number">3.</span> <span class="toc-text">Linux Distros</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CentOS-RedHat-Fedora-Linux"><span class="toc-number">3.1.</span> <span class="toc-text">CentOS&#x2F;RedHat&#x2F;Fedora Linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Arch-Linux"><span class="toc-number">3.2.</span> <span class="toc-text">Arch Linux</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        我与 Linux 的那些事01：初识
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-01-09T00:00:00.000Z" class="dt-published" itemprop="datePublished">2021-01-09 12:00:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-07T18:30:29.096Z" class="dt-updated" itemprop="dateModified">2023-10-07 06:30:29 PM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Linux/">Linux</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="序"><a href="#序" class="headerlink" title="序"></a>序</h2><p>最近看 Obsidian 越来越不错，加上最近也比较空闲，就准备将之前 Onenote 上的笔记全部整理成<br>Markdown 模式。结果仔细一看，发现上面的笔记很零碎——部分是在之前公司用英文写的工作相关的<br>文档，其他的要么是摘抄的文档，要么干脆就是直接写个标题，贴个链接，并没有太多价值。基于职业道德，<br>加上最近看了下山下英子的断舍离系列书，就直接把工作文档给删掉了。然后呢，发现另外一个文件夹也有一<br>些中英文夹杂的笔记。之前对于将自己写的一些英文笔记放到自己的博客会有一点顾虑，毕竟我也是有将一些<br>英文文档中文本土话，但是现在想想，fuck it！崇洋媚外就崇洋媚外了吧。这是我自己的博客，我自己的<br>笔记，不管怎么看，都是我想怎么样就怎么样。所以说，笔记啊，自己怎么舒服怎么来。本文是记录一下我对<br>Debian&#x2F;Linux 认识和一些使用心得。</p>
+<h2 id="初识-Linux"><a href="#初识-Linux" class="headerlink" title="初识 Linux"></a>初识 Linux</h2><h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>关于我是怎么认识 Linux 的呢？这里面其实涉及了当初的 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%85%BE%E8%AE%AF360%E4%B9%8B%E4%BA%89">3Q 大战</a>。</p>
+<p>故事是要从我上大学开始说起，2015 年，我的中学生涯正式结束了，成为了一个大学生。在那年暑假末，我<br>拥有的人生第一部手机——魅族 4 pro 以及第一台计算机——宏碁 Aspire E 15。因为买的晚，同学<br>都在群里说大学所在的城市治安并不是很安全，小偷扒手盛行，然后第一个月又是军训，就没有将电脑带到学<br>校，直接丢在家里。</p>
+<p>军训结束也就放国庆假了，回到家打开笔记本时突然发现开不了机。之后就去找店主了，问他我刚买一个月的<br>电脑怎么开不了机了。然后店主问道：“是不是 Win 8 系统。”我说对。店主就笑笑了，接着说道：“这个<br>应该是 Win 8 系统的问题，我给你换成 Win 7 吧”。Win 8 sucks！换好系统后，我就高高兴兴地回家<br>了。按照国际惯例，系统转好后要装个杀毒软件。那么是腾讯管家呢，还是 360 呢？网上都说 360 好，<br>看室友用的也是 360，好，那就 360 吧。装好后就关机，出去找同学玩了。</p>
+<p>放完假回到学校，就提了一下这个事，然后问了句，这两个杀毒软件那个好用啊？结果的到了两个答案？一个<br>说腾讯好，另一个说 360 好。好，既然没有得到统一的答案，那我就两个都装上，自己体验。</p>
+<p>这一体验，就体验出问题了。那时 3q 大战刚结束不就，虽然法院是宣判了结果，但两大厂家怎么可能轻易<br>妥协呢？两个软件起冲突了，腾讯管家说 360 有风险，360 说腾讯管家是个高危漏洞，都推荐卸载对方。<br>搞得我有点烦躁了，既然两个共存不了，那我就直接将两个都卸载掉。卸载掉后一开始一切都很正常。</p>
+<p>可是，可是第二天下课后开电脑发现，开不开。强制关机，再开机，连续三次后通过上次成功启动进入系统，<br>既然进去了，那没事了。然后之后又出现这个问题了。那这我就不能忍了。为了确定是不是每次都会出现，重<br>新关机开机，结果几次之后就再也不能开机了。虽然想马上修好，但是问了电信营业厅的学长，说要收我 50<br>块，告辞，这都好几天的饭钱。周末回了一趟家，然后又跑去找店主了，装好后又问店主要了个镜像。店主的<br>镜像也是网上下的，这次的安装的系统默认已经安装了 360。我寻思，算了，先这样用着吧。</p>
+<p>用了一段时间后，发现每次开机会启动 360，而且启动时间是越来越慢，又卸掉了 360，卸掉后发现系统<br>又启动不了，是卸载时把那些补丁也删掉了，结果包含了系统重要文件。这回不只是对管家和 360 失望了，<br>对 Win 7 也是比较失望。时至 Win 10 刚发布没多久，就更新到了 Win 10，然后又找室友推荐了下<br>杀毒软件，安装上了小红伞。</p>
+<p>之后我就想，难道世界上就只有 Windows 这一种操作系统吗？这么想着，就自己去网上搜了搜，结果就被<br>我发现了 Linux。从此踏上了一条不归路。</p>
+<h3 id="VMWare-和-Ubuntu"><a href="#VMWare-和-Ubuntu" class="headerlink" title="VMWare 和 Ubuntu"></a>VMWare 和 Ubuntu</h3><p>既然找到了替代品，那么就得体验下，不实际体验下，怎么进行比较呢？不过基于目前 Win 10 + 小红伞还<br>是很稳的，虽然偶尔软件会有些小问题，但问题都不大，网上都有解决方案。在查看 Ubuntu 安装时，经常<br>看到教程上有说用的是 VMWare 虚拟机做的演示。就有查了下虚拟机。了解后发现，哇，还有这样的好东<br>西。</p>
+<p>在国内，应用越广泛的商业软件，破解体系也很完善。所以很快就安装破解了 VMWare，然后就开始了<br>Ubuntu 的探索之旅了。</p>
+<p>下载镜像，创建虚拟机，一步一步照着教程走。第一次很成功，啥问题都没有。然后就开始摸索着用<br>Ubuntu。</p>
+<h3 id="Ubuntu-初体验"><a href="#Ubuntu-初体验" class="headerlink" title="Ubuntu 初体验"></a>Ubuntu 初体验</h3><p>刚进入 Ubuntu 时，感觉它的 UI 界面都比 Windows 要好看太多了，加上在 terminal 里敲命令<br>很酷，感觉有点电影中黑客的那种味道。初看很美妙，那么就要在进一步，安装一些办公软件了。这下就遇到<br>问题了，QQ 在网上还是找到了个版本的， Wechat 也可以用 Web 版聊天。但总是没有 Windows 上这么<br>丝滑。而且在应用商店更新软件时，会很卡。一开始我只是以为是我网络比较慢的原因，没有在意。也不用去<br>管那些什么杀毒软件了。而且安装软件除了应用商店，直接敲一个命令就好，很舒服。而且开发环境该有的也<br>都有。</p>
+<p>很好，在体验了有一段时间后。总觉着在虚拟机里玩不是个事，总觉得差点什么。于是就想直接装到笔记本<br>上，但我又还想保留 Windows —— 要和室友一起打游戏，那怎么办呢？上网查呗。于是又学到了新词，<br>双系统。</p>
+<p>既然有了解决方案，那么就行动吧。备份文件，下载最新 Ubuntu 镜像，制作 U 盘启动盘，找好教程。在<br>一个周五的晚上，我向双系统迈出了第一步，结果迈太大，拉胯了。装是装成功了，可惜没有网，默认没有带<br>博通的无线网卡驱动。你说有线网？有线网要 Netkeeper 客户端认证，想什么呢？当时已经到了冬天，也<br>比较晚了。就没有再去说用室友的电脑去下网卡驱动包。用自己的 Win 10 自己下啊。不好意思，第一次装<br>双系统，装好后发现 Win 10 的快速启动不兼容，Win 10 启动不了，挂了。想了一下，等笔记本风扇平静<br>了，又默默掏出 Win 10 启动 U 盘，弄到一两点，就睡了，第二天起来后，老老实实地用着虚拟机，心里<br>虽然有一丝不得劲，但很快就和室友一起玩起了游戏。</p>
+<p>放寒假回到家后，将内存调大一些，结果电脑被卡死了。就加了根内存条，偶尔会开一开虚拟机玩一玩。然后<br>当时又入了 VIM 的坑，一有时间就会去搞搞 VIM。</p>
+<h3 id="Ubuntu-双系统"><a href="#Ubuntu-双系统" class="headerlink" title="Ubuntu 双系统"></a>Ubuntu 双系统</h3><p>时间转到大一的暑假，时间够长，为了更好的体验 VIM，毕竟 VIM 还是 Linux 下的爽啊。于是就搞了<br>根网线，在家里搞起了双系统。吸取了上次失败的经验，这次首先把 Win 10 的快速启动给关掉了。</p>
+<p>Ubuntu 安装，没什么难度，加上这次又是连着有线网，一路顺到底。但不能一直连着有线网啊，方便肯定<br>是无线更方便。就把无线网卡装上，一切也都是那么的顺利。基础软件也全都装好了，没毛病，很好。结果<br>正想这要开始玩 VIM 时，突然就弹出个 <code>kernel error</code>，这就给我整的有点懵，赶紧上网查查什么<br>原因，结果一看大家都遇到过，是个没有解决方法，是个 bug。</p>
+<p>Alright，fuck Ubuntu，I’m done with u。老老实实又将 Win 10 重新装了一遍。连 VIM 也不想<br>玩了，索然无味。就和高中同学出去旅游了。玩完回来后，就没有怎么搭理笔记本了。没事就看看小说、<br>电影，出去吃个夜宵。</p>
+<h2 id="Linux-Distros"><a href="#Linux-Distros" class="headerlink" title="Linux Distros"></a>Linux Distros</h2><p>暑假对 Ubuntu 失望后，但是依然没有放弃对 Linux 的探索。为什么呢？闲的呗，在说这么一个小众的<br>系统，当然符合我的口味啊。不然我为什么手机不买三星 OPPO VIVO 小米，电脑为什么不买联想华硕<br>戴尔，而偏偏要买魅族和宏碁呢？</p>
+<h3 id="CentOS-RedHat-Fedora-Linux"><a href="#CentOS-RedHat-Fedora-Linux" class="headerlink" title="CentOS&#x2F;RedHat&#x2F;Fedora Linux"></a>CentOS&#x2F;RedHat&#x2F;Fedora Linux</h3><p>放弃 Ubuntu 后，我对 Ubuntu 的厌恶感与日剧增。然后就开始去了解各个种类的 Linux Distro 了。<br>首先，主流的 Linux Distro 可以用包管理来区分，两大阵营：<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/deb/7025498"><code>deb</code></a>&#x2F;<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/dpkg"><code>dpkg</code></a> 和<br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/RPM/3794648"><code>rpm</code></a> 或者说是 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/apt/20109246"><code>apt</code></a> 和 <a target="_blank" rel="noopener" href="https://www.man7.org/linux/man-pages/man8/yum.8.html"><code>yum</code></a>&#x2F;<a target="_blank" rel="noopener" href="https://fedoraproject.org/wiki/DNF"><code>dnf</code></a>。基于对 Ubuntu 的<br>失望，就想试试 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/RPM/3794648"><code>rpm</code></a> 系的，<a target="_blank" rel="noopener" href="https://www.redhat.com/en"><code>RedHat</code></a> 要收费，那就 <a target="_blank" rel="noopener" href="https://www.centos.org/"><code>CentOS</code></a><br>吧。结果是 <a target="_blank" rel="noopener" href="https://www.centos.org/"><code>CentOS</code></a> 的软件包很旧，<a target="_blank" rel="noopener" href="http://gcc.gnu.org/"><code>Gcc</code></a> 都 6.2 了，而系统默认的还是<br>4.8，而且也没有 QQ。看了下界面，风格比较旧，加上同样是 2G 的内存，Ubuntu 能比较流畅，而<br>CentOS 就有点卡。</p>
+<p>既然开源社区的不太行，那就看看商业版的。在网上，尤其是国内，花点时间总是能找到资源的。找了个比较<br>全的 <a target="_blank" rel="noopener" href="https://www.redhat.com/en"><code>RedHat</code></a> 镜像资源，又放到虚拟机里体验一下。比 <a target="_blank" rel="noopener" href="https://www.centos.org/"><code>CentOS</code></a> 还卡。<br>之后又了解到 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/RPM/3794648"><code>rpm</code></a> 还有个 <a target="_blank" rel="noopener" href="https://getfedora.org/"><code>Fedora</code></a>，也去试了试，发现和<br><a target="_blank" rel="noopener" href="https://www.centos.org/"><code>CentOS</code></a> 没差多少，就是让我知道了还有个 <code>dnf</code> 的命令工具。</p>
+<p>接二连三的测试，对 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/RPM/3794648"><code>rpm</code></a> 系的映像并不是很好，总之就是不适合个人日常使用。</p>
+<h3 id="Arch-Linux"><a href="#Arch-Linux" class="headerlink" title="Arch Linux"></a>Arch Linux</h3><p>淘汰 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/RPM/3794648"><code>rpm</code></a> 后接着逛贴吧，经常看到说 <a target="_blank" rel="noopener" href="https://archlinux.org/"><code>Arch</code></a>，说是“邪教”。好吧，那就入一次<br>“邪教”吧，看看到底邪在哪里。而且经常在 <a target="_blank" rel="noopener" href="https://archlinux.org/"><code>Arch</code></a> 吧看到他们晒桌面，桌面是真的好看。</p>
+<p>第一次安装时，被它的镜像给惊讶到了。只有一两百兆，这，比 <a target="_blank" rel="noopener" href="https://www.centos.org/"><code>CentOS</code></a> minimal 也要<br>小好多。刚进入安装界面就懵了一下，就一个提示符，啥界面都没有，当时直接就关掉了虚拟机了。之前已经<br>装过好多次，也就没有去找教程，结果第一次就是败了。</p>
+<p>失败了不要紧，反而激励了我，不成功一次我是不会罢休的。然后赶紧去查了下安装文档。才知道，这就是<br><a target="_blank" rel="noopener" href="https://archlinux.org/"><code>Arch</code></a> 的特色——精简、高度定制化，安装是没有图形界面，而且要联网，不然你也装不了。<br>这才恍然大悟，这就是它的镜像这么小的原因啊。</p>
+<p>看着英文 <a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Installation_guide">Wiki</a>，一步一步按照上面操作，一开始是卡在网络上，换好源<br>后，最后没有生成 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/initramfs"><code>Initramfs</code></a> 结果启动不了。经过两三次的失败后，终于装好了，<br>结果是，还需要自己安装桌面环境。当时累了，不想搞了，直接关掉虚拟机去洗澡了。另一个和 Arch 齐名<br>的高自定义的 <a target="_blank" rel="noopener" href="https://www.gentoo.org/"><code>Gentoo Linux</code></a> 我没有去碰过，因为虚拟机上操作不了，安装时大部分都是<br>要现场编译的，只在贴吧看过直播贴。</p>
+<p>之后就是我对桌面环境的选择了。这个第二篇再介绍吧。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E8%AF%86-Linux"><span class="toc-number">2.</span> <span class="toc-text">初识 Linux</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%B7%E5%9B%A0"><span class="toc-number">2.1.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VMWare-%E5%92%8C-Ubuntu"><span class="toc-number">2.2.</span> <span class="toc-text">VMWare 和 Ubuntu</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ubuntu-%E5%88%9D%E4%BD%93%E9%AA%8C"><span class="toc-number">2.3.</span> <span class="toc-text">Ubuntu 初体验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ubuntu-%E5%8F%8C%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.4.</span> <span class="toc-text">Ubuntu 双系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-Distros"><span class="toc-number">3.</span> <span class="toc-text">Linux Distros</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CentOS-RedHat-Fedora-Linux"><span class="toc-number">3.1.</span> <span class="toc-text">CentOS&#x2F;RedHat&#x2F;Fedora Linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Arch-Linux"><span class="toc-number">3.2.</span> <span class="toc-text">Arch Linux</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2021/01/09/linux-staffs-01/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&text=我与 Linux 的那些事01：初识"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&title=我与 Linux 的那些事01：初识"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&is_video=false&description=我与 Linux 的那些事01：初识"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=我与 Linux 的那些事01：初识&body=Check out this article: https://oneforalone.github.io/2021/01/09/linux-staffs-01/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&title=我与 Linux 的那些事01：初识"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&title=我与 Linux 的那些事01：初识"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&title=我与 Linux 的那些事01：初识"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&title=我与 Linux 的那些事01：初识"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&name=我与 Linux 的那些事01：初识&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2021/01/09/linux-staffs-01/&t=我与 Linux 的那些事01：初识"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

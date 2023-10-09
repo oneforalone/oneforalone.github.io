@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Hash Function哈希函数是密码学中的一种加密算法，所谓函数呢，即是两个集合之间对应的映射关系。哈希函数的描述是：  A mathematical algorithm that maps data of an arbitrary size (often called the“message”) to a bit array of a fixed size (the “hash value”">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Blockchain Basics">
+<meta property="og:url" content="https://oneforalone.github.io/2021/12/07/blockchain-basics/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="Hash Function哈希函数是密码学中的一种加密算法，所谓函数呢，即是两个集合之间对应的映射关系。哈希函数的描述是：  A mathematical algorithm that maps data of an arbitrary size (often called the“message”) to a bit array of a fixed size (the “hash value”">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://oneforalone.github.io/images/blockchain/hash-function.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/blockchain/merkle-tree.svg">
+<meta property="og:image" content="https://oneforalone.github.io/images/blockchain/npos-election.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/blockchain/npos-security-level.png">
+<meta property="article:published_time" content="2021-12-07T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-07T18:30:29.082Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Blockchain">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oneforalone.github.io/images/blockchain/hash-function.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Blockchain Basics</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/01/11/macos/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/12/05/vnc/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2021/12/07/blockchain-basics/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&text=Blockchain Basics"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&title=Blockchain Basics"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&is_video=false&description=Blockchain Basics"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Blockchain Basics&body=Check out this article: https://oneforalone.github.io/2021/12/07/blockchain-basics/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&title=Blockchain Basics"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&title=Blockchain Basics"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&title=Blockchain Basics"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&title=Blockchain Basics"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&name=Blockchain Basics&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2021/12/07/blockchain-basics/&t=Blockchain Basics"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hash-Function"><span class="toc-number">1.</span> <span class="toc-text">Hash Function</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">1.1.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Merkle-Tree"><span class="toc-number">2.</span> <span class="toc-text">Merkle Tree</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference-1"><span class="toc-number">2.1.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Consensus-Mechanism"><span class="toc-number">3.</span> <span class="toc-text">Consensus Mechanism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PoW"><span class="toc-number">3.1.</span> <span class="toc-text">PoW</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros-and-Cons"><span class="toc-number">3.1.1.</span> <span class="toc-text">Pros and Cons</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference-2"><span class="toc-number">3.1.2.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PoS"><span class="toc-number">3.2.</span> <span class="toc-text">PoS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros-and-Cons-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">Pros and Cons</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference-3"><span class="toc-number">3.2.2.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PoST"><span class="toc-number">3.3.</span> <span class="toc-text">PoST</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference-4"><span class="toc-number">3.3.1.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PoA"><span class="toc-number">3.4.</span> <span class="toc-text">PoA</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference-5"><span class="toc-number">3.4.1.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NPoS"><span class="toc-number">3.5.</span> <span class="toc-text">NPoS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference-6"><span class="toc-number">3.5.1.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zero-Knowledge-Proof"><span class="toc-number">4.</span> <span class="toc-text">Zero-Knowledge Proof</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Non-interactive-Zero-Knowledge-Proof"><span class="toc-number">4.1.</span> <span class="toc-text">Non-interactive Zero-Knowledge Proof</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Interactive-Zero-Knowledge-Proof"><span class="toc-number">4.2.</span> <span class="toc-text">Interactive Zero-Knowledge Proof</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference-7"><span class="toc-number">4.3.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Blockchain Basics
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-12-07T00:00:00.000Z" class="dt-published" itemprop="datePublished">2021-12-07 12:00:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-07T18:30:29.082Z" class="dt-updated" itemprop="dateModified">2023-10-07 06:30:29 PM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Blockchain/">Blockchain</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Blockchain/" rel="tag">Blockchain</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Hash-Function"><a href="#Hash-Function" class="headerlink" title="Hash Function"></a>Hash Function</h2><p>哈希函数是密码学中的一种加密算法，所谓函数呢，即是两个集合之间对应的映射关系。哈希函数的描述是：</p>
+<blockquote>
+<p>A mathematical algorithm that maps data of an arbitrary size (often called the<br>“message”) to a bit array of a fixed size (the “hash value”, “hash”, or<br>“message digest”).</p>
+</blockquote>
+<p>翻译过来就是：对任意输入，输出固定长度的字符</p>
+<p>其工作流程如图所示：<br><img src="/images/blockchain/hash-function.png" alt="hash-function"></p>
+<p>对 hash 函数来说，有以下特性：</p>
+<ul>
+<li>计算快</li>
+<li>不可逆</li>
+<li>冲突域(两个不同的输入会得到相同的输出)小</li>
+</ul>
+<p>不可逆是其最为重大的特征，只能通过穷举法来破解，但对于现在的计算机来说，计算的时间过长，所以就认<br>为不可被破解。</p>
+<p>根据其输出的长度，有多种不同的具体实现：</p>
+<ul>
+<li>MD5: 输出长度为 128 bits，即 16 bytes</li>
+<li>SHA-1: 输出长度为 160 bits，即 20 bytes</li>
+<li>RIPEMD-160: 输出长度为 160 bits，即 20 bytes，基于 MD4(MD5 的初版) 设计的</li>
+<li>Whirlpool: 输出长度为 512 bits，即 64 bytes，基于 AES 的改进</li>
+<li>SHA-2:<ul>
+<li>SHA224: 输出长度为 224 bits，即 24 bytes</li>
+<li>SHA256: 输出长度为 256 bits，即 32 bytes</li>
+<li>SHA384: 输出长度为 384 bits，即 48 bytes</li>
+<li>SHA512: 输出长度为 512 bits，即 64 bytes</li>
+</ul>
+</li>
+</ul>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1]. <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">Wikipedia: Cryptographic hash function</a></p>
+<h2 id="Merkle-Tree"><a href="#Merkle-Tree" class="headerlink" title="Merkle Tree"></a>Merkle Tree</h2><p>Wiki 对 Merkle Tree 的定义是：</p>
+<blockquote>
+<p>A tree in which every “leaf” (node) is labelled with the cryptographic hash of<br>a data block, and every node that is not a leaf (called a <em>branch</em>, <em>inner node</em>,<br>or <em>inode</em>) is labelled with the cryptographic hash of the labels of its child<br>nodes.</p>
+</blockquote>
+<p>以下是 Merkle Tree 的图示：<br><img src="/images/blockchain/merkle-tree.svg" alt="merkle-tree"></p>
+<p>简单的概括来说，就是 hash 的 hash。</p>
+<p>为什么要这么做呢？这和 hash 函数的第三个特性有关，冲突域小。虽然 hash 函数的冲突域很小，但是对<br>区块链来说，其存在的安全漏洞还是比较大，那么怎么解决的，给它在加一层 hash，这样就能在既保证效率<br>的同时还能保证安全。</p>
+<h3 id="Reference-1"><a href="#Reference-1" class="headerlink" title="Reference"></a>Reference</h3><p>[1]. <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Merkle_tree">Wikipedia: Merkle tree</a></p>
+<h2 id="Consensus-Mechanism"><a href="#Consensus-Mechanism" class="headerlink" title="Consensus Mechanism"></a>Consensus Mechanism</h2><p>Consensus Mechanism，共识机制。以下是个比较贴切的定义：</p>
+<blockquote>
+<p>How the individual nodes of a distributed network agree on the current state<br>of the system</p>
+</blockquote>
+<p>共识共识，即对某件事的处理方式和结果打成一致。在计算机的分布式系统中，即是各个节点的当前系统中<br>的状态都有遵守一个协议，至于这个协议是什么，那就要下面要介绍到的 <code>PoW/PoS/PoST/PoA</code>。如果<br>对共识机制感兴趣的话，可以自行了解下<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Byzantine_fault">Byzantine fault</a>。<br>中文的话搜索拜占庭将军问题。</p>
+<h3 id="PoW"><a href="#PoW" class="headerlink" title="PoW"></a>PoW</h3><p><strong>Proof of Work</strong> 的简写，工作量证明（说了也是白说），一种共识机制协议。目前 Ethereum 和<br>Bitcoin 使用的都是 <strong>PoW</strong> 协议，Ethereum 目前正准备将协议从 <strong>PoW</strong> 改为 <strong>PoS</strong>，<br>升级为 Eth2。</p>
+<p>那么 <strong>PoW</strong> 到底是个什么呢？</p>
+<p>在分布式网络中，最大的问题是要解决信任问题，就是你需要怎么证明这件事确实是你做的，而不是别人做的。<br>感谢 Hash 函数（那些到处宣扬数学无用论的人，祝愿他们永远也用不到数学），因为 Hash 函数的特性，<br>所以 <strong>PoW</strong> 就相当于在做数学题，以下只是形式上的描述，仅供参考，具体的实现要举例的要复杂的多。</p>
+<p>$ Hash(x || nonce) &#x3D; C $</p>
+<p>其中 <code>nonce</code> 是系统随机分配的，<code>C</code> 是由系统根据当前的状态进行指定，<code>Hash</code> 函数的算法也是确定<br>的，所需要的是求出 <code>x</code> 的值，而因为 hash 算法是不可逆的，所以只能通过穷举法来尝试，而穷举法是<br>很消耗 CPU 资源的，需要做大量的计算，因而叫做 <strong>PoW</strong> —— 工作量证明。其他人要验证也很简单，<br>只需要将 <code>x</code> 和 <code>nonce</code> 代入函数，将得到的结果与 C 进行对比，因为哈希碰撞域很小，小到几乎可以<br>忽略，因此可以根据这个结果来判断对方是否正确，算出答案的这个节点就能够获得奖励。因此，区块链就是<br>在凭空造币。</p>
+<p>因为这种机制，所以又将做这种计算的工作叫做挖矿，执行计算工作的计算机叫矿机。</p>
+<blockquote>
+<p>Tips. 第一个算出答案并同步上链的机器就证明了它算出了这个答案，而其他的晚了的被称为孤块，不同<br>的链对孤块的处理方式不同，BitCoin 是直接将孤块丢掉，Ethereum 是将孤块定义为 Uncle Block，<br>前 7 个 Uncle Block 都有奖励。</p>
+</blockquote>
+<h4 id="Pros-and-Cons"><a href="#Pros-and-Cons" class="headerlink" title="Pros and Cons"></a>Pros and Cons</h4><ul>
+<li><p>Pros：</p>
+<ul>
+<li>无需成本，只要有矿机就可以开挖</li>
+<li>运行稳定，目前已经在 Bitcoin 上运行了十多年了</li>
+<li>实现简单</li>
+</ul>
+</li>
+<li><p>Cons：</p>
+<ul>
+<li>耗电</li>
+<li>开挖前需要对矿机硬件进行调研</li>
+<li>大矿池容易控场，从去中心化又转变成中心化</li>
+</ul>
+</li>
+</ul>
+<h4 id="Reference-2"><a href="#Reference-2" class="headerlink" title="Reference"></a>Reference</h4><p>[1]. <a target="_blank" rel="noopener" href="https://ethereum.org/en/developers/docs/consensus-mechanisms/pow/">PROOF-OF-WORK</a></p>
+<h3 id="PoS"><a href="#PoS" class="headerlink" title="PoS"></a>PoS</h3><p><strong>Proof of Stake</strong> 的简写，权益证明，对 <strong>PoW</strong> 的一种改进。由 <strong>PoW</strong> 的特性可知，执行<br><strong>PoW</strong> 的的计算机需要做大量的计算，这就意味着需要消耗大量的电量，同时也催生了一些定制的 CPU：<br><em>ASIC</em> —— Application Specific Integrated Circuit。随着 BTC 的价格飙升，这些缺点<br>所带来的弊端也越来越严重，所以也不怪国家会打击 BTC 的矿场。</p>
+<p>话题扯远了，回到 <strong>PoS</strong>，它具体是怎么工作的呢？首先，权益证明就是说，你需要先提交一定的 Token<br>进行质押，质押了 Token 的机器叫做<em>验证者（Validator）</em>。验证者负责对提交上链的新的 block<br>进行验证，而不需要进行大量大计算，只有在新的 block 验证不通过的时候才会创建新的 block，同时并<br>不是说你质押了就会一直验证，而是系统进行随机的抽选，而一旦验证者进行作弊或是离线，系统将会没收质<br>押的 Token。所以说验证者之间没有像 <strong>PoW</strong> 中那样——第一个出块才有奖励——的竞争关系。</p>
+<p>从操作流程来看， <strong>PoS</strong> 对 <strong>PoW</strong> 的改进有：</p>
+<ul>
+<li>省电</li>
+<li>门槛低：这里的门槛指的是服务器的门槛，服务器的硬件不再像 <strong>PoW</strong> 那样高性能。</li>
+<li>对中心化的抵抗更强：这会引入更多的节点加入网络，网络的节点越多，可信度就越高。</li>
+</ul>
+<p>对 Ethereum 来说，<strong>PoS</strong> 也带来对 <code>shard chains</code> – <a target="_blank" rel="noopener" href="https://ethereum.org/en/eth2/shard-chains/">shard chains</a><br>更强劲的支持，而这是 Ethereum Network 扩展的关键性更新。</p>
+<p><strong>shard</strong>: 在垂直方向拓展整条链，允许在同一时间在垂直方向创建多个 block，也就相当于原来一个<br>block 的位置，之后可以放多个 block，即 block 的超集（我自己这么理解的）。多个 block 组成了<br>一个 epoch，即 epoch 为 block 的超集。</p>
+<h4 id="Pros-and-Cons-1"><a href="#Pros-and-Cons-1" class="headerlink" title="Pros and Cons"></a>Pros and Cons</h4><ul>
+<li>Pros:<ul>
+<li>硬件要求低：不需要对硬件进行调查，如果没有质押，只需要加入质押池</li>
+<li>更去中心化：硬件要求低意味着可以让更多的计算机加入网络，以此来增加 <code>51% 攻击</code>的抵抗性</li>
+<li>允许 sharding: 这个优点是针对 Eth2 来说的，Ethereum 的 shard chains 可在同一时间<br>创建更多的 block，增加 transaction 的吞吐。</li>
+</ul>
+</li>
+<li>Cons:<ul>
+<li>相比 <strong>PoW</strong> 技术还不是很成熟</li>
+</ul>
+</li>
+</ul>
+<p><strong>51%攻击</strong>: 所谓 51%攻击，就是说如果有人&#x2F;组织掌握了整个链上的 51%的节点，那么该人&#x2F;组织就能<br>控制整条链。</p>
+<h4 id="Reference-3"><a href="#Reference-3" class="headerlink" title="Reference"></a>Reference</h4><p>[1]. <a target="_blank" rel="noopener" href="https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/">PROOF-OF-STAKE</a></p>
+<p>[2]. <a target="_blank" rel="noopener" href="https://ethereum.org/en/eth2/shard-chains/">shard chains</a></p>
+<p>[3]. <a target="_blank" rel="noopener" href="https://www.investopedia.com/terms/1/51-attack.asp">51% attack</a></p>
+<h3 id="PoST"><a href="#PoST" class="headerlink" title="PoST"></a>PoST</h3><p><strong>Proof of Spacetime</strong> 或 <strong>Proof of Space and Time</strong> 的简写，时间和空间证明，简称时空<br>证明。每隔一段时间，随机抽取存放在 miner<a href="%E5%8D%B3%E8%8A%82%E7%82%B9%E7%9A%84%E5%AE%9E%E7%8E%B0%EF%BC%8C%E9%80%9A%E4%BF%97%E7%82%B9%E8%AF%B4%E5%B0%B1%E6%98%AF%E6%8C%96%E7%9F%BF%E8%BD%AF%E4%BB%B6">^miner</a> 上的存储数据，来验证这段时间内该 miner 确实<br>存储了对应的数据。代表性的链是：<a target="_blank" rel="noopener" href="https://filecoin.io/">filecoin</a></p>
+<h4 id="Reference-4"><a href="#Reference-4" class="headerlink" title="Reference"></a>Reference</h4><p>[1]. <a target="_blank" rel="noopener" href="https://filecoin.io/blog/posts/what-sets-us-apart-filecoin-s-proof-system/">What sets it apart: Filecoin’s proof system</a></p>
+<p>[2]. <a target="_blank" rel="noopener" href="https://docs.filecoin.io/about-filecoin/how-filecoin-works/#proofs">How Filecoin Works: Proofs</a></p>
+<p>[3]. <a target="_blank" rel="noopener" href="https://chia.net/faq/#faq-3">FAQ: What is Proof of Space and Time</a></p>
+<h3 id="PoA"><a href="#PoA" class="headerlink" title="PoA"></a>PoA</h3><p><strong>Proof of Authority</strong>，基于认证证明，用于 Ethereum 的私链。<a target="_blank" rel="noopener" href="https://polkadot.network/">Polkadot Network</a>，<br>波卡网主网上线时使用，现已切换到 <strong>NPoS</strong>。</p>
+<blockquote>
+<p>Proof-of-authority chains utilise a number of secret keys (authorities) to<br>collaborate and create the longest chain instead of the public Ethereum<br>network’s proof-of-work scheme (Ethash).</p>
+</blockquote>
+<p>目前还不是很完善，只有 <code>TurboEthereum</code>[^turboethereum] 中的 <code>flu</code>[^flu] 客户端中使用。<br>简单说就是通过密钥字段来区分不同的链。</p>
+<p>[^turboethereum]: 以太坊 tookkit，集成了很多以太坊操作的工具。<br>[^flu]: TurboEthereum 中的一个命令，用来与链进行交互</p>
+<h4 id="Reference-5"><a href="#Reference-5" class="headerlink" title="Reference"></a>Reference</h4><p>[1]. <a target="_blank" rel="noopener" href="https://github.com/ethereum/guide/blob/master/poa.md">PoA Private Chains</a></p>
+<p>[2]. <a target="_blank" rel="noopener" href="https://gavofyork.gitbooks.io/turboethereum/content/index.html">TurboEthereum Guide</a></p>
+<h3 id="NPoS"><a href="#NPoS" class="headerlink" title="NPoS"></a>NPoS</h3><p><strong>Nominated Proof of Stake</strong> 的简写。Polkadot 链中使用的共识机制。</p>
+<blockquote>
+<p>A relatively new type of scheme used to select the validators who are allowed<br>to participate in the consensus protocol.</p>
+</blockquote>
+<p><strong>PoS</strong> 中选举 Validators 的新方法。引入了 Nominators，即让更多的 Token 持有者加入共识中。<br>就如同选举自己的代表一样，只要是公民，就能选择自己看好的代表，同时有算法来保证代表的公平性，不能<br>被过代表（over-representation，想想“女拳师”们，过代表的典型），也不能 under-presentation<br>（不知道中文翻译成什么更确切，意思就是代表性不足，国人就参考人大代表的选举是什么情况，典型的<br>under-presentation）。现在来看 Polkadot 中的 <strong>validator</strong> 和 <strong>nominator</strong>。</p>
+<ul>
+<li><strong>Validator</strong><blockquote>
+<p>Play a key role in highly sensitive protocols such as block production and<br>the finality gadget. Their job is demanding as they need to run costly<br>operations, ensure high communication responsiveness, and build a long-term<br>reputation of reliability.</p>
+</blockquote>
+</li>
+</ul>
+<p>就是说 Validator 在 Polkadot 中掌握治理权，由他们来保障链中区块的生成以及最终确认，同时保证<br>高响应。在 <strong>PoS</strong> 中，他们需要支付大额度的 Token 质押。一旦有 Validator 违反共识（确认假<br>区块、离线、恶意攻击链上网络、执行修改后的 node 软件等），那么所质押的 Token 就会被没收掉。<br>当然，只要遵守共识，就能得到一定的收益，同时，和人大代表或议员一样，数量上是有限制，不可能有很<br>多个 validator。</p>
+<ul>
+<li><strong>nominators</strong><blockquote>
+<p>A nominator publishes a list of validator candidates that she trusts, and<br>puts down an amount of Dots at stake to support them with.</p>
+</blockquote>
+</li>
+</ul>
+<p>如果将 validator 比作人大代表，那么 nominator 就是超过 18 岁的公民了。nominator 可以通过<br>质押自己手中的 <code>DOT</code> 来为自己看好的 validator 候选人进行投票，不同于人大代表的选举，<br>nominator 可以选举多个 validator 候选人。如果自己支持的候选人被选中为 validator ，那么你<br>支持的 validator 在获得收益时，你也能获得收益，反之亦然，validator 违反共识会被惩罚，你对其<br>的支持的 DOT 也会被没收掉。在分配收益时，你可以自己选择将自己的收益给 validator，分配给多少<br>取决于你自己，你既可以将收益完全给 validator，自己不要那些收益，也可以完全保留收益，不和<br>validator 分享。不同于 validator 的数量有限，只要你有 DOT，你就可以成为 nominator。这样就<br>能让持有 DOT 的人都可以参与链上的治理。</p>
+<p><strong>DOT</strong>: Polkadot 的代币（Token）</p>
+<p>那么选举的流程是怎么样的呢？不同于 <strong>PoS</strong> 的按质押的权重比，而是确保 nominator 的质押平均的<br>分配到参选的 validator 上。为了确保这一点，选举需要有以下两点：</p>
+<ul>
+<li><strong>Fair representation</strong><blockquote>
+<p>any nominator holding at least one n-th of the totall stake is guaranteed to<br>have at least one of their trusted validators elected.</p>
+</blockquote>
+</li>
+</ul>
+<p>代表的公平性，即不能被 over-presentation，也不能被 under-presentation。这点是根据<br><a target="_blank" rel="noopener" href="https://www.aaai.org/ocs/index.php/AAAI/AAAI17/paper/view/14757/13791">Lars Edvard Phragmen 的 proportional justified representation</a><br>来实现的。其规则是：</p>
+<blockquote>
+<p>如果要选举 $ n $ 个 validator，任意持有总质押的 $ \frac{1}{n} $ 及以上 token 的<br>nominator 至少要选择一个 validator 候选人。</p>
+</blockquote>
+<p>以下图片展示了三个选举，其中第一个选举认为是不公平的，二、三认为是公平的。</p>
+<p><img src="/images/blockchain/npos-election.png" alt="npos-election.png"></p>
+<ul>
+<li><strong>Security</strong><blockquote>
+<p>If a nominator gets two or more of its trusted validators elected, we need<br>to distribute[^np] her stake among them, in such a wway that the validators’<br>backings are as balanced as possible.</p>
+</blockquote>
+</li>
+</ul>
+<p>那安全性是怎么实现的呢？当 nominator 给多个 validator 候选人投票时，将其投票拆分，然后分别<br>投给不同的候选人，最后通过计算候选人的最终得票，将得票最少票数作为安全等级的级数。至于该如何拆分<br>投票的数量，这是个 NP 完全问题，我暂时还没去研究。如果要看具体的算法分析，可自行阅读参考文档中<br>的 <code>Nominated Proof-of-Stake</code> 。</p>
+<p>下图展示了 level 6 和 level 9 的选举。Level 越高，其安全性肯定是越好。</p>
+<p><img src="/images/blockchain/npos-security-level.png" alt="npos-security-level.png"></p>
+<p>[^np]: NP-complete 算法</p>
+<p>至于具体的细节方面，那时属于 Polkadot 里面的内容了，就不再这里介绍。</p>
+<blockquote>
+<p>P.S 因为截止到我写这个的时候，我也没有完全看完文档，只是做了个 overview。具体的介绍应该会<br>放的 Polkadot 的介绍文档中。</p>
+</blockquote>
+<h4 id="Reference-6"><a href="#Reference-6" class="headerlink" title="Reference"></a>Reference</h4><p>[1]. <a target="_blank" rel="noopener" href="https://wiki.polkadot.network/docs/learn-staking">Polkadot wiki: learn-staking</a></p>
+<p>[2]. <a target="_blank" rel="noopener" href="https://medium.com/web3foundation/how-nominated-proof-of-stake-will-work-in-polkadot-377d70c6bd43">How Nominated Proof-of-Stake will work in Polkadot</a></p>
+<p>[3]. <a target="_blank" rel="noopener" href="https://medium.com/polkadot-network/grandpa-block-finality-in-polkadot-an-introduction-part-1-d08a24a021b5">GRANDPA: Block Finality in Polkadot</a></p>
+<p>[4]. <a target="_blank" rel="noopener" href="https://www.britannica.com/science/NP-complete-problem">NP-complete problem</a></p>
+<p>[5]. <a target="_blank" rel="noopener" href="https://research.web3.foundation/en/latest/polkadot/NPoS/index.html">Nominated Proof-of-Stake</a></p>
+<p>[6]. <a target="_blank" rel="noopener" href="http://www.npc.gov.cn/npc/c30834/202112/07284fbc6faa4189b77f8b0ca9a39153.shtml">人大代表选举是实现全过程人民民主的首要环节和坚实基础</a></p>
+<h2 id="Zero-Knowledge-Proof"><a href="#Zero-Knowledge-Proof" class="headerlink" title="Zero-Knowledge Proof"></a>Zero-Knowledge Proof</h2><blockquote>
+<p><strong>Notes: it’s a long term study subject, need more time to read paper &amp; reference.</strong></p>
+</blockquote>
+<h3 id="Non-interactive-Zero-Knowledge-Proof"><a href="#Non-interactive-Zero-Knowledge-Proof" class="headerlink" title="Non-interactive Zero-Knowledge Proof"></a>Non-interactive Zero-Knowledge Proof</h3><h3 id="Interactive-Zero-Knowledge-Proof"><a href="#Interactive-Zero-Knowledge-Proof" class="headerlink" title="Interactive Zero-Knowledge Proof"></a>Interactive Zero-Knowledge Proof</h3><h3 id="Reference-7"><a href="#Reference-7" class="headerlink" title="Reference"></a>Reference</h3><p>[1]. <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Zero-knowledge_proof#Zero_knowledge_types">Wikipedia: Zero-knowledge proof</a></p>
+<p>[2]. <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof">Wikipedia: Non-interactive zero-knowledge proof</a></p>
+<p>[3]. <a target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/3-540-46766-1_35">Non-interactive zero-knowledge proof of knowledge and chosen ciphertext attack</a></p>
+<p>[4]. <a target="_blank" rel="noopener" href="https://link.springer.com/article/10.1007/BF00195207">Definitions and properties of zero-kenowledge proof systems</a></p>
+<p>[5]. <a target="_blank" rel="noopener" href="https://epubs.siam.org/doi/abs/10.1137/S0097539791220688">On the composition of zero-knowledge proof systems</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hash-Function"><span class="toc-number">1.</span> <span class="toc-text">Hash Function</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">1.1.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Merkle-Tree"><span class="toc-number">2.</span> <span class="toc-text">Merkle Tree</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference-1"><span class="toc-number">2.1.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Consensus-Mechanism"><span class="toc-number">3.</span> <span class="toc-text">Consensus Mechanism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PoW"><span class="toc-number">3.1.</span> <span class="toc-text">PoW</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros-and-Cons"><span class="toc-number">3.1.1.</span> <span class="toc-text">Pros and Cons</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference-2"><span class="toc-number">3.1.2.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PoS"><span class="toc-number">3.2.</span> <span class="toc-text">PoS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pros-and-Cons-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">Pros and Cons</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference-3"><span class="toc-number">3.2.2.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PoST"><span class="toc-number">3.3.</span> <span class="toc-text">PoST</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference-4"><span class="toc-number">3.3.1.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PoA"><span class="toc-number">3.4.</span> <span class="toc-text">PoA</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference-5"><span class="toc-number">3.4.1.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NPoS"><span class="toc-number">3.5.</span> <span class="toc-text">NPoS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference-6"><span class="toc-number">3.5.1.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zero-Knowledge-Proof"><span class="toc-number">4.</span> <span class="toc-text">Zero-Knowledge Proof</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Non-interactive-Zero-Knowledge-Proof"><span class="toc-number">4.1.</span> <span class="toc-text">Non-interactive Zero-Knowledge Proof</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Interactive-Zero-Knowledge-Proof"><span class="toc-number">4.2.</span> <span class="toc-text">Interactive Zero-Knowledge Proof</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference-7"><span class="toc-number">4.3.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2021/12/07/blockchain-basics/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&text=Blockchain Basics"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&title=Blockchain Basics"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&is_video=false&description=Blockchain Basics"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Blockchain Basics&body=Check out this article: https://oneforalone.github.io/2021/12/07/blockchain-basics/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&title=Blockchain Basics"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&title=Blockchain Basics"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&title=Blockchain Basics"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&title=Blockchain Basics"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2021/12/07/blockchain-basics/&name=Blockchain Basics&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2021/12/07/blockchain-basics/&t=Blockchain Basics"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

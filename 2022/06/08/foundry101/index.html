@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Prodromes前篇 Web3 Development Toolkits 中对比的几个通用的 Smart Contracttoolkits，当中介绍的比较详细的是 Hardhat。 但是从切换到 Foundry 后，发现是真的爽。所以就有了这篇 Foundry101，相信我，Foundry，你值得拥有。其实只要参考官方文档就好了，但是这里我就记录一下自己使用的一个完整流程吧。 官方文档链接：ht">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Foundry Tutorial">
+<meta property="og:url" content="https://oneforalone.github.io/2022/06/08/foundry101/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="Prodromes前篇 Web3 Development Toolkits 中对比的几个通用的 Smart Contracttoolkits，当中介绍的比较详细的是 Hardhat。 但是从切换到 Foundry 后，发现是真的爽。所以就有了这篇 Foundry101，相信我，Foundry，你值得拥有。其实只要参考官方文档就好了，但是这里我就记录一下自己使用的一个完整流程吧。 官方文档链接：ht">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-06-08T12:25:14.000Z">
+<meta property="article:modified_time" content="2023-10-07T18:30:29.077Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Blockchain">
+<meta property="article:tag" content="Ethereum">
+<meta property="article:tag" content="Rust">
+<meta property="article:tag" content="Solidity">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Foundry Tutorial</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/06/08/hacking-in-solidity/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/06/08/centos6-utils/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/06/08/foundry101/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/06/08/foundry101/&text=Foundry Tutorial"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/06/08/foundry101/&title=Foundry Tutorial"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/06/08/foundry101/&is_video=false&description=Foundry Tutorial"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Foundry Tutorial&body=Check out this article: https://oneforalone.github.io/2022/06/08/foundry101/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/06/08/foundry101/&title=Foundry Tutorial"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/06/08/foundry101/&title=Foundry Tutorial"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/06/08/foundry101/&title=Foundry Tutorial"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/06/08/foundry101/&title=Foundry Tutorial"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/06/08/foundry101/&name=Foundry Tutorial&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/06/08/foundry101/&t=Foundry Tutorial"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Prodromes"><span class="toc-number">1.</span> <span class="toc-text">Prodromes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Setup"><span class="toc-number">2.</span> <span class="toc-text">Setup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Init"><span class="toc-number">3.</span> <span class="toc-text">Init</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Demo"><span class="toc-number">4.</span> <span class="toc-text">Demo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Testing"><span class="toc-number">5.</span> <span class="toc-text">Testing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Deploying"><span class="toc-number">6.</span> <span class="toc-text">Deploying</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Utils"><span class="toc-number">7.</span> <span class="toc-text">Utils</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Gas-Tracking"><span class="toc-number">7.1.</span> <span class="toc-text">Gas Tracking</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Debugger"><span class="toc-number">7.2.</span> <span class="toc-text">Debugger</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summary"><span class="toc-number">8.</span> <span class="toc-text">Summary</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">9.</span> <span class="toc-text">Reference</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Foundry Tutorial
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-06-08T12:25:14.000Z" class="dt-published" itemprop="datePublished">2022-06-08 12:25:14 PM</time>
+        
+        (Updated: <time datetime="2023-10-07T18:30:29.077Z" class="dt-updated" itemprop="dateModified">2023-10-07 06:30:29 PM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Blockchain/">Blockchain</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Blockchain/" rel="tag">Blockchain</a>, <a class="p-category" href="/tags/Ethereum/" rel="tag">Ethereum</a>, <a class="p-category" href="/tags/Rust/" rel="tag">Rust</a>, <a class="p-category" href="/tags/Solidity/" rel="tag">Solidity</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Prodromes"><a href="#Prodromes" class="headerlink" title="Prodromes"></a>Prodromes</h2><p>前篇 <a href="/2022/04/13/web3-development-toolkits/" title="Web3 Development Toolkits">Web3 Development Toolkits</a> 中对比的几个通用的 Smart Contract<br>toolkits，当中介绍的比较详细的是 Hardhat。 但是从切换到 Foundry 后，发现是真的爽。所以就有<br>了这篇 Foundry101，相信我，Foundry，你值得拥有。其实只要参考官方文档就好了，但是这里我就记录<br>一下自己使用的一个完整流程吧。</p>
+<p>官方文档链接：<a target="_blank" rel="noopener" href="https://book.getfoundry.sh/index.html">https://book.getfoundry.sh/index.html</a></p>
+<p>本篇教程的代码托管在 Github 上：<a target="_blank" rel="noopener" href="https://github.com/oneforalone/my_nft">my_nft</a></p>
+<h2 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h2><ul>
+<li>rust</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://sh.rustup.rs -sSf | sh</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>foundry</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://foundry.paradigm.xyz | bash</span><br></pre></td></tr></table></figure>
+
+<p>安装程序没什么，根据自己的 OS 执行对应的操作就好了，我喜欢 *nix 的生态，同时使用的是 MacOS，<br>所以不会介绍 Windows 上的操作。</p>
+<p>安装好后在将 zsh 的自动补全也配置一下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir -pv $HOME/.zfunc</span><br><span class="line">echo &quot;fpath+=~/.zfunc&quot; &gt;&gt; $HOME/.zshrc</span><br><span class="line">forge completions zsh &gt; $HOME/.zfunc/_forge</span><br><span class="line">cast completions zsh &gt; $HOME/.zfunc/_cast</span><br><span class="line">echo &quot;autoload -Uz compinit &amp;&amp; compinit&quot; &gt;&gt; $HOME/.zshrc</span><br></pre></td></tr></table></figure>
+
+<h2 id="Init"><a href="#Init" class="headerlink" title="Init"></a>Init</h2><p>创建一个新项目，本教程中项目名为 <code>my_nft</code>，所以：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">forge init my_nft</span><br></pre></td></tr></table></figure>
+
+<p>然后就会在当前目录下创建一个 <code>my_nft</code> 的文件夹。切换到 <code>my_nft</code> 目录下。以下的操作无特殊说明<br>的话都是在 <code>my_nft</code> 目录下操作的。</p>
+<p>安装 <code>OpenZeppelin</code> 和 <code>forge-std</code> 依赖库：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">OpenZeppelin</span></span><br><span class="line">forge install openzeppelin/openzeppelin-contracts</span><br></pre></td></tr></table></figure>
+
+<p><code>forge install</code> 是直接去 gihtub 上下的，后面接 Github 的账号名和对应的 repo 名。<code>init</code> 时<br>会自动安装 <code>forge-std</code> 库。</p>
+<p>如果是直接使用 Github 上的源代码的话，不需要执行这些操作，直接 clone 下来就可以用，不然我为啥<br>要上传呢？默认 clone 下来的目录为 <code>my_nft</code>。</p>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p>具体的代码直接去 Github 的 repo 上看吧，clone 到本地：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone --recurse-submodules https://github.com/oneforalone/my_nft</span><br></pre></td></tr></table></figure>
+
+<p>这里只展示文件目录结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">├── .env</span><br><span class="line">├── foundry.toml</span><br><span class="line">├── lib</span><br><span class="line">│   ├── forge-std</span><br><span class="line">│   ├── openzeppelin-contracts</span><br><span class="line">│   └── solmate</span><br><span class="line">├── remappings.txt</span><br><span class="line">├── script</span><br><span class="line">│   └── MyNFT.s.sol</span><br><span class="line">├── src</span><br><span class="line">│   └── MyNFT.sol</span><br><span class="line">└── test</span><br><span class="line">    └── MyNFT.t.sol</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>foundry.toml</code>：foundry 配置文件</li>
+<li><code>lib</code> 目录：存放 <code>forge install</code> 的三方库</li>
+<li><code>remappings.txt</code>：配合 <code>VSCode</code>，里面的内容和 <code>foundry.toml</code> 中的 <code>remappings</code> 是<br>一致的。在配置好 <code>foundry.toml</code> 后，可执行 <code>forge remappings &gt; remappings.txt</code> 生成。</li>
+<li><code>script</code> 目录：存放 solidity 脚本，用来部署合约。</li>
+<li><code>test</code> 测试合约的文件后缀均为 <code>.t.sol</code>。</li>
+<li><code>.env</code>：个人配置文件，用来存放部署合约时的账号私钥，RPC_URL，EtherScan 的 API key 之类<br>的，该文件要自己自行创建配置。</li>
+</ul>
+<h2 id="Testing"><a href="#Testing" class="headerlink" title="Testing"></a>Testing</h2><p>执行全部的测试：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">forge test</span><br></pre></td></tr></table></figure>
+
+<p>测试具体的函数：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">forge test -vvvv --match-test=&lt;FunctionName&gt;</span><br></pre></td></tr></table></figure>
+
+<p>查看测试的代码可以看出，测试代码的函数名开头均为 <code>test</code>，如果反向测试（即测试错误案例），则文件<br>开头名为 <code>testFail</code>，当然，如果是知道 tx 会被 revert 的话，可以直接使用 cheatcode:<br><code>vm.expectRevert</code>。</p>
+<p>再一次强调，foundry 的 cheatcode 是真的 cool，我推测大概率是因为 foundry 引用了<br><a target="_blank" rel="noopener" href="https://crates.io/crates/revm">revm</a>，可以直接在本地把 tx 跑一遍，所以，能够使用<br>cheatcode 也就不足为奇了。</p>
+<p>而且 foundry 还可以 fuzz testing，测试时真的是爽到起飞。</p>
+<p>忘了说了，foundry 测试也是用的合约，语言当然就是 solidity 咯，这个也要比 hardhat 要舒服，<br>写合约，测试合约，都是用同一种语言，这样才舒服嘛。</p>
+<h2 id="Deploying"><a href="#Deploying" class="headerlink" title="Deploying"></a>Deploying</h2><p>Foundry 原生的部署合约稍微有点麻烦，命令比较长：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">forge create --rpc-url &lt;your_rpc_url&gt; \</span><br><span class="line">  --constructor-args &quot;MyNFT&quot; &quot;MYT&quot; &quot;https://www.example.com&quot; \</span><br><span class="line">  --private-key &lt;your_private_key&gt; \</span><br><span class="line">  src/MyNFT.sol:MyNFT \</span><br><span class="line">  --etherscan-api-key &lt;your_etherscan_api_key&gt; \</span><br><span class="line">  --verify</span><br></pre></td></tr></table></figure>
+
+<p>看上去就很烦，而且也不太方便。不过目前已经支持使用 solidity 脚本部署了。</p>
+<ul>
+<li><code>script/MyNFT.s.sol</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//SPDX-License-Identifier: UNLICENSED</span><br><span class="line">pragma solidity &gt;=0.8.10;</span><br><span class="line"></span><br><span class="line">import &quot;@forge-std/Script.sol&quot;;</span><br><span class="line">import &quot;../src/MyNFT.sol&quot;;</span><br><span class="line"></span><br><span class="line">contract DeployMyNFT is Script &#123;</span><br><span class="line">    function run() external &#123;</span><br><span class="line">        address deployer = vm.addr(vm.envUint(&quot;PRIVATE_KEY&quot;));</span><br><span class="line"></span><br><span class="line">        console.log(&quot;The Deployer address:&quot;, deployer);</span><br><span class="line">        console.log(&quot;Balance is:&quot;, deployer.balance);</span><br><span class="line"></span><br><span class="line">        vm.startBroadcast(deployer);</span><br><span class="line"></span><br><span class="line">        MyNFT nft = new MyNFT(&quot;MyNFT&quot;, &quot;MYT&quot;, &quot;https://www.example.com&quot;);</span><br><span class="line">        vm.stopBroadcast();</span><br><span class="line"></span><br><span class="line">        console.log(&quot;MyNFT deployed at:&quot;, address(nft));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>分别在 <code>.env</code> 和 <code>foundry.toml</code> 添加以下内容：</p>
+<ul>
+<li><code>.env</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PRIVATE_KEY=</span><br><span class="line">MAINNET_RPC_URL=</span><br><span class="line">RINKEBY_RPC_URL=</span><br><span class="line">ANVIL_RPC_URL=&quot;http://localhost:8545&quot;</span><br><span class="line">ETHERSCAN_KEY=</span><br></pre></td></tr></table></figure>
+
+<p>然后添加上自己的 private key，RPC URL 和 etherscan 的 api key。</p>
+<ul>
+<li><code>foundry.toml</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[rpc_endpoints]</span><br><span class="line">mainnet = &quot;$&#123;MAINNET_RPC_URL&#125;&quot;</span><br><span class="line">rinkeby = &quot;$&#123;RINKEBY_RPC_URL&#125;&quot;</span><br><span class="line">anvil = &quot;$&#123;ANVIL_RPC_URL&#125;&quot;</span><br><span class="line"></span><br><span class="line">[etherscan]</span><br><span class="line">mainnet = &#123; key = &quot;$&#123;ETHERSCAN_KEY&#125;&quot; &#125;</span><br><span class="line">rinkeby = &#123; key = &quot;$&#123;ETHERSCAN_KEY&#125;&quot; &#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>source .env</code> 后再部署到对应的网络上：</p>
+<ul>
+<li>mainnet</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">forge script DeployMyNFT --rpc-url MAINNET_RPC_URL --broadcast --verify</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>rinkeby</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">forge script DeployMyNFT --rpc-url RINKEBY_RPC_URL --broadcast --verify</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>anvil（本地）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">forge script DeployMyNFT --rpc-url $ANVIL_RPC_URL --broadcast</span><br></pre></td></tr></table></figure>
+
+<p>如果想要将合于代码开源的话，如果你在配置文件中配置了对应的 api key 的话，可以在上面命令追加<br>参数 <code>--verify</code>。</p>
+<p>或者自己手动执行合约代码开源：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">forge verify-contract --chain-id &lt;chain-id&gt; \</span><br><span class="line">  --number-of-optimizations &lt;optimization number&gt; \</span><br><span class="line">  --constructor-args $(cast abi-encode &quot;constructor(&lt;arg1Type&gt;,&lt;arg2Type&gt;,...)&quot; arg1 arg2 ...) \</span><br><span class="line">  --compiler-version &lt;compiler-version&gt; \</span><br><span class="line">  &lt;the-contract-address&gt; \</span><br><span class="line">  src/&lt;contract-file&gt;:&lt;contract-name&gt; \</span><br><span class="line">  &lt;etherscan-api-key&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如果不想加这么多参数的话，可以直接在 <code>foundry.toml</code> 中配置对应的参数，具体参数的配置参考：<br><a target="_blank" rel="noopener" href="https://book.getfoundry.sh/reference/config.html">https://book.getfoundry.sh/reference/config.html</a></p>
+<h2 id="Utils"><a href="#Utils" class="headerlink" title="Utils"></a>Utils</h2><h3 id="Gas-Tracking"><a href="#Gas-Tracking" class="headerlink" title="Gas Tracking"></a>Gas Tracking</h3><p>有时候比较关心合约调用的 gas 怎么办呢？虽然 <code>web3.js</code> 有 <code>estimateGas</code> 方法，但是要每个<br>调用都自己手动写，有点麻烦，不过没关系，切换到 foundry，只要在 <code>foundry.toml</code> 中添加一行<br><code>gas_reports = [&quot;*&quot;]</code>，然后执行: <code>forge test --gas-report</code> 就能将所有合约中的函数调用<br>的 gas 都给展示出来，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">╭──────────────────────────────┬─────────────────┬───────┬────────┬───────┬─────────╮</span><br><span class="line">│ src/MyNFT.sol:MyNFT contract ┆                 ┆       ┆        ┆       ┆         │</span><br><span class="line">╞══════════════════════════════╪═════════════════╪═══════╪════════╪═══════╪═════════╡</span><br><span class="line">│ Deployment Cost              ┆ Deployment Size ┆       ┆        ┆       ┆         │</span><br><span class="line">├╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┤</span><br><span class="line">│ 1163822                      ┆ 6564            ┆       ┆        ┆       ┆         │</span><br><span class="line">├╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┤</span><br><span class="line">│ Function Name                ┆ min             ┆ avg   ┆ median ┆ max   ┆ # calls │</span><br><span class="line">├╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┤</span><br><span class="line">│ mintTo                       ┆ 0               ┆ 46262 ┆ 69393  ┆ 69393 ┆ 3       │</span><br><span class="line">├╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┤</span><br><span class="line">│ owner                        ┆ 2398            ┆ 2398  ┆ 2398   ┆ 2398  ┆ 2       │</span><br><span class="line">├╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┤</span><br><span class="line">│ tokenURI                     ┆ 4271            ┆ 4271  ┆ 4271   ┆ 4271  ┆ 2       │</span><br><span class="line">├╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┤</span><br><span class="line">│ withdrawPayments             ┆ 606             ┆ 4369  ┆ 4369   ┆ 8132  ┆ 2       │</span><br><span class="line">╰──────────────────────────────┴─────────────────┴───────┴────────┴───────┴─────────╯</span><br></pre></td></tr></table></figure>
+
+<p>很 cool 吧。这就是原生支持 evm 的好处。我想如果有人用 golang 去写一个 toolkit 的话，也是可<br>以实现 foundry 所有的功能的。</p>
+<h3 id="Debugger"><a href="#Debugger" class="headerlink" title="Debugger"></a>Debugger</h3><p>foundry 还支持 debug 合约，这个就比较难得了。和 Remix 唯一不足的一点是，Remix 能显示<br>Storage，而 Foundry 的 debuger 中没有 Storage 的展示。使用方法就是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">forge test --debug &lt;FuncName&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">forge test --debug testSetter</span><br></pre></td></tr></table></figure>
+
+<p>或是</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">forge debug --debug &lt;contract-file&gt; \</span><br><span class="line">  --sig &lt;FuncSig&gt; &lt;FuncArg1&gt; &lt;FuncArg2&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>Anyway, foundry 更新还是比较频繁的，还是尽量去官方的文档吧。</p>
+<p>Enjoy.</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://book.getfoundry.sh/index.html">Foundry Book</a></li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Prodromes"><span class="toc-number">1.</span> <span class="toc-text">Prodromes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Setup"><span class="toc-number">2.</span> <span class="toc-text">Setup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Init"><span class="toc-number">3.</span> <span class="toc-text">Init</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Demo"><span class="toc-number">4.</span> <span class="toc-text">Demo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Testing"><span class="toc-number">5.</span> <span class="toc-text">Testing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Deploying"><span class="toc-number">6.</span> <span class="toc-text">Deploying</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Utils"><span class="toc-number">7.</span> <span class="toc-text">Utils</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Gas-Tracking"><span class="toc-number">7.1.</span> <span class="toc-text">Gas Tracking</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Debugger"><span class="toc-number">7.2.</span> <span class="toc-text">Debugger</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summary"><span class="toc-number">8.</span> <span class="toc-text">Summary</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">9.</span> <span class="toc-text">Reference</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/06/08/foundry101/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/06/08/foundry101/&text=Foundry Tutorial"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/06/08/foundry101/&title=Foundry Tutorial"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/06/08/foundry101/&is_video=false&description=Foundry Tutorial"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Foundry Tutorial&body=Check out this article: https://oneforalone.github.io/2022/06/08/foundry101/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/06/08/foundry101/&title=Foundry Tutorial"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/06/08/foundry101/&title=Foundry Tutorial"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/06/08/foundry101/&title=Foundry Tutorial"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/06/08/foundry101/&title=Foundry Tutorial"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/06/08/foundry101/&name=Foundry Tutorial&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/06/08/foundry101/&t=Foundry Tutorial"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

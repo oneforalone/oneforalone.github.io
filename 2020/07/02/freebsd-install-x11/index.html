@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="没事玩了会 FreeBSD，安装完系统后发现，只有个黑黑的 terminal，这怎么能行呢？本意是想要作为桌面系统的。去社区和官网溜达一下，参照 FreeBSD Handbook 中的I.5 节就开始折腾了。 对了，在国内的伙伴千万要记得，换成国内的 pkg 源哦，另外，官网给的镜像已经挂了，建议使用中科大的镜像 安装 Xorg因为 *nix 的桌面环境都是基于 X Windows System">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FreeBSD 12 安装图形界面">
+<meta property="og:url" content="https://oneforalone.github.io/2020/07/02/freebsd-install-x11/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="没事玩了会 FreeBSD，安装完系统后发现，只有个黑黑的 terminal，这怎么能行呢？本意是想要作为桌面系统的。去社区和官网溜达一下，参照 FreeBSD Handbook 中的I.5 节就开始折腾了。 对了，在国内的伙伴千万要记得，换成国内的 pkg 源哦，另外，官网给的镜像已经挂了，建议使用中科大的镜像 安装 Xorg因为 *nix 的桌面环境都是基于 X Windows System">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-07-02T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-07T18:30:29.081Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Unix">
+<meta property="article:tag" content="FreeBSD">
+<meta property="article:tag" content="Xorg">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>FreeBSD 12 安装图形界面</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2020/07/03/dual-os-date-issue/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2020/06/30/vb-docker-conflicts/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&text=FreeBSD 12 安装图形界面"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&title=FreeBSD 12 安装图形界面"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&is_video=false&description=FreeBSD 12 安装图形界面"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=FreeBSD 12 安装图形界面&body=Check out this article: https://oneforalone.github.io/2020/07/02/freebsd-install-x11/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&title=FreeBSD 12 安装图形界面"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&title=FreeBSD 12 安装图形界面"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&title=FreeBSD 12 安装图形界面"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&title=FreeBSD 12 安装图形界面"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&name=FreeBSD 12 安装图形界面&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&t=FreeBSD 12 安装图形界面"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Xorg"><span class="toc-number">1.</span> <span class="toc-text">安装 Xorg</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE-XDM"><span class="toc-number">2.</span> <span class="toc-text">安装配置 XDM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE-Xfce"><span class="toc-number">3.</span> <span class="toc-text">安装配置 Xfce</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        FreeBSD 12 安装图形界面
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-07-02T00:00:00.000Z" class="dt-published" itemprop="datePublished">2020-07-02 12:00:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-07T18:30:29.081Z" class="dt-updated" itemprop="dateModified">2023-10-07 06:30:29 PM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/FreeBSD/">FreeBSD</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/FreeBSD/" rel="tag">FreeBSD</a>, <a class="p-category" href="/tags/Unix/" rel="tag">Unix</a>, <a class="p-category" href="/tags/Xorg/" rel="tag">Xorg</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>没事玩了会 FreeBSD，安装完系统后发现，只有个黑黑的 terminal，这怎么能行呢？本意是想要作为<br>桌面系统的。去社区和官网溜达一下，参照 <a target="_blank" rel="noopener" href="https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/index.html">FreeBSD Handbook</a> 中的<br><a target="_blank" rel="noopener" href="https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/x11.html">I.5 节</a>就开始折腾了。</p>
+<p>对了，在国内的伙伴千万要记得，换成国内的 pkg 源哦，另外，官网给的镜像已经挂了，建议使用<br><a target="_blank" rel="noopener" href="http://mirrors.ustc.edu.cn/help/freebsd-pkg.html">中科大的镜像</a></p>
+<h2 id="安装-Xorg"><a href="#安装-Xorg" class="headerlink" title="安装 Xorg"></a>安装 Xorg</h2><p>因为 *nix 的桌面环境都是基于 <a target="_blank" rel="noopener" href="https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/x-understanding.html">X Windows System</a> 的，所以，需要先安装<br>X Windows System，该套件包名叫 <code>xorg</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pkg install xorg</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="安装配置-XDM"><a href="#安装配置-XDM" class="headerlink" title="安装配置 XDM"></a>安装配置 XDM</h2><p>安装完 <code>xorg</code> 后，就需要安装登陆界面的管理器了。当然，不同的桌面环境有不同的 <code>XDM</code>。我这里就<br>直接装默认的，虽然很丑，但是好用啊。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pkg install x11/xdm</span></span><br></pre></td></tr></table></figure>
+
+<p>安装好后编辑 <code>/etc/ttys</code>，将其中的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ttyv8 &quot;/usr/local/bin/xdm -nodaemon&quot; xterm off secure</span><br></pre></td></tr></table></figure>
+
+<p>这一行中的 <code>off</code> 改为 <code>on</code> 保存。这行配置会让 <code>XDM</code> 随系统启动而启动。</p>
+<h2 id="安装配置-Xfce"><a href="#安装配置-Xfce" class="headerlink" title="安装配置 Xfce"></a>安装配置 Xfce</h2><p>最后，安装 <code>Xfce</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pkg install xfce</span></span><br></pre></td></tr></table></figure>
+
+<p>因为 <code>Xfce</code> 是用 <a target="_blank" rel="noopener" href="https://www.freedesktop.org/wiki/Software/dbus/"><code>D-Bus</code></a> 作为消息总线的，所以需要将 <code>D-Bus</code> 设为开机自启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sysrc dbus_enable=YES</span></span><br></pre></td></tr></table></figure>
+
+<p>另外，官方手册中没有写要配置鼠标的服务.安装好后发现没有鼠标，所以，还需要将鼠标的服务设为开机<br>自启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sysrc moused_enable=YES</span></span><br></pre></td></tr></table></figure>
+
+<p>用以下命令创建 <code>~/.xinitrc</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">% <span class="built_in">echo</span> <span class="string">&quot;. /usr/local/etc/xdg/xfce4/xinitrc&quot;</span> &gt; ~/.xinitrc</span><br></pre></td></tr></table></figure>
+
+<p>设置使用 <code>XDM</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">% <span class="built_in">echo</span> <span class="string">&quot;. /usr/local/etc/xdg/xfce4/xinitrc&quot;</span> &gt; ~/.xsession</span><br></pre></td></tr></table></figure>
+
+<p><strong>注</strong>：以上两个命令都是以用户权限执行的，如果没有切换，那么默认是进入 <code>root</code> 用户的桌面。</p>
+<p>P.S. 什么，<code>GNOME</code> 和 <code>KDE</code>？自己看文档去，反正我不用这些桌面。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Xorg"><span class="toc-number">1.</span> <span class="toc-text">安装 Xorg</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE-XDM"><span class="toc-number">2.</span> <span class="toc-text">安装配置 XDM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE-Xfce"><span class="toc-number">3.</span> <span class="toc-text">安装配置 Xfce</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&text=FreeBSD 12 安装图形界面"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&title=FreeBSD 12 安装图形界面"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&is_video=false&description=FreeBSD 12 安装图形界面"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=FreeBSD 12 安装图形界面&body=Check out this article: https://oneforalone.github.io/2020/07/02/freebsd-install-x11/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&title=FreeBSD 12 安装图形界面"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&title=FreeBSD 12 安装图形界面"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&title=FreeBSD 12 安装图形界面"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&title=FreeBSD 12 安装图形界面"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&name=FreeBSD 12 安装图形界面&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2020/07/02/freebsd-install-x11/&t=FreeBSD 12 安装图形界面"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

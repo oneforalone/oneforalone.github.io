@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="区块链，目前比较火的技术之一，目前众说纷纭，各自都持有各自的看法。但接触过区块链的人或多或少都知道 defi（Decentralised Finance)。而在 defi 中，又以 Uniswap 为代表。 Uniswap，或者叫做 CFMM (Constant Function Maket Maker)，是目前 defi 中的龙头之一。其功能是让 Ethereum 上的不同的 token 之间自">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Defi - Uniswap">
+<meta property="og:url" content="https://oneforalone.github.io/2022/09/08/defi-uniswap/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="区块链，目前比较火的技术之一，目前众说纷纭，各自都持有各自的看法。但接触过区块链的人或多或少都知道 defi（Decentralised Finance)。而在 defi 中，又以 Uniswap 为代表。 Uniswap，或者叫做 CFMM (Constant Function Maket Maker)，是目前 defi 中的龙头之一。其功能是让 Ethereum 上的不同的 token 之间自">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://oneforalone.github.io/images/uniswap/uniswap-v3-liquidity.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/uniswap/uniswap-v3-liquidity-tick.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/uniswap/uniswap-v2-liquidity-tick.png">
+<meta property="article:published_time" content="2022-09-08T13:03:04.000Z">
+<meta property="article:modified_time" content="2023-10-09T11:22:24.981Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Blockchain">
+<meta property="article:tag" content="Ethereum">
+<meta property="article:tag" content="DeFi">
+<meta property="article:tag" content="Uniswap">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oneforalone.github.io/images/uniswap/uniswap-v3-liquidity.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Defi - Uniswap</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/09/19/ethereum2.0/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/06/09/ubuntu-utils/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/09/08/defi-uniswap/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&text=Defi - Uniswap"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&title=Defi - Uniswap"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&is_video=false&description=Defi - Uniswap"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Defi - Uniswap&body=Check out this article: https://oneforalone.github.io/2022/09/08/defi-uniswap/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&title=Defi - Uniswap"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&title=Defi - Uniswap"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&title=Defi - Uniswap"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&title=Defi - Uniswap"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&name=Defi - Uniswap&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/09/08/defi-uniswap/&t=Defi - Uniswap"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CFMM"><span class="toc-number">1.</span> <span class="toc-text">CFMM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#V1"><span class="toc-number">3.</span> <span class="toc-text">V1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ETH-ERC20"><span class="toc-number">3.1.</span> <span class="toc-text">ETH &lt;-&gt; ERC20</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%EF%BC%9AETH-OMG"><span class="toc-number">3.1.1.</span> <span class="toc-text">示例：ETH -&gt; OMG</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ERC20-ERC20"><span class="toc-number">3.2.</span> <span class="toc-text">ERC20 &lt;-&gt; ERC20</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.3.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#V2"><span class="toc-number">4.</span> <span class="toc-text">V2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ERC20-Pairs"><span class="toc-number">4.1.</span> <span class="toc-text">ERC20 Pairs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Price-Oracle"><span class="toc-number">4.2.</span> <span class="toc-text">Price Oracle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flash-Swaps"><span class="toc-number">4.3.</span> <span class="toc-text">Flash Swaps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Protocol-Fee"><span class="toc-number">4.4.</span> <span class="toc-text">Protocol Fee</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Meta-Transactions-for-Liduidity-Pool"><span class="toc-number">4.5.</span> <span class="toc-text">Meta Transactions for Liduidity Pool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-1"><span class="toc-number">4.6.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#V3"><span class="toc-number">5.</span> <span class="toc-text">V3</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E4%B8%AD%E6%B5%81%E5%8A%A8%E6%80%A7"><span class="toc-number">5.1.</span> <span class="toc-text">集中流动性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%B9%E6%80%A7%E8%B4%B9%E7%94%A8"><span class="toc-number">5.2.</span> <span class="toc-text">弹性费用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B3%E5%8F%B0%E8%87%AA%E6%B2%BB"><span class="toc-number">5.3.</span> <span class="toc-text">平台自治</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96-Oracle"><span class="toc-number">5.4.</span> <span class="toc-text">优化 Oracle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-2"><span class="toc-number">5.5.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What%E2%80%99s-Next"><span class="toc-number">6.</span> <span class="toc-text">What’s Next?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">7.</span> <span class="toc-text">Reference:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Appendices"><span class="toc-number">8.</span> <span class="toc-text">Appendices</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Appendix-A-x-y-k-%E6%A8%A1%E5%9E%8B"><span class="toc-number">8.1.</span> <span class="toc-text">Appendix A. x * y &#x3D; k 模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Appendix-B-%E6%BB%91%E7%82%B9"><span class="toc-number">8.2.</span> <span class="toc-text">Appendix B. 滑点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Appendix-C-%E6%97%A0%E5%B8%B8%E6%8D%9F%E5%A4%B1"><span class="toc-number">8.3.</span> <span class="toc-text">Appendix C. 无常损失</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Appendix-D-Liquidity"><span class="toc-number">8.4.</span> <span class="toc-text">Appendix D. Liquidity</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Defi - Uniswap
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-09-08T13:03:04.000Z" class="dt-published" itemprop="datePublished">2022-09-08 01:03:04 PM</time>
+        
+        (Updated: <time datetime="2023-10-09T11:22:24.981Z" class="dt-updated" itemprop="dateModified">2023-10-09 11:22:24 AM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Blockchain/">Blockchain</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Blockchain/" rel="tag">Blockchain</a>, <a class="p-category" href="/tags/DeFi/" rel="tag">DeFi</a>, <a class="p-category" href="/tags/Ethereum/" rel="tag">Ethereum</a>, <a class="p-category" href="/tags/Uniswap/" rel="tag">Uniswap</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>区块链，目前比较火的技术之一，目前众说纷纭，各自都持有各自的看法。但接触过区块链的人或多或少<br>都知道 defi（Decentralised Finance)。而在 defi 中，又以 Uniswap 为代表。</p>
+<p>Uniswap，或者叫做 CFMM (Constant Function Maket Maker)，是目前 defi 中的龙头之一。<br>其功能是让 Ethereum 上的不同的 token 之间自由地兑换。因为是使用的是合约实现的，加上去中心化<br>的属性，确保了平台的公开透明，且不易被中心化的机构操控。但既然是兑换平台，那么就可能存在套利<br>空间[8][9]。本文将从其设计和代码层面进行分析。Uniswap 有三个版本 V1, V2 和 其中 V1 是用<br>Vyper 实现的，最初的版本，token 之间的 swap 是通过 ETH 来中转的。V2 是用 solidity 实现的，<br>实现了不同的 ERC20 token 之间直接 swap，同时也支持 flash swap。但是 V2 版本的滑点较高，<br>价格区间较小，所以有了 V3，让价格区间更大了，同时可以直接追踪各个 token 的价格。</p>
+<blockquote>
+<p>P.S. 其中参考文档中 Towards a Theory of Maximal Extractable Value I:<br>Constant Function Market Makers 中第 10 页中的公式：<br>$G(\Delta + \Delta^{sand}) - G(\Delta^{sand}) &#x3D; (1 + \eta)G(\Delta)$<br>有误，正确的应该是：<br>$G(\Delta + \Delta^{sand}) - G(\Delta^{sand}) &#x3D; (1 - \eta)G(\Delta)$ 。<br>同时公式 (2) 应该也是错的，反正我是推不出那个公式，如果是用 token B 去换 token A<br>的话，那么得到的 A 的数量应该是：<br>$\Delta’ &#x3D; -\frac{R_AR_B}{R_B + \gamma\Delta} + R_A$，<br>如果说是 $\Delta$ 与 $\Delta’$ 的关系，那么应该是:<br>$G(\Delta) &#x3D; \Delta &#x3D; \frac{1}{\gamma}(\frac{R_AR_B}{R_A - \Delta’} - R_B)$<br>这个都是可以从公式 (1)：<br>$(R_A - \Delta’)(R_B + \gamma\Delta) &#x3D; R_AR_B &#x3D; K$<br>可以推导出来，可能是作者打错了吧。（本文的结果和其参考文档中给出的公式是一致的）</p>
+</blockquote>
+<h2 id="CFMM"><a href="#CFMM" class="headerlink" title="CFMM"></a>CFMM</h2><p>在分析 Uniswap 前，首先要了解什么是 CFMM。其本质就一个函数[2]：</p>
+<p>$$<br>x \times y &#x3D; k \tag{1}<br>$$</p>
+<p>其中 x, y 是对应 token 的数量，而 k 是个常数（不变），这样就能保持 token x, y<br>之间对应价格的稳定。所以其对应的价格为：$P(x) &#x3D; \frac{x}{y}$, $P(y) &#x3D; \frac{y}{x}$。<br>也就是说这时候要用 $\Delta$ 的 x 去兑换 y 的话，可以得到 $y - \frac{k}{x-\Delta}$<br>的 y。对应的价格也就变成了<br>$P_y(x) &#x3D; \frac{y + \Delta y}{x + \Delta x},<br>P_x(y) &#x3D; \frac{x + \Delta x}{y + \Delta y},<br>\Delta x &#x3D; \Delta, \Delta y &#x3D; y - \frac{k}{x - \Delta}$。<br>不管是 V1，V2 还是 V3，其最核心的公式就是这个。公式的具体分析参见{ref}<code>appendix-a</code>。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Uniswap 其主要功能就是交互 token。就三个功能：</p>
+<ul>
+<li>Swap Tokens</li>
+<li>Add Liquidity</li>
+<li>Remove Liquidity</li>
+</ul>
+<p>Swap Tokens 功能为主，大部分用户就是用的这个功能。但是这个 Swap 功能是要建立在有 Liquidity<br>Pool 上，需要有大户创建提供 Liquidity。既然有创建，那么也就需要有销毁咯。</p>
+<h2 id="V1"><a href="#V1" class="headerlink" title="V1"></a>V1</h2><p>V1 版本很简单，就是对 $x \times y &#x3D;k$ 公式的直接应用。其主要的特点是消耗的 gas 低，同时支持<br>ETH &lt;-&gt; ERC20 和 ERC20 &lt;-&gt; ERC20 之间的兑换[1]。</p>
+<h3 id="ETH-ERC20"><a href="#ETH-ERC20" class="headerlink" title="ETH &lt;-&gt; ERC20"></a>ETH &lt;-&gt; ERC20</h3><p>用 ETH 换 ERC20 很简单，就是将对应的 ETH 转到对应的合约上，然后将对应的 ERC20 token 转回来。<br>计算也很简单，就是套用公式：</p>
+<p>$$<br>(x + \gamma\Delta x) \times (y - \Delta y) &#x3D; k &#x3D; x \times y<br>$$</p>
+<p>其中 x 为 ETH，y 为 ERC20，$\Delta x$ 为需要交换的 ETH，$\Delta y$ 为要换出来的 ERC20，<br>$\gamma &#x3D; 1 - \rho$，$\rho$ 为平台的手续费，Uniswap 默认为 0.3%。即：</p>
+<p>$$<br>(x \times 1000 + 997 \times \Delta x) \times (y - \Delta y) &#x3D; x \times y<br>$$</p>
+<p>代码为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@private</span></span><br><span class="line"><span class="meta">@constant</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">getInputPrice</span>(<span class="params">input_amount: uint256, input_reserve: uint256, output_reserve: input256</span>) -&gt; uint256:</span><br><span class="line">    <span class="keyword">assert</span> input_reserve &gt; <span class="number">0</span> <span class="keyword">and</span> output_reserve &gt; <span class="number">0</span></span><br><span class="line">    input_amount_with_fee: uint256 = input_amount * <span class="number">997</span></span><br><span class="line">    numerator: uint256 = input_amount_with_fee * output_reserve</span><br><span class="line">    denominator: uint256 = (input_reserve * <span class="number">1000</span>) + input_amount_with_fee</span><br><span class="line">    <span class="keyword">return</span> numerator / denominator</span><br><span class="line"></span><br><span class="line"><span class="meta">@private</span></span><br><span class="line"><span class="meta">@constant</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">getOutputPrice</span>(<span class="params">output_amount: uint256, input_reserve: uint256, output_reserve: uint256</span>) -&gt; uint256:</span><br><span class="line">    <span class="keyword">assert</span> input_reerve &gt; <span class="number">0</span> <span class="keyword">and</span> output_reserve &gt; <span class="number">0</span></span><br><span class="line">    numerator: uint256 = input_reserve * output_amount * <span class="number">1000</span></span><br><span class="line">    denominator: uint256 = (output_reserve - output_amount) * <span class="number">997</span></span><br><span class="line">    <span class="keyword">return</span> numerator / denominator + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>其中代码中所谓的 <code>Price</code> 其实是返回交换后得到对应 token 的数量，不是真正的价格。即<br><code>getInputPrice</code> 是在给定 $x, y, \Delta x$ 的情况下返回<br>$\Delta y &#x3D; \lfloor\frac{\alpha\gamma}{1 + \alpha\gamma} y\rfloor$ 的值。<br><code>getOutputPrice</code> 是在给定 $x, y, \Delta y$ 的情况下返回<br>$\Delta x &#x3D; \lfloor\frac{\beta}{1 - \beta} \cdot \frac{1}{\gamma} \cdot x\rfloor + 1$<br>的值。其中 $\alpha &#x3D; \frac{\Delta x}{x}, \beta &#x3D; \frac{\Delta y}{y},<br>\gamma &#x3D; 1 - \rho, \rho &#x3D; 0.3%$。</p>
+<p>因此， <code>getInputPrice</code> 的实现的公式为：</p>
+<p>$$<br>\frac{(997 \times \Delta x \times y)}{1000 \times x + 997 \times \Delta x}<br>$$</p>
+<p><code>getOutPrice</code> 的公式为：</p>
+<p>$$<br>\frac{1000 \times x \times \Delta y}{997 \times (y - \Delta y)} + 1<br>$$</p>
+<blockquote>
+<p>P.S 这里对结果进行向下取整的原因是 Vyper 中算术运算是不支持浮点数，所以就直接向下取整咯，<br>至于为什么 $\Delta x$ 要取整后再加 1，而 $\Delta y$ 取整后却不用加 1。个人看法是<br>$\Delta x$ 是用户出的，所以多出一点后的 token 会加入到流动性池中，但是 $\Delta y$ 是<br>从流动性池中取出来，不可能多给你，那样次数多了后容易将池子掏空。我相信你懂我的意思的。</p>
+</blockquote>
+<h4 id="示例：ETH-OMG"><a href="#示例：ETH-OMG" class="headerlink" title="示例：ETH -&gt; OMG"></a>示例：ETH -&gt; OMG</h4><p>假设 ETH&#x2F;OMG 流动池中有 10 ETH 和 500 OMG。即 x &#x3D; 10, y &#x3D; 500, k &#x3D; x _ y &#x3D; 5000。<br>这里 ETH:OMG &#x3D; 1:50，也就是 1 ETH &#x3D; 50 OMG。如果有人需要将 1 ETH 换成 OMG，即<br>$\Delta x &#x3D; 1$。则 $x’ &#x3D; 10 + 0.977 &#x3D; 10.977, y’ &#x3D; 455.4978591600619$，<br>$\Delta y &#x3D; y - y’ &#x3D; 44.50214083993808$，即 1 ETH 最终能换到大概 44.5 OMG。<br>因为手续费是该流动性池中，所以新的 k 值为 11 _ 455.4978591600619 &#x3D; 5010.4764507606815。<br>实际上是 1 ETH &#x3D; 44.5 OMG，OMG&#x2F;ETH 的汇率变低，如果有人还用 ETH 来换 OMG，<br>则 OMG&#x2F;ETH 的汇率会更低，相反 ETH&#x2F;OMG 的汇率就更高，这时用 OMG 换 ETH 就会更值，<br>所以就会有人进行套利，因此确保 ETH 和 OMG 之间的汇率保持在一个相对稳定的价格。</p>
+<h3 id="ERC20-ERC20"><a href="#ERC20-ERC20" class="headerlink" title="ERC20 &lt;-&gt; ERC20"></a>ERC20 &lt;-&gt; ERC20</h3><p>由于 ETH 不是 ERC20，但是是个共用的 pair，所以可以用 ETH 来中转。所以 ERC20 和 ERC20<br>之间的兑换本质上还是 ETH 和 ERC20 的兑换，只不过是将两个兑换合并到了一起。例如你要用 token<br>ABC 来兑换 token XYZ，那么实际的操作是将 ABC 兑换成 ETH，再将 ETH 兑换成 XYZ。</p>
+<p>实际的代码比较多，如果想了解具体实现的可以访问其 Github 地址：<br><a target="_blank" rel="noopener" href="https://github.com/Uniswap/v1-contracts%E3%80%82">https://github.com/Uniswap/v1-contracts。</a></p>
+<p>一下是算法的代码：</p>
+<p>ABC Exchange 合约代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">contract Factory():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">getExchange</span>(<span class="params">token_addr: address</span>) -&gt; address: constant</span><br><span class="line"></span><br><span class="line">contract Exchange():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">ethToTokenTransfer</span>(<span class="params">recipent: address</span>) -&gt; <span class="built_in">bool</span>: modifying</span><br><span class="line"></span><br><span class="line">factory: Factory</span><br><span class="line"></span><br><span class="line"><span class="meta">@public</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">tokenToTokenSwap</span>(<span class="params">token_addr: address, tokens_sold: uint256</span>):</span><br><span class="line">    exchange: address = self.factory.getExchange(token_addr)</span><br><span class="line">    fee: uint256 = tokens_sold / <span class="number">500</span></span><br><span class="line">    invariant: uint256 = self.eth_pool * self.token_pool</span><br><span class="line">    new_token_pool: uint256 = self.token_pool + tokens_sold</span><br><span class="line">    new_eth_pool: uint256 = invariant / (new_token_pool - fee)</span><br><span class="line">    eth_out: uint256 = self.eth_pool - new_eth_pool</span><br><span class="line">    self.eth_pool = new_eth_pool</span><br><span class="line">    self.token_pool = new_token_pool</span><br><span class="line">    Exchange(exchange).ethToTokenTransfer(msg.sender, value=eth_out)</span><br></pre></td></tr></table></figure>
+
+<p>XYZ Exchange 合约中的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@public</span></span><br><span class="line"><span class="meta">@payable</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">ethToTokenTransfer</span>(<span class="params">recipent: address</span>):</span><br><span class="line">    fee: uint256 = msg.value / <span class="number">500</span></span><br><span class="line">    invariant: uint256 = self.eth_pool * self.token_pool</span><br><span class="line">    new_eth_pool: uint256 = self.eth_pool + msg.value</span><br><span class="line">    new_token_pool: uint256 = invariant / (new_eth_pool - fee)</span><br><span class="line">    tokens_out: uint256 = self.token_pool - new_token_pool</span><br><span class="line">    self.eth_pool = new_eth_pool</span><br><span class="line">    self.token_pool = new_token_pool</span><br><span class="line">    self.invariant = new_eth_pool * new_token_pool</span><br><span class="line">    self.token.transfer(recipent, tokens_out)</span><br></pre></td></tr></table></figure>
+
+<p>ABC 兑换 XYZ 的调用顺序是： ABC Exchange 合约中的 <code>tokenToTokenSwap</code>，再其中计算 ABC<br>对应 ETH，然后 ETH 的数量和调用者的地址传给 XYZ Exchange 合约中的 <code>ethTokenTransfer</code>，<br>将 ETH 换成 XYZ，然后再将得到的 XYZ 发送给调用者。</p>
+<p>至于添加流动性池和销毁流动性池，这个也没什么，按照提供的流动性所占的比例分发平台币给你，然后那个<br>平台币就是之后赎回（销毁）流动性池的凭证，同时这些平台币的占比也是后续交易手续费的分成占比。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于 V1 版本的 Uniswap 来说，做的比较粗糙。</p>
+<ol>
+<li>ERC20 与 ERC20 之间的兑换中转了一下，这里多花了一笔 gas fee，同时如果抽取手续费的话，<br>中间的损耗会更大。</li>
+<li>价格很容易被操控，比如说其他的合约调用了其价格进行操作，这时的价格就会波动，套利者就可以<br>进行套利。或者更甚的是攻击者可以直接进行砸盘操作，直接将池子掏空。</li>
+</ol>
+<h2 id="V2"><a href="#V2" class="headerlink" title="V2"></a>V2</h2><p>V2 版本与 V1 相比，增加了以下新的特性。</p>
+<ul>
+<li>ERC20 的 pair</li>
+<li>价格预言机（Price Oracle）</li>
+<li>Flash Swap</li>
+<li>平台手续费可开关</li>
+<li>流动性池之间的元交易</li>
+</ul>
+<h3 id="ERC20-Pairs"><a href="#ERC20-Pairs" class="headerlink" title="ERC20 Pairs"></a>ERC20 Pairs</h3><p>x * y &#x3D; k 模型有两个无法避免的缺陷，其中一个就是会有无常损失。由 Appendix-c 可知，每次价格<br>波动时，就会有套利，每次兑换都会导致 LP （Liquidity Provider）的资产出现无常损失。而在 V1<br>版本中，不同的 ERC20 之间的兑换是通过 ETH 进行中转的，这样就会将无常损失进一步的扩大（ABC 兑<br>ETH 中有一次损失，ETH 再兑 XYZ 又有一次损失）。同时，对于用户来说，每次 ERC20 的兑换都要中转，<br>中间的磨损（手续费，gas 费）也比较大。因此 V2 版本直接实现了 ERC20 Pair，让不同的 ERC20<br>之间不通过 ETH 直接兑换。这样就将 LP 的无常损失和用户的兑换成本降低一倍了。</p>
+<p>对于套利者来说，V2 版本的套利要比 V1 版本的难。因为 V1 版本有 ETH 中转，不需要计算 token<br>之间兑换的路径，而对于 V2 版本来说，套利者就需要通过算法来计算不同 token 之间的路径以获得<br>最佳套利空间，算法差的就会被算法好的进行一次套利，所以一次交易可能包含多个套利在其中。</p>
+<h3 id="Price-Oracle"><a href="#Price-Oracle" class="headerlink" title="Price Oracle"></a>Price Oracle</h3><p>对于两个不同价值的资产（A，B），其相对价格（B 相对于 A）：$P_A(B) &#x3D; \frac{R_A}{R_B}$，<br>其中 $R_A$ 表示 token A 的数量，$R_B$ 表示 token B 的数量。虽然中间有手续费，但是还是<br>可以将这个结果看作一个近似的价格，所以可以将这个值记录在链上来表示价格随时间的变化。V1 版本<br>不可以这么做是因为这个值太容易被人操控，而 V2 是通过时间线来记录价格，这样的话这个价格就不会<br>像 V1 那么容易被操控。而且 V2 版本不是记录上一次的价格，而是将每次的价格都进行累加，要计算<br>一个周期内的价格时：</p>
+<p>$$<br>P_{t_1,t_2} &#x3D; \frac{\Sigma^{t_2}_{i&#x3D;t_1} P_i}{t_2 - t_1} &#x3D;<br>\frac{\Sigma^{t_2}_{i&#x3D;1}P_i - \Sigma^{t_1}{i&#x3D;1}P_i}{t_2 - t_1}<br>$$</p>
+<p>其中 $t_1 &lt; t_2$，令</p>
+<p>$$<br>a_t &#x3D; \sum_{i&#x3D;1}^n P_i<br>$$</p>
+<p>则有：</p>
+<p>$$<br>P_{t_1, t_2} &#x3D; \frac{a_{t_2} - a_{t_1}}{t_2 - t_1}<br>$$</p>
+<p>因为 $P_B(A)$（A 相对于 B 的价格）和 $P_A(B)$（B 相对于 A 的价格）的通过公式计算的结果<br>不能保持其乘积为 1，所以 V2 版本会同时记录下这两个价格。</p>
+<p>其中存在一个问题就是如果有人不调用 Uniswap 的合约，而是直接给对应的 ERC20 pair 合约<br>转入对应的 token，这样就可以操控对应的价格了。这点的话 Uniswap 是每次 swap 后都会将<br>对应的 token 数量记录下来，如果当前的 token 数量和上次记录的不一致，那么就使用上次记录<br>下来的值进行计算。为了给一些误操作的人一些机会，Uniswap 保留了个函数 <code>skim</code> 可以让意外<br>转给合约的人将 token 提出来，同时也有一个防治有人恶意攻击时强制同步价格的函数 <code>update</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function skim(address to) external lock &#123;</span><br><span class="line">    address _token0 = token0; // gas savings</span><br><span class="line">    address _token1 = token1; // gas savings</span><br><span class="line">    _safeTransfer(_token0, to, IERC20(_token0).balanceOf(address(this)).sub(reserve0));</span><br><span class="line">    _safeTransfer(_token1, to, IERC20(_token1).balanceOf(address(this)).sub(reserve1));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function sync() external lock &#123;</span><br><span class="line">    _update(IERC20(token0).balanceOf(address(this)), IERC20(token1).balanceOf(address(this)), reserve0, reserve1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>又因为 Solidity 不支持浮点计算，V2 版本为了支持浮点计算，将整数部分和小数部分分开存放<br>然后计算，改计算库为 <code>UQ112x112.sol</code>。使用 112 bit 分别存储整数部分和小数部分，同时<br>为了更有效地利用存储，剩下的 32 bit 用来保存对应 $a_t$ 的值，即价格的累加和。</p>
+<blockquote>
+<p>P.S 在 Solidity 中，默认整型是 uint256，即 256 bit。因为浮点数是 112 + 112 &#x3D;<br>224 bit（uint224)，剩余 256 - 224 &#x3D; 32 bit。关于 Solidity 中整型的详细介绍，<br>参考其官方文档：<a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/latest/types.html#integers">https://docs.soliditylang.org/en/latest/types.html#integers</a></p>
+</blockquote>
+<p>所以 V2 版本支持的浮点数范围为 $[0, 2^{112} - 1]$，精度为 $\frac{1}{2^{112}}$，<br>因为 uinx 的 timestamp 也是 32 bit，即 $2^{32} - 1$ 秒，即在 Jul 02, 2106 这一天<br>会溢出，而 Uniswap 的是在创建后 $\frac{2^{32} - 1}{365 \times 24 \times 60 \times<br>60} \approx 136$ 年后才会溢出，在 2106 年后，所以在 $a_t$ 溢出前时间已经溢出了，所以这个<br>溢出是安全的。</p>
+<p>同时，为了防止流动性池被掏空，Uniswap 在创建 ERC20 pair 的流动性池时，会将 10^3 个单位<br>token 转给 0 地址（相当于销毁）。这样就相当于只要流动性池创建，那么这个池子就会一直存在，<br>不会被掏空（防止出现除零问题）。</p>
+<blockquote>
+<p>P.S 在 Ethereum 体系中，ETH 的最小单位为 wei，$1 ETH &#x3D; 10^18 wei$。所以对于<br>销毁 $10^3$ 个单位的 token，可以忽略不计。</p>
+</blockquote>
+<h3 id="Flash-Swaps"><a href="#Flash-Swaps" class="headerlink" title="Flash Swaps"></a>Flash Swaps</h3><p>Flash Swaps，翻译叫做“闪电换”。何谓”闪电换”呢？在 V1 的版本中，你要兑换 token 只能先将手中的<br>token 转给合约，然后合约再将你需要的 token 转给你，这就意味着你在兑换之前首先需要持有 token。<br>而”闪电换“是在你将手中的 token 转给合约前就将你需要的 token 转给你，如果你支付的 token 数量<br>不对，那么这比交易会被回退，如果数量正确，则交易不变，这就是“闪电换”。通俗点说，就是你在发起兑换<br>时，你就会收到需要兑换的 token。为什么要有”闪电换“呢？因为有“闪电贷”啊，这种带“闪电”的，都是<br>快进快出的，只需要保证交易是在一个 trasaction 中完成就可以。这样对那些套利者就更友好，他们可以<br>实现“零元购”来进行套利，这样就会有更多的人套利，从而让价格更快的达到市场上的价格。一个经典的实例<br>就是 <code>mevalphaleak.eth</code> 实现的“零元购”：<a target="_blank" rel="noopener" href="https://etherscan.io/tx/0x0efe3832b85e610fc4ba815f2be3943036a1a1be33cbd8f378a20d20667c1b39">0x0efe3832b85e610fc4ba815f2be3943036a1a1be33cbd8f378a20d20667c1b39</a></p>
+<p>该操作就是用到了“闪电贷”（dxdy）和“闪电换”（uniswap）。</p>
+<p>因为有 flash swap，所以 $\Delta x$ 不是由用户提供的，而是由公式计算得出，所以就由原来的 ：</p>
+<p>$$<br>(x_1 - 0.003 \cdot x_{in}) \cdot y_1 \geq x_0 \cdot y_0<br>$$</p>
+<p>变成了：</p>
+<p>$$<br>(x_1 - 0.003 \cdot x_{in}) \cdot (y_1 - 0.003 \cdot y_{in}) \geq x_0 \cdot y_0<br>$$</p>
+<p>为了方便合约中计算，等式两边放大 1,000,000 倍，有：</p>
+<p>$$<br>(1000 \cdot x_1 - 3 \cdot x_{in})\cdot(1000 \cdot y_1 - 3 \cdot y_{in}) \geq<br>1000000 \cdot x_0 \cdot y_0sc<br>$$</p>
+<p>合约代码：</p>
+<ul>
+<li>v2-core&#x2F;UniswapV2Pair.sol</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">function swap(</span><br><span class="line">    uint256 amount0Out,</span><br><span class="line">    uint256 amount1Out,</span><br><span class="line">    address to,</span><br><span class="line">    bytes calldata data</span><br><span class="line">) external lock &#123;</span><br><span class="line">    require(amount0Out &gt; 0 || amount1Out &gt; 0, &#x27;UniswapV2: INSUFFICIENT_OUTPUT_AMOUNT&#x27;);</span><br><span class="line">    (uint112 _reserve0, uint112 _reserve1, ) = getReserves(); // gas savings</span><br><span class="line">    require(amount0Out &lt; _reserve0 &amp;&amp; amount1Out &lt; _reserve1, &#x27;UniswapV2: INSUFFICIENT_LIQUIDITY&#x27;);</span><br><span class="line"></span><br><span class="line">    uint256 balance0;</span><br><span class="line">    uint256 balance1;</span><br><span class="line">    &#123;</span><br><span class="line">        // scope for _token&#123;0,1&#125;, avoids stack too deep errors</span><br><span class="line">        address _token0 = token0;</span><br><span class="line">        address _token1 = token1;</span><br><span class="line">        require(to != _token0 &amp;&amp; to != _token1, &#x27;UniswapV2: INVALID_TO&#x27;);</span><br><span class="line">        if (amount0Out &gt; 0) _safeTransfer(_token0, to, amount0Out); // optimistically transfer tokens</span><br><span class="line">        if (amount1Out &gt; 0) _safeTransfer(_token1, to, amount1Out); // optimistically transfer tokens</span><br><span class="line">        if (data.length &gt; 0) IUniswapV2Callee(to).uniswapV2Call(msg.sender, amount0Out, amount1Out, data);</span><br><span class="line">        balance0 = IERC20(_token0).balanceOf(address(this));</span><br><span class="line">        balance1 = IERC20(_token1).balanceOf(address(this));</span><br><span class="line">    &#125;</span><br><span class="line">    uint256 amount0In = balance0 &gt; _reserve0 - amount0Out ? balance0 - (_reserve0 - amount0Out) : 0;</span><br><span class="line">    uint256 amount1In = balance1 &gt; _reserve1 - amount1Out ? balance1 - (_reserve1 - amount1Out) : 0;</span><br><span class="line">    require(amount0In &gt; 0 || amount1In &gt; 0, &#x27;UniswapV2: INSUFFICIENT_INPUT_AMOUNT&#x27;);</span><br><span class="line">    &#123;</span><br><span class="line">        // scope for reserve&#123;0,1&#125;Adjusted, avoids stack too deep errors</span><br><span class="line">        uint256 balance0Adjusted = balance0.mul(1000).sub(amount0In.mul(3));</span><br><span class="line">        uint256 balance1Adjusted = balance1.mul(1000).sub(amount1In.mul(3));</span><br><span class="line">        require(</span><br><span class="line">            balance0Adjusted.mul(balance1Adjusted) &gt;= uint256(_reserve0).mul(_reserve1).mul(1000**2),</span><br><span class="line">            &#x27;UniswapV2: K&#x27;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    _update(balance0, balance1, _reserve0, _reserve1);</span><br><span class="line">    emit Swap(msg.sender, amount0In, amount1In, amount0Out, amount1Out, to);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>v2-periphery&#x2F;UniswapV2Router02.sol</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function _swap(uint[] memory amounts, address[] memory path, address _to) internal virtual &#123;</span><br><span class="line">    for (uint i; i &lt; path.length - 1; i++) &#123;</span><br><span class="line">        (address input, address output) = (path[i], path[i + 1]);</span><br><span class="line">        (address token0,) = UniswapV2Library.sortTokens(input, output);</span><br><span class="line">        uint amountOut = amounts[i + 1];</span><br><span class="line">        (uint amount0Out, uint amount1Out) = input == token0 ? (uint(0), amountOut) : (amountOut, uint(0));</span><br><span class="line">        address to = i &lt; path.length - 2 ? UniswapV2Library.pairFor(factory, output, path[i + 2]) : _to;</span><br><span class="line">        IUniswapV2Pair(UniswapV2Library.pairFor(factory, input, output)).swap(</span><br><span class="line">            amount0Out, amount1Out, to, new bytes(0)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从代码中可以看出 <code>v2-core/UniswapV2Pair.sol</code> 中的 <code>swap</code> 被<br><code>v2-periphery/UniswapV2Router02.sol</code> 中的 <code>_swap</code> 调用。其中 <code>amount0In</code> 和<br><code>amount1In</code> 是根据 <code>amount0Out</code> 和 <code>amount1out</code> 得来的，而 <code>amount0Out</code> 和<br><code>amount1Out</code> 是根据 <code>input</code> 的地址来进行判断计算的，所以不能确定是到底是用 x 来换 y 还是<br>y 换 x，为了确保流动性 k 不会减少，就就调整为了</p>
+<p>$$<br>(1000 \cdot x_1 - 3 \cdot x_{in}) \cdot (1000 \cdot y_1 - 3 \cdot y_{in}) \geq<br>x_0 \cdot y_0<br>$$</p>
+<h3 id="Protocol-Fee"><a href="#Protocol-Fee" class="headerlink" title="Protocol Fee"></a>Protocol Fee</h3><p>在 V1 版本中，所有的手续费时转入到合约中，之后将其分发给 LPs（Liquidity Providers）。<br>在 V2 中，增加了一个控制手续费的开关，可以控制平台是否对手续费进行抽成，抽成为 5<br>个基点(0.05%)。对于整个手续费来说，平台抽成占到了 1&#x2F;6 （0.05% &#x2F; 0.3% &#x3D; 1 &#x2F; 6），<br>默认平台不抽成。如果平台进行抽成的话，那么每笔交易都需要多执行一次转账，而转账需要<br>gas fee，为了降低这部分 gas fee，平台将每次的手续费都进行累加，只有 LPs 对流动<br>性池进行操作是，才会对当前的手续费进行结算。</p>
+<p>手续费的抽取是抽取 $\Delta x$ 的 0.3%，所以其增长速度是 $\sqrt k$ （$k &#x3D; x \cdot y$）。<br>所以从 $t_1$ 到 $t_2$ 之间抽取的费用在 $t_2$ 时占流动性池的比为：</p>
+<p>$$<br>f_{1,2} &#x3D; \frac{\sqrt{k_2} - \sqrt{k_1}}{\sqrt{k_2}} &#x3D; 1 -<br>\frac{\sqrt{k_1}}{\sqrt{k_2}} \tag {2}<br>$$</p>
+<p>因此平台抽成在 $t_1$ 到 $t_2$ 中占流动性的比为 $\phi \cdot f_{1,2}$，其中<br>$\phi &#x3D; \frac{1}{6}$。设 $s_m$ 为发送的流动性币（UNI），则：</p>
+<p>$$<br>\frac{s_m}{s_m + s_1} &#x3D; \phi \cdot f_{1, 2} \tag {3}<br>$$</p>
+<p>将 $(2)$ 代入 $(3)$ 中有：</p>
+<p>$$<br>s_m &#x3D; \frac{\sqrt{k_2} - \sqrt{k_1}}{(\frac{1}{\phi} - 1) \cdot \sqrt{k_2} +<br>\sqrt{k_1}} \cdot s_1 \tag {4}<br>$$</p>
+<p>将 $\phi &#x3D; \frac{1}{6}$ 代入 $(4)$ 中有：</p>
+<p>$$<br>s_m &#x3D; \frac{\sqrt{k_2} - \sqrt{k_1}}{5 \cdot \sqrt{k_2} + \sqrt{k_1}} \cdot s_1<br>$$</p>
+<blockquote>
+<p>P.S Uniswap 中流动性币为 UNI，代表提供的流动性的 share。该 share 用来计算手续费的分成。</p>
+</blockquote>
+<p>假设提供 100 DAI 和 1 ETH 得到 10 个 share，即 10 UNI，当提供的值变为了 96 DAI 和 1.5<br>ETH 时，平台得到的 UNI 为（假设在提供时平台抽取已经开启）：</p>
+<p>$$<br>s_m &#x3D; \frac{\sqrt{96 \cdot 1.5} - \sqrt{100 \cdot 1}}{5 \cdot \sqrt{96 \cdot<br>1.5} + \sqrt{100 \cdot 1}} \cdot 10 \approx 0.0286<br>$$</p>
+<p>所以此时平台的分成就为 0.0286 UNI。</p>
+<h3 id="Meta-Transactions-for-Liduidity-Pool"><a href="#Meta-Transactions-for-Liduidity-Pool" class="headerlink" title="Meta Transactions for Liduidity Pool"></a>Meta Transactions for Liduidity Pool</h3><p>正常的交易中，需要支付该条链的原生代币（ETH）作为 gas fee，而 Uniswap 的代币 UNI 是 ERC20，<br>但是其中增加了一个函数 <code>permit</code>，该函数遵循 <a target="_blank" rel="noopener" href="https://eips.ethereum.org/EIPS/eip-712">EIP712</a>[12]，<br>可以让 UNI 的持有者在链下对 trasaction 进行签名，可以让其他拥有 ETH 的地址转走 UNI 持有者<br>中的 UNI，即可让其他地址代替自己操作 UNI。通俗点就是权益转让。因为拥有 UNI 的话就可以直接去<br>销毁对应的流动性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function permit(address owner, address spender, uint value, uint deadline, uint8 v, bytes32 r, bytes32 s) external &#123;</span><br><span class="line">    require(deadline &gt;= block.timestamp, &#x27;UniswapV2: EXPIRED&#x27;);</span><br><span class="line">    bytes32 digest = keccak256(</span><br><span class="line">        abi.encodePacked(</span><br><span class="line">            &#x27;\x19\x01&#x27;,</span><br><span class="line">            DOMAIN_SEPARATOR,</span><br><span class="line">            keccak256(abi.encode(PERMIT_TYPEHASH, owner, spender, value, nonces[owner]++, deadline))</span><br><span class="line">        )</span><br><span class="line">    );</span><br><span class="line">    address recoveredAddress = ecrecover(digest, v, r, s);</span><br><span class="line">    require(recoveredAddress != address(0) &amp;&amp; recoveredAddress == owner, &#x27;UniswapV2: INVALID_SIGNATURE&#x27;);</span><br><span class="line">    _approve(owner, spender, value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从代码中可以看出，<code>permit</code> 其实就是个变种的 <code>approve</code>。</p>
+<p>详细的代码分析可参考 UNISWAP CONTRACT WALK-THROUGH[2]。</p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p>总的来说，V2 版本相对于 V1 版本来说，改动很大，同时这些新增的特性对于 CFMM 来说更加有利，<br>尤其是其 Flash Swap 和 ERC20 Pairs。让更多的人参加套利来保持其内部价格和市场价格一致。当然，<br>缺点也很明显，就是滑点比较高。</p>
+<h2 id="V3"><a href="#V3" class="headerlink" title="V3"></a>V3</h2><p>从 V1 到 V2，改进确实很大，所以 V2 版本是使用的最多的一个版本，同时也是最受套利者们欢迎的。<br>但是不得不承认，V2 版本的滑点依旧是存在，为了改进这一缺陷，其他的 Defi 平台就采用了其他的<br>公式[10]，而 Uniswap 对 $ x \times y &#x3D; k$ 这个公式进行改进，升级到 V3 版本。</p>
+<p>V3 版本主要更新了以下几个特性：</p>
+<ul>
+<li>集中流动性（Liquidity）</li>
+<li>弹性费用</li>
+<li>平台手自治</li>
+<li>优化 Oracle</li>
+</ul>
+<h3 id="集中流动性"><a href="#集中流动性" class="headerlink" title="集中流动性"></a>集中流动性</h3><p>$$<br>\begin{align}<br>&amp;L^2 &#x3D; k \\<br>&amp;(x + x_{offset}) \cdot (y + y_{offset}) &#x3D; L^2<br>\end{align}<br>$$</p>
+<p>由此有：</p>
+<p><img src="/images/uniswap/uniswap-v3-liquidity.png" alt="v3-liquidity.png"></p>
+<p>如上图所示，如果由流动性（L）来代替原来的常量（k），那么曲线就往原点方向平移了，价格区间也就由<br>原来的 $(0, \infty)$ 变成了一个有上下界的闭区间。设 P 为 x 相对于 y 的价格，即 $P &#x3D;<br>\frac{y}{x}$ 则 real reserves 与 Y Reserves 轴的交点即为此前流动性价格上界的平方根，<br>与 X Reserves 轴的交点为当前流动性价格下界的平方根，即当前流动性的价格区间为<br>$[\sqrt{P_{lower}}, \sqrt{P_{uppper}}]$。因此流动性离散地分布在不同的价格区间，使用上述<br>公式不能恰当地描述流动性和 token 数量的关系，需要基于上述公式推导出一更恰当的公式。参照<br>Appendix-d，有：</p>
+<p>$$<br>L &#x3D; \frac{dy}{d\sqrt{P}}<br>$$</p>
+<p>将每个价格区间算作一个 tick，则流动性在不同的 tick 的 分布图为：</p>
+<p><img src="/images/uniswap/uniswap-v3-liquidity-tick.png" alt="v3-liquidity-tick.png"></p>
+<blockquote>
+<p>P.S 这个分布图很 poisson。</p>
+</blockquote>
+<p>而 v2 版本对应的分布为：</p>
+<p><img src="/images/uniswap/uniswap-v2-liquidity-tick.png" alt="v2-liquidity-tick.png"></p>
+<p>因为 Liquidity 分布不同，所以之前的用 ERC20（UNI）来作为 share 就不合适了，将其变成<br>ERC721 更为合适，每对 Pair 不同价格区间都有一个 ERC721，这样同时也解决了 V2 版本将手续费<br>存入流动性池的缺陷，V3 版本可以将手续费直接转给该流动性的 ERC721，同时平台的抽成也可以让用户<br>自己设置。</p>
+<p>不同价格区间的好处是，当价格波动超出了 $P_{upper}$，Uniswap 会自动将 x 清算成 y，然后这个<br>价格区间就 deactive 了，当价格波动回到这个区间，Uniswap 又会自动买回 x，激活这个价格区间。<br>这样的话 LP 们的收益就会更大，而且无常损失也比 V2 版本的要少，同时也大大提高了资产的利用率，<br>因为 V2 版本能利用到的流动性就是在某个价格附近，无法大部分资产都没有利用到，而 V3 版本就能将<br>大量的流动性都集中在正常的价格区间，一旦价格剧烈波动，那么 LP 可以将其他的价格区间的流动性取出，<br>投入到新的价格区间。</p>
+<h3 id="弹性费用"><a href="#弹性费用" class="headerlink" title="弹性费用"></a>弹性费用</h3><p>在 V1 和 V2 版本中，交易费都是 0.3%。但是因为 V3 版本的改进，不同的价格有不同的流动性池，<br>所以交易费也就支持在创建流动性池时选择不同的交易费，目前是有三个不同的费率，0.05%，0.30% 和<br>1%。</p>
+<h3 id="平台自治"><a href="#平台自治" class="headerlink" title="平台自治"></a>平台自治</h3><p>V2 版本中，平台的手续费是由开发者指定的，而 V3 中则将平台的手续费的管理权交到了 LP 的手中，<br>LP 拥有流动性池的管理权，可以控制平台抽取多少手续费，范围为 0 或是交易费的 $\frac{1}{N},<br>4 \leq N \leq10$。同时 LP 可以将管理权转移给其他的地址。</p>
+<h3 id="优化-Oracle"><a href="#优化-Oracle" class="headerlink" title="优化 Oracle"></a>优化 Oracle</h3><p>在 V2 版本中，Price Oracle 分别记录了 x 和 y 的价格。在 V3<br>版本中，改用了新公式，有：</p>
+<p>$$<br>\begin{align}<br>&amp;L &#x3D; \sqrt{x \cdot y} \\<br>&amp;P &#x3D; \sqrt{\frac{y}{x}}<br>\end{align}<br>$$</p>
+<p>所以：</p>
+<p>$$<br>\begin{align}<br>&amp;x &#x3D; \frac{L}{\sqrt{P}} \\<br>&amp;y &#x3D; L \cdot \sqrt{P}<br>\end{align}<br>$$</p>
+<p>因此对 x 和 y 的数量（Reserves）可以直接通过流动性（Liquidity）和 x 相对于 y 的价格 P<br>的平方根求出，不需要分别记录下 x 和 y 的价格。至于为什么是 $\sqrt{P}$ 而不是 P，是因为<br>取根号后同样的存储能够记录更多的价格。</p>
+<h3 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h3><p>相比于 V2 版本，V3 版本主要是对原有的公式进行了改进，从原来的 x 和 y 数量的关系变为流动性和<br>x 相对于 y 的价格的关系，让流动性池的分布更加合理，即将交换的滑点降低了，也提高了资金的利用率。<br>同时也将流动性池的管理权移交给了 LP，而不是由平台来管控，更加的去中心化。但同样是因为流动性池<br>分散在不同的价格区间内，套利空间就变得很小。</p>
+<h2 id="What’s-Next"><a href="#What’s-Next" class="headerlink" title="What’s Next?"></a>What’s Next?</h2><p>从 2018 年到 2022 年，从最简陋的 V1 版本，到如今的 V3 版本，短短四年间，Uniswap 在 Defi<br>中引领潮流，目前来看，V3 版本似乎已经很完善了，那么 Uniswap 下一步该走向何方呢？是否会进一步<br>引入 DID 和 zk-snark？在网上看到有人推测 Uniswap 的下一步是让用户直接交易 token，而不是<br>通过 token 的 pair 进行兑换，这个推论很 make sense。</p>
+<p>个人的观点是 Defi 目前来说还是由一些数学大佬在引领，未来应该是要将公式简化出来，让更多的用户和<br>开发者参与进来，而不是越变越复杂，这样才能创建繁荣的生态。</p>
+<p>That’s it, happy hacking ^_^</p>
+<blockquote>
+<p>P.S 如果在本文中发现有错误或遗漏的地方，欢迎提 issue。</p>
+</blockquote>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h2><p>[1]. Hayden Adams. 2018. Uniswap Whitepaper. <a target="_blank" rel="noopener" href="https://hackmd.io/@HaydenAdams/HJ9jLsfTz">https://hackmd.io/@HaydenAdams/HJ9jLsfTz</a></p>
+<p>[2]. Yi Zhang, Xiaohong Chen and Deajun Park. 2018. Formal Specification of Constant Product ($x \times y &#x3D; k$) Market Maker Model and Implementation. Retrieved Aug 31. 2022 from <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/runtimeverification/verified-smart-contracts/uniswap/uniswap/x-y-k.pdf">https://raw.githubusercontent.com/runtimeverification/verified-smart-contracts/uniswap/uniswap/x-y-k.pdf</a></p>
+<p>[3]. Hayden Adams, Noah Zinsmeister and Dan Robinson. 2020. Uniswap v2 Core. Retrieved Aug 28, 2022 from <a target="_blank" rel="noopener" href="https://uniswap.org/whitepaper.pdf">https://uniswap.org/whitepaper.pdf</a></p>
+<p>[4]. Ori Pomerantz. 2021. UNISWAP-V2 CONTRACT WALK-THROUGH. <a target="_blank" rel="noopener" href="https://ethereum.org/en/developers/tutorials/uniswap-v2-annotated-code/">https://ethereum.org/en/developers/tutorials/uniswap-v2-annotated-code/</a></p>
+<p>[5]. Hayden Adams, Noah Zinsmeister, Moody Salem, River Keefer and Dan Robinson. 2021. Uniswap v3 Core. Retrieved Aug 28, 2022 from <a target="_blank" rel="noopener" href="https://uniswap.org/whitepaper-v3.pdf">https://uniswap.org/whitepaper-v3.pdf</a></p>
+<p>[6]. Trapdoor-Tech. May. 2021. Uniswap - Deep Dive into V3 technical white paper. <a target="_blank" rel="noopener" href="https://trapdoortech.medium.com/uniswap-deep-dive-into-v3-technical-white-paper-2fe2b5c90d2">https://trapdoortech.medium.com/uniswap-deep-dive-into-v3-technical-white-paper-2fe2b5c90d2</a>)</p>
+<p>[7]. Trapdoor-Tech. Jun. 2021. Uniswap - Deep Dive into V3’s Source Code. <a target="_blank" rel="noopener" href="https://trapdoortech.medium.com/uniswap-deep-dive-into-v3s-source-code-b141c1754bae">https://trapdoortech.medium.com/uniswap-deep-dive-into-v3s-source-code-b141c1754bae</a></p>
+<p>[8]. Kshitij Kulkarni, Theo Diamandis and Tarun Chitra. 2022. Towards a Theory of Maximal Extractable Value I: Constant Function Market Makers. Retrieved Jul 23, 2022 from <a target="_blank" rel="noopener" href="https://people.eecs.berkeley.edu/~ksk/files/MEV_CFMM.pdf">https://people.eecs.berkeley.edu/~ksk/files/MEV_CFMM.pdf</a></p>
+<p>[9]. noxx. 2022. DEX Arbitrage, Mathematical Optimisations &amp; Me. <a target="_blank" rel="noopener" href="https://noxx.substack.com/p/dex-arbitrage-mathematical-optimisations">https://noxx.substack.com/p/dex-arbitrage-mathematical-optimisations</a></p>
+<p>[10]. Dan Robinson. 2021. Uniswap V3: The Universal AMM. <a target="_blank" rel="noopener" href="https://www.paradigm.xyz/2021/06/uniswap-v3-the-universal-amm">https://www.paradigm.xyz/2021/06/uniswap-v3-the-universal-amm</a></p>
+<p>[11]. Guillermo Angeris, Tarun Chitra. 2020. Improved Price Oracles: Constant Function Market Makers. Retrieved Sep 4, 2022 from <a target="_blank" rel="noopener" href="https://www.deepdyve.com/lp/arxiv/improved-price-oracles-constant-function-market-makers-xlrgVekYST?key=acm">https://www.deepdyve.com/lp/arxiv/improved-price-oracles-constant-function-market-makers-xlrgVekYST?key=acm</a></p>
+<p>[12]. Remco Bloemen, Leonid Logvinov, Jacob Evans. 2017. <a target="_blank" rel="noopener" href="https://eips.ethereum.org/EIPS/eip-712">https://eips.ethereum.org/EIPS/eip-712</a></p>
+<h2 id="Appendices"><a href="#Appendices" class="headerlink" title="Appendices"></a>Appendices</h2><h3 id="Appendix-A-x-y-k-模型"><a href="#Appendix-A-x-y-k-模型" class="headerlink" title="Appendix A. x * y &#x3D; k 模型"></a>Appendix A. x * y &#x3D; k 模型</h3><p>$$<br>x \times y &#x3D; k \tag{a.1}<br>$$</p>
+<p>使用 $\Delta x$ 的 token X 换取 $\Delta y$ 的 token Y，有:</p>
+<p>$$<br>(x + \Delta x) \times (y - \Delta y) &#x3D; k<br>$$</p>
+<p>令 $x’ &#x3D; x + \Delta x, y’ &#x3D; y - \Delta y$，则有</p>
+<p>$$<br>x’ \times y’ &#x3D; k &#x3D; x \times y \tag{a.2}<br>$$</p>
+<p>令 $\alpha &#x3D; \frac{\Delta x}{x}, \beta &#x3D; \frac{\Delta y}{y}$，有</p>
+<p>$$<br>x’ &#x3D; x + \Delta x &#x3D; (1 + \alpha)x, : y’ &#x3D; y - \Delta y &#x3D; (1 - \beta)y \tag{a.3}<br>$$</p>
+<p>由 $(a.2)$ 和 $(a.3)$ 有：</p>
+<p>$$<br>(1 + \alpha)x \times (1-\beta)y &#x3D; x \times y<br>$$</p>
+<p>因此 $\alpha$ 和 $\beta$ 之间的关系为：</p>
+<p>$$<br>\alpha &#x3D; \frac{\beta}{1 - \beta}, :<br>\beta &#x3D; \frac{\alpha}{1 + \alpha} \tag{a.4}<br>$$</p>
+<p>将 $(a.4)$ 代入 $(a.3)$ 有：</p>
+<p>$$<br>\begin{align}<br>&amp;x’ &#x3D; (1 + \alpha)x &#x3D; \frac{1}{1 - \beta} x \\<br>&amp;y’ &#x3D; \frac{1}{1 + \alpha} y &#x3D; (1 - \beta) y<br>\end{align}<br>$$</p>
+<p>且：</p>
+<p>$$<br>\begin{align}<br>&amp;\Delta x &#x3D; \frac{\beta}{1 - \beta} x \\<br>&amp;\Delta y &#x3D; \frac{\alpha}{1 + \alpha} y<br>\end{align}<br>$$</p>
+<p>以上是在平台（即 Uniswap）不抽取手续费的情况下的结果。下面，将考虑平台会抽取一定的手续费。<br>设手续费为 $\rho$，$0 \leq \rho &lt; 1$（例如，Uniswap 的手续费为 0.3%，则 $\rho &#x3D; 0.003$）。</p>
+<p>令 $\gamma &#x3D; 1 - \rho$，有：</p>
+<p>$$<br>(x + \gamma\Delta x) \times (y - \Delta y) &#x3D; k<br>$$</p>
+<p>令 $\alpha &#x3D; \frac{\Delta x}{x}, \beta &#x3D; \frac{\Delta y}{y}$，有：</p>
+<p>$$<br>x’_\rho &#x3D; x + \gamma\Delta x &#x3D; (1 + \gamma\alpha) x, :<br>y’_\rho &#x3D; y - \Delta y &#x3D; (1 - \beta) y \tag{a.5}<br>$$</p>
+<p>因为 $x’_\rho \times y’_\rho &#x3D; k$，由 $(a.1)$ 和 $(a.5)$ 有：</p>
+<p>$$<br>(1 + \gamma\alpha)x \times (1 - \beta) y &#x3D; x \times y<br>$$</p>
+<p>即：</p>
+<p>$$<br>\alpha &#x3D; \frac{1}{\gamma} \cdot \frac{\beta}{1 - \beta}, :<br>\beta &#x3D; \frac{\gamma\alpha}{1 + \gamma\alpha} \tag{a.6}<br>$$</p>
+<p>将 $(a.6)$ 代入 $(a.5)$ 有：</p>
+<p>$$<br>\begin{align}<br>&amp;x’_\rho &#x3D; (1 + \gamma\alpha) x &#x3D; \frac{1 + \beta(\frac{1}{\gamma} - 1)}{1 -<br>\beta} x \\<br>&amp;y’_\rho &#x3D; \frac{1}{1 + \gamma\alpha} y &#x3D; (1 - \beta) y<br>\end{align}<br>$$</p>
+<p>即：</p>
+<p>$$<br>\begin{align}<br>&amp;\Delta x_\rho &#x3D; \frac{\beta}{1 - \beta} \cdot \frac{1}{\gamma} \cdot x \\<br>&amp;\Delta y_\rho &#x3D; \frac{\gamma\alpha}{1 + \gamma\alpha} \cdot y<br>\end{align}<br>$$</p>
+<p>因此有：</p>
+<p>$$<br>\begin{align}<br>x’_\rho \times y’_\rho &amp;&#x3D; \frac{1 + \beta(\frac{1}{\gamma} - 1)}{1 - \beta} x<br>\times (1 - \beta) y \\<br>&amp;&#x3D; (1 + \beta(\frac{1}{\gamma} -1)) \cdot x \cdot y<br>\end{align}<br>$$</p>
+<p>当 $\rho &#x3D; 0$ （即无手续费）时，$\gamma &#x3D; 1 - \rho &#x3D; 1$，$x’_\rho \times y’_\rho &#x3D;<br>x \times y$；<br>当 $\rho &gt;0$ 时，$0 &lt; \gamma &lt; 1$，即 $\frac{1}{\gamma} &gt; 1 \Rightarrow<br>\frac{1}{\gamma} - 1 &gt; 0$，<br>则 $x’_\rho \times y’_\rho &gt; x \times y$。所以在收取收取手续费时，每次兑换后都会略有通胀。</p>
+<h3 id="Appendix-B-滑点"><a href="#Appendix-B-滑点" class="headerlink" title="Appendix B. 滑点"></a>Appendix B. 滑点</h3><p>滑点（Slippage），一般只预设成交价与真实成交价格的偏差。在 CFMM 中，一旦发生交易，就会产生<br>滑点。交易额越大，滑点越大，交易者损失也就越大。以下是滑点的分析推导。</p>
+<p>假设交易平台不收取交易费，有：</p>
+<p>$$<br>\left{<br>    \begin{align}<br>    &amp;x \times y &#x3D; k \\<br>    &amp;(x + \Delta x) \times (y - \Delta y) &#x3D; k<br>    \end{align}<br>\right.<br>$$</p>
+<p>由此可得：</p>
+<p>$$<br>\begin{align}<br>\Delta y &amp;&#x3D; y - \frac{x \times y}{x + \Delta x} \\<br>         &amp;&#x3D; \frac{y \times (x + \Delta x)}{x + \Delta x} - \frac{x \times<br>            y}{x + \Delta x} \<br>         &amp;&#x3D; \frac{y \cdot \Delta x}{x + \Delta x}<br>\end{align}<br>$$</p>
+<p>即在实际交易中，y 相对于 x 的价格为：</p>
+<p>$$<br>\begin{align}<br>P’_x(y) &#x3D; \frac{\Delta x}{\Delta y}<br>        &#x3D; \frac{\Delta x}{\frac{y \cdot \Delta x}{x + \Delta x}}<br>        &#x3D; \frac{x + \Delta x}{y}<br>\end{align}<br>$$</p>
+<p>而在交易开始时，y 相对于 x 的价格为：</p>
+<p>$$<br>P_x(y) &#x3D; \frac{x}{y}<br>$$</p>
+<p>所以滑点就产生了，为：</p>
+<p>$$<br>\begin{align}<br>Slippage_{P_x(y)} &amp;&#x3D; P’_x(y) - P_x(y) \\<br>                  &amp;&#x3D; \frac{x + \Delta x}{y} - \frac{x}{y} \\<br>                  &amp;&#x3D; \frac{\Delta x}{y}<br>\end{align}<br>$$</p>
+<p>由上式有，滑点与交易额（$\Delta x$）成正比，与其流动性池中的数量（y）成反比。在 y 不变的情况<br>下，交易额（$\Delta x$）越大，滑点就越大。</p>
+<p>如果交易有手续费（$\rho$）的话，则由 $(a.6)$ 及其后得到的有：</p>
+<p>$$<br>\frac{\Delta x_\rho}{\Delta y_\rho} &#x3D; \frac{\frac{\beta}{1 - \beta} \cdot<br>\frac{1}{\gamma} \cdot x}{\frac{\gamma\alpha}{1 + \gamma\alpha}y} \\<br>$$</p>
+<p>其中 $\gamma &#x3D; 1 - \rho, \alpha &#x3D; \frac{\Delta x}{x}, \beta &#x3D; \frac{\Delta<br>y}{y}, \beta &#x3D; \frac{\gamma\alpha}{1 + \gamma\alpha}$。<br>所以：</p>
+<p>$$<br>Slippage’_{P_x(y)} &#x3D; (1 - \rho)\frac{\Delta x}{y}<br>$$</p>
+<p>因为 $\rho$ 也是一个确定的值，所以结论和无手续费一致。</p>
+<h3 id="Appendix-C-无常损失"><a href="#Appendix-C-无常损失" class="headerlink" title="Appendix C. 无常损失"></a>Appendix C. 无常损失</h3><p>无常损失（Impermanent Loss），是指当资产价格剧烈波动时，持有的资产净值损耗减少，就会产生暂时<br>性的账面损失。放到 CFMM 中就是当价格剧烈波动时，流动行池的总价值就减少。因为其价格是靠套利者来<br>对价格进行调节，会造成越涨越卖，越跌越买的情况，所以流动性池中的无常损失会成为永久损失。具体分析<br>如下：</p>
+<p>假设 Uniswap 的 ETH&#x2F;DAI 流动池中有 10 ETH 和 400 DAI，则 k &#x3D; 4000，ETH 相对于 DAI<br>的价格为：40 DAI&#x2F;ETH。若有流动性提供者提供了 2 ETH 和 80 DAI 的流动性，则该提供者的流动性<br>占比为 20%。当 ETH 价格突然涨到 60 DAI&#x2F;ETH 时，就会有人用 DAI 来换 ETH 进行套利。</p>
+<p>设共用了 $\Delta x$ 个 DAI 兑换了 $\Delta y$ 个 ETH 后，Uniswap 中 ETH&#x2F;DAI 的值变为<br>1&#x2F;60，则：</p>
+<p>$$<br>\begin{align}<br>&amp;(10 - \Delta x) \times (400 + \Delta y) &#x3D; 4000 \\<br>&amp;\frac{10 - \Delta x}{400 + \Delta y} &#x3D; \frac{1}{60}<br>\end{align}<br>$$</p>
+<p>解得：</p>
+<p>$$<br>\begin{align}<br>x \approx 1.84 \\<br>y \approx 89.6<br>\end{align}<br>$$</p>
+<p>即大概用了 89.6 个 DAI 兑换了 1.84 个 ETH 后，ETH&#x2F;DAI &#x3D; 1&#x2F;60。此时 ETH&#x2F;DAI 池中有<br>8.16 个 ETH，489.6 个 DAI。套利的价格为 $\frac{\Delta x}{\Delta y} \approx 47.41$<br>DAI&#x2F;ETH，比池中的价格高，存在滑点，比真实价格低，即套利空间。</p>
+<p>在套利完成后，之前的流动性提供者在池中的资产为 1.632 ETH 和 97.92 DAI，其 $\Delta x &#x3D;<br>0.368, \Delta y &#x3D; 17.92$，而按照 ETH 的现价 60 DAI&#x2F;ETH 来算，当 $\Delta x &#x3D; 0.368$<br>时，$\Delta y &#x3D; 0.368 \times 60 &#x3D; 22.08 \ne 17.92$，所以就产生了 22.08 - 17.92 &#x3D;<br>4.16 个 DAI 的无常损失。</p>
+<h3 id="Appendix-D-Liquidity"><a href="#Appendix-D-Liquidity" class="headerlink" title="Appendix D. Liquidity"></a>Appendix D. Liquidity</h3><p>首先，有:</p>
+<p>$$<br>(x + x_{offset}) \cdot (y + y_{offset}) &#x3D; L^2 \tag {d.1}<br>$$</p>
+<p>由 $(d.1)$ 可得：</p>
+<p>$$<br>\begin{align}<br>x &#x3D; \frac{L^2}{y + y_{offset}} - x_{offset} \\<br>y &#x3D; \frac{L^2}{x + x_{offset}} - y_{offset}<br>\end{align}<br>$$</p>
+<p>又：</p>
+<p>$$<br>\begin{align}<br>&amp;dy &#x3D; y + y_{offset} &#x3D; \frac{L^2}{x + x_{offset}} \\<br>&amp;dx &#x3D; x + x_{offset}<br>\end{align}<br>$$</p>
+<p>所以有：</p>
+<p>$$<br>P_y(x) &#x3D; \frac{dy}{dx} &#x3D; \frac{\frac{L^2}{x + x_{offset}}}{x + x_{offset}} &#x3D;<br>\frac{L^2}{x + x_{offset}} \tag{d.2}<br>$$</p>
+<p>一下将 $P_y(x)$ 简写成 P。由 $(d.2)$ 有：</p>
+<p>$$<br>\sqrt P &#x3D;  \frac{L}{x + x_{offset}} &#x3D; \frac{L}{\frac{L^2}{y + y_{offset}}} &#x3D;<br>\frac{y + y_{offset}}{L} \tag {d.3}<br>$$</p>
+<p>由 $(d.3)$ 有：</p>
+<p>$$<br>y &#x3D;  L \cdot \sqrt P - y_{offset}<br>$$</p>
+<p>等式两边求导有：</p>
+<p>$$<br>\begin{align}<br>&amp;dy &#x3D; L \cdot d\sqrt P \\<br>\Rightarrow &amp;L &#x3D; \frac{dy}{d\sqrt P}<br>\end{align}<br>$$</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CFMM"><span class="toc-number">1.</span> <span class="toc-text">CFMM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#V1"><span class="toc-number">3.</span> <span class="toc-text">V1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ETH-ERC20"><span class="toc-number">3.1.</span> <span class="toc-text">ETH &lt;-&gt; ERC20</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%EF%BC%9AETH-OMG"><span class="toc-number">3.1.1.</span> <span class="toc-text">示例：ETH -&gt; OMG</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ERC20-ERC20"><span class="toc-number">3.2.</span> <span class="toc-text">ERC20 &lt;-&gt; ERC20</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.3.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#V2"><span class="toc-number">4.</span> <span class="toc-text">V2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ERC20-Pairs"><span class="toc-number">4.1.</span> <span class="toc-text">ERC20 Pairs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Price-Oracle"><span class="toc-number">4.2.</span> <span class="toc-text">Price Oracle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flash-Swaps"><span class="toc-number">4.3.</span> <span class="toc-text">Flash Swaps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Protocol-Fee"><span class="toc-number">4.4.</span> <span class="toc-text">Protocol Fee</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Meta-Transactions-for-Liduidity-Pool"><span class="toc-number">4.5.</span> <span class="toc-text">Meta Transactions for Liduidity Pool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-1"><span class="toc-number">4.6.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#V3"><span class="toc-number">5.</span> <span class="toc-text">V3</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E4%B8%AD%E6%B5%81%E5%8A%A8%E6%80%A7"><span class="toc-number">5.1.</span> <span class="toc-text">集中流动性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%B9%E6%80%A7%E8%B4%B9%E7%94%A8"><span class="toc-number">5.2.</span> <span class="toc-text">弹性费用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B3%E5%8F%B0%E8%87%AA%E6%B2%BB"><span class="toc-number">5.3.</span> <span class="toc-text">平台自治</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96-Oracle"><span class="toc-number">5.4.</span> <span class="toc-text">优化 Oracle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-2"><span class="toc-number">5.5.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What%E2%80%99s-Next"><span class="toc-number">6.</span> <span class="toc-text">What’s Next?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">7.</span> <span class="toc-text">Reference:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Appendices"><span class="toc-number">8.</span> <span class="toc-text">Appendices</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Appendix-A-x-y-k-%E6%A8%A1%E5%9E%8B"><span class="toc-number">8.1.</span> <span class="toc-text">Appendix A. x * y &#x3D; k 模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Appendix-B-%E6%BB%91%E7%82%B9"><span class="toc-number">8.2.</span> <span class="toc-text">Appendix B. 滑点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Appendix-C-%E6%97%A0%E5%B8%B8%E6%8D%9F%E5%A4%B1"><span class="toc-number">8.3.</span> <span class="toc-text">Appendix C. 无常损失</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Appendix-D-Liquidity"><span class="toc-number">8.4.</span> <span class="toc-text">Appendix D. Liquidity</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/09/08/defi-uniswap/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&text=Defi - Uniswap"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&title=Defi - Uniswap"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&is_video=false&description=Defi - Uniswap"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Defi - Uniswap&body=Check out this article: https://oneforalone.github.io/2022/09/08/defi-uniswap/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&title=Defi - Uniswap"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&title=Defi - Uniswap"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&title=Defi - Uniswap"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&title=Defi - Uniswap"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/09/08/defi-uniswap/&name=Defi - Uniswap&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/09/08/defi-uniswap/&t=Defi - Uniswap"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

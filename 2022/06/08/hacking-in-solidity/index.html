@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="NOTE: This is a draft Contract Typescontract&#x2F;abstract&#x2F;interface&#x2F;library  abstract: at least one function unimplemented interface: no function implemented, all functions mark as external">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hacking in Solidity">
+<meta property="og:url" content="https://oneforalone.github.io/2022/06/08/hacking-in-solidity/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="NOTE: This is a draft Contract Typescontract&#x2F;abstract&#x2F;interface&#x2F;library  abstract: at least one function unimplemented interface: no function implemented, all functions mark as external">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-06-08T12:26:50.000Z">
+<meta property="article:modified_time" content="2023-10-09T11:25:57.179Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Blockchain">
+<meta property="article:tag" content="Solidity">
+<meta property="article:tag" content="Programming">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Hacking in Solidity</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/06/09/ubuntu-utils/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/06/08/foundry101/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&text=Hacking in Solidity"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&title=Hacking in Solidity"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&is_video=false&description=Hacking in Solidity"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hacking in Solidity&body=Check out this article: https://oneforalone.github.io/2022/06/08/hacking-in-solidity/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&title=Hacking in Solidity"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&title=Hacking in Solidity"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&title=Hacking in Solidity"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&title=Hacking in Solidity"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&name=Hacking in Solidity&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&t=Hacking in Solidity"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Contract-Types"><span class="toc-number">1.</span> <span class="toc-text">Contract Types</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Base-Class-Functions"><span class="toc-number">2.</span> <span class="toc-text">Base Class Functions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shadowing"><span class="toc-number">3.</span> <span class="toc-text">Shadowing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Overriding-changes"><span class="toc-number">4.</span> <span class="toc-text">Overriding changes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Virtual-Functions"><span class="toc-number">5.</span> <span class="toc-text">Virtual Functions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#State-Variables"><span class="toc-number">6.</span> <span class="toc-text">State Variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EVM-Storage"><span class="toc-number">7.</span> <span class="toc-text">EVM Storage</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#security"><span class="toc-number">8.</span> <span class="toc-text">security:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Error-Handling"><span class="toc-number">8.1.</span> <span class="toc-text">Error Handling</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Hacking in Solidity
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-06-08T12:26:50.000Z" class="dt-published" itemprop="datePublished">2022-06-08 12:26:50 PM</time>
+        
+        (Updated: <time datetime="2023-10-09T11:25:57.179Z" class="dt-updated" itemprop="dateModified">2023-10-09 11:25:57 AM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Programming/">Programming</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Blockchain/" rel="tag">Blockchain</a>, <a class="p-category" href="/tags/Programming/" rel="tag">Programming</a>, <a class="p-category" href="/tags/Solidity/" rel="tag">Solidity</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><strong>NOTE: This is a draft</strong></p>
+<h2 id="Contract-Types"><a href="#Contract-Types" class="headerlink" title="Contract Types"></a>Contract Types</h2><p>contract&#x2F;abstract&#x2F;interface&#x2F;library</p>
+<ul>
+<li><code>abstract</code>: at least one function unimplemented</li>
+<li><code>interface</code>: no function implemented, all functions mark as <code>external</code>, no<br>constructor&#x2F;state vars, can not inherit from contracts but can inherit from<br>other interfaces.</li>
+<li><code>library</code>: deployed once, using <code>delegatecall</code> , no state vars, can not<br>inherit or inherited, can not receive ether, can not be destroyed,can only<br>call directly, not delegatecall</li>
+</ul>
+<p><code>using for</code>, directive using library for specific value types</p>
+<h2 id="Base-Class-Functions"><a href="#Base-Class-Functions" class="headerlink" title="Base Class Functions"></a>Base Class Functions</h2><p>Inheritance Hierarchy</p>
+<p>Derived -&gt; Base</p>
+<p>Explicit: contract.function()<br>One Level Up: super.function()</p>
+<h2 id="Shadowing"><a href="#Shadowing" class="headerlink" title="Shadowing"></a>Shadowing</h2><p>state variable shadowing</p>
+<p>base -&gt; state var x<br>derived x-&gt; state var x</p>
+<p>not allow in the latest version</p>
+<h2 id="Overriding-changes"><a href="#Overriding-changes" class="headerlink" title="Overriding changes"></a>Overriding changes</h2><ul>
+<li>function overrideing: <code>virtual</code> -&gt; <code>override</code></li>
+<li>visibility: <code>external</code> -&gt; <code>public</code></li>
+<li>others: non <code>payable</code> -&gt; <code>view</code>&#x2F;<code>pure</code>, <code>view</code> -&gt; <code>pure</code>, payable X -&gt; any</li>
+</ul>
+<h2 id="Virtual-Functions"><a href="#Virtual-Functions" class="headerlink" title="Virtual Functions"></a>Virtual Functions</h2><p>functions without implementation</p>
+<p>in interface, all functions considered virtual, no need to add <code>virtual</code> keyword,<br>functions are private visibility cannot be virtual</p>
+<h2 id="State-Variables"><a href="#State-Variables" class="headerlink" title="State Variables"></a>State Variables</h2><ul>
+<li>public state variables: automatic getters</li>
+<li>public getters can override external functions that matchs params and return<br>types and the name.</li>
+<li>public getters can not override</li>
+</ul>
+<h2 id="EVM-Storage"><a href="#EVM-Storage" class="headerlink" title="EVM Storage"></a>EVM Storage</h2><p><code>sload</code> to retrieve value and <code>sstore</code> to write value not initialized varaible<br>is set to 0 store by order of storage slots, each slot is 32 bytes</p>
+<p>storage packing: if the size of continulous variables less than 32 bytes, than<br>can put these varaiable into one slot</p>
+<p>due to storage packing, a <code>uint256</code> type consumes less gas than <code>uint128</code> …<br>if you need access a variable</p>
+<h2 id="security"><a href="#security" class="headerlink" title="security:"></a>security:</h2><ul>
+<li><p>lock pragma version<br>using the specific version of pragma, such as <code>pragma solidity 0.8.0</code> instead<br><code>pragma solidity ^0.8.0</code></p>
+</li>
+<li><p>function pattern:<br>FIRST (check), function performs checks (who called the function, are the<br>arguments in range, did they send enough Ether, does the person have tokens,<br>etc.)</p>
+</li>
+</ul>
+<p>SECOND (effect), if al checks passed it’s time to make effect to the state<br>variables of the current contract</p>
+<p>LAST (interact), interact with other contracts</p>
+<p>use check-effect-interact</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">contract ChecksEffectInteractions &#123;</span><br><span class="line"></span><br><span class="line">  mapping(address =&gt; uint) balances;</span><br><span class="line"></span><br><span class="line">  function deposit() public payable &#123;</span><br><span class="line">	// Check</span><br><span class="line">	balances[msg.sender] = msg.value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  function withdraw(uint amount) public &#123;</span><br><span class="line">    // Check</span><br><span class="line">    require(balances[msg.sender] &gt;= amount);</span><br><span class="line">    // Effect</span><br><span class="line">    balances[msg.sender] -= amount;</span><br><span class="line">    // Interact</span><br><span class="line">    msg.sender.transfer(amount);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>random, using chainlink</p>
+</li>
+<li><p>loops + state variables &#x3D; NO GOOD</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">contract CostlyOperationsInLoop &#123;</span><br><span class="line">  uint loop_count = 100;</span><br><span class="line">  uint state_variable = 0;</span><br><span class="line"></span><br><span class="line">  function bad() external &#123;</span><br><span class="line">    for (uint i=0; i &lt; loop_count; i++) &#123;</span><br><span class="line">      state_variable++;</span><br><span class="line">	&#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  function good() external &#123;</span><br><span class="line">    uint local_variable = state_variable;</span><br><span class="line">    for (uint i=0; i &lt; loop_count; i++) &#123;</span><br><span class="line">	    local_variable++;</span><br><span class="line">    &#125;</span><br><span class="line">    state_variable = local_variable;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>functions default open (public)</p>
+</li>
+<li><p>separation of privileges<br>favor multisig address for critical roles or actions, such as pause&#x2F;unpause&#x2F;<br>shudown, emergency fund drain, upgradeability, allow&#x2F;deny list and critical<br>parameters.</p>
+</li>
+<li><p>event logging (transactions + messages)<br>ensuring your contract emits the most critical events, as well as indexes the<br>“commonly” accept <code>indexed</code> (faster access) event… Used for off-chain<br>monitoring (helps many Dapps function), as well as important for IR situations.<br>commonly accepted indexed events &#x3D;ERC20 Transfer, Approval, events - NOTE:<br>only transactions are on the blockchain, but messages (e.g. SC&lt;&gt;SC) are not,<br>unless is explicitly stated within the contract for emit event to occur…</p>
+</li>
+<li><p>low level OPCODE</p>
+</li>
+</ul>
+<p>see more on cheatsheet: <a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/latest/cheatsheet.html">https://docs.soliditylang.org/en/latest/cheatsheet.html</a></p>
+<p><code>call</code> &#x2F; <code>delegatecall</code> &#x2F; <code>staticcall</code>, in order to interface with contracts<br>that do not adhere to the ABI, or to get more direct control over the encoding.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bytes memory payload = abi.encodeWithSignature(&quot;register(string)&quot;, &quot;MyName&quot;);</span><br><span class="line">(bool success, bytes memory returnDate) = address(contracAddress).call(payload);</span><br><span class="line">require(success);</span><br></pre></td></tr></table></figure>
+
+<p>run the contract methods by <code>call</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">address(contracAddress).call&#123;gas: 10000, value: 1 ether&#125;(</span><br><span class="line">  abi.encodeWithSignature(&quot;register(string)&quot;, &quot;MyName&quot;));</span><br></pre></td></tr></table></figure>
+
+<p><code>delegatecall</code> only the code of the given address is used, all other aspects<br>(storage, balance, …) are taken from the current contract, i.e. the caller<br>contract. However, change the storage based on the order of contract varaiable<br>define, is the order is not the same, there would be some problem. And do not<br>support <code>value</code> option in tx</p>
+<p><code>staticcall</code> is same as <code>call</code> expect that <code>staticcall</code> do not change the state<br>of the contract, if it does, then it will revert</p>
+<p><code>callcode</code> di not provide access to the original <code>msg.sender</code> and <code>msg.value</code>.<br>And this function was removed in version 0.5.0.</p>
+<p><code>selfdestruct(address)</code> will destory the contract and send all the balance of<br>the contract to the <code>address</code> passing by.</p>
+<p><code>private</code> variable does not mean it private to all, it can still be retrieve by<br>it’s storage order, such as<br><code>web3.eth.getStroageAt(address, position [, defaultBlock] [, callback])</code>.</p>
+<p>while running construtor, the contract codesize is 0. that’s to say, when<br>calling other contract in a contract, the contract size in other contract view<br>is 0.</p>
+<ul>
+<li>gas usage:<br>stack &lt; memory &lt; storage</li>
+</ul>
+<p>storage collision attacks</p>
+<h3 id="Error-Handling"><a href="#Error-Handling" class="headerlink" title="Error Handling"></a>Error Handling</h3><p><a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/v0.8.15/control-structures.html?highlight=require#error-handling-assert-require-revert-and-exceptions">https://docs.soliditylang.org/en/v0.8.15/control-structures.html?highlight=require#error-handling-assert-require-revert-and-exceptions</a></p>
+<ul>
+<li><code>assert</code></li>
+<li><code>require</code></li>
+<li><code>revert</code></li>
+</ul>
+<p>Exceptions can contain error data that is passed back to the caller in the form<br>of <a target="_blank" rel="noopener" href="https://docs.soliditylang.org/en/v0.8.15/contracts.html#errors">error instances</a>.<br>The built-in errors <code>Error(string)</code> and <code>Panic(uint256)</code> are used by special<br>functions, as explained below. <code>Error</code> is used for “regular” error conditions<br>while <code>Panic</code> is used for errors that should not be present in bug-free code.</p>
+<p><code>assert</code> creates an error of type <code>Panic(uint256)</code>, Assert should only be used<br>to test for internal errors, and to check invariants.</p>
+<p><code>require</code> creates an error without any data or an error of type <code>Error(string)</code>.<br>It should be used to ensure valid conditions that cannot be detected until<br>execution time.</p>
+<p>You can optionally provide a message string for <code>require</code>, but not for <code>assert</code>.</p>
+<p><code>revert</code> uses parentheses and accepts a string:</p>
+<blockquote>
+<p>revert(); revert(“description”);</p>
+</blockquote>
+<p>The error data will be passed back to the caller and can be caught there. Using<br><code>revert()</code> causes a revert without any error data while <code>revert(&quot;description&quot;)</code><br>will create an <code>Error(string)</code> error.</p>
+<p>The two ways <code>if (!condition) revert(...);</code> and <code>require(condition, ...);</code> are<br>equivalent as long as the arguments to <code>revert</code> and <code>require</code> do not have<br>side-effects, for example if they are just strings.</p>
+<p><strong>Use</strong> <code>require()</code><strong>to:</strong></p>
+<ul>
+<li>Validate user inputs ie. <code>require(input&lt;20);</code></li>
+<li>Validate the response from an external contract i.e.<br><code>require(external.send(amount));</code></li>
+<li>Validate state conditions prior to execution, ie. <br><code>require(block.number &gt; SOME_BLOCK_NUMBER)</code> or <br><code>require(balance[msg.sender]&gt;=amount)</code></li>
+<li>Generally, you should use <code>require</code> most often</li>
+<li>Generally, it will be used towards <strong>the beginning</strong> of a function</li>
+</ul>
+<p>There are many examples of <code>require()</code> in use for such things in our<br><a target="_blank" rel="noopener" href="https://github.com/ConsenSys/smart-contract-best-practices">Smart Contract Best Practices</a>.</p>
+<p><strong>Use</strong> <code>revert()</code><strong>to:</strong></p>
+<ul>
+<li>Handle the same type of situations as <code>require()</code>, but with more complex logic.</li>
+</ul>
+<p>If you have some complex nested <code>if/else</code> logic flow, you may find that it makes<br>sense to use <code>revert()</code> instead of <code>require()</code>. Keep in mind though,<br><a target="_blank" rel="noopener" href="https://github.com/ConsenSys/smart-contract-best-practices#fundamental-tradeoffs-simplicity-versus-complexity-cases">complex logic is a code smell</a>.</p>
+<p><strong>Use</strong> <code>assert()</code> <strong>to:</strong></p>
+<ul>
+<li>Check for <a target="_blank" rel="noopener" href="https://github.com/ConsenSys/smart-contract-best-practices#integer-overflow-and-underflow">overflow&#x2F;underflow</a>, i.e. <code>c = a+b; assert(c &gt; b)</code></li>
+<li>Check <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Invariant_(computer_science)">invariants</a>, i.e. <code>assert(this.balance &gt;= totalSupply);</code></li>
+<li>Validate state after making changes</li>
+<li>Prevent conditions which should never, ever be possible</li>
+<li>Generally, you will probably use <code>assert</code> less often</li>
+<li>Generally, it will be used towards <strong>the end</strong> of a function.</li>
+</ul>
+<p>Basically, <code>require()</code> should be your go to function for checking conditions,<br><code>assert()</code> is just there to prevent anything really bad from happening, but it<br>shouldn’t be possible for the condition to evaluate to <code>false</code>.</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Contract-Types"><span class="toc-number">1.</span> <span class="toc-text">Contract Types</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Base-Class-Functions"><span class="toc-number">2.</span> <span class="toc-text">Base Class Functions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shadowing"><span class="toc-number">3.</span> <span class="toc-text">Shadowing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Overriding-changes"><span class="toc-number">4.</span> <span class="toc-text">Overriding changes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Virtual-Functions"><span class="toc-number">5.</span> <span class="toc-text">Virtual Functions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#State-Variables"><span class="toc-number">6.</span> <span class="toc-text">State Variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EVM-Storage"><span class="toc-number">7.</span> <span class="toc-text">EVM Storage</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#security"><span class="toc-number">8.</span> <span class="toc-text">security:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Error-Handling"><span class="toc-number">8.1.</span> <span class="toc-text">Error Handling</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&text=Hacking in Solidity"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&title=Hacking in Solidity"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&is_video=false&description=Hacking in Solidity"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hacking in Solidity&body=Check out this article: https://oneforalone.github.io/2022/06/08/hacking-in-solidity/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&title=Hacking in Solidity"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&title=Hacking in Solidity"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&title=Hacking in Solidity"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&title=Hacking in Solidity"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&name=Hacking in Solidity&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/06/08/hacking-in-solidity/&t=Hacking in Solidity"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

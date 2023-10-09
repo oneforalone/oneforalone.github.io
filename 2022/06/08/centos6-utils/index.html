@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="CentOS 6 使用国内 yum 源虽然说 CentOS 已经被收购了，但是国内还是有部分服务器使用的是 CentOS 6 的系统，这时要想安装一些软件就会有点问题，官网给的源在国内的话速度很慢。解决办法有：  自己将 CentOS 的镜像下载到本地，搭建个本地源 替换成国内的源  方法一操作简单，这里不做介绍，记录下方法二的操作。经过一番 googling 和尝试，发现国内无论是中科大还是网易">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS 6 Utils">
+<meta property="og:url" content="https://oneforalone.github.io/2022/06/08/centos6-utils/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="CentOS 6 使用国内 yum 源虽然说 CentOS 已经被收购了，但是国内还是有部分服务器使用的是 CentOS 6 的系统，这时要想安装一些软件就会有点问题，官网给的源在国内的话速度很慢。解决办法有：  自己将 CentOS 的镜像下载到本地，搭建个本地源 替换成国内的源  方法一操作简单，这里不做介绍，记录下方法二的操作。经过一番 googling 和尝试，发现国内无论是中科大还是网易">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-06-08T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-09T11:22:05.397Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Network">
+<meta property="article:tag" content="CentOS">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>CentOS 6 Utils</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/06/08/foundry101/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/06/08/centos7-utils/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/06/08/centos6-utils/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&text=CentOS 6 Utils"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&title=CentOS 6 Utils"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&is_video=false&description=CentOS 6 Utils"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CentOS 6 Utils&body=Check out this article: https://oneforalone.github.io/2022/06/08/centos6-utils/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&title=CentOS 6 Utils"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&title=CentOS 6 Utils"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&title=CentOS 6 Utils"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&title=CentOS 6 Utils"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&name=CentOS 6 Utils&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/06/08/centos6-utils/&t=CentOS 6 Utils"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CentOS-6-%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85-yum-%E6%BA%90"><span class="toc-number">1.</span> <span class="toc-text">CentOS 6 使用国内 yum 源</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E5%AE%98%E6%96%B9%E6%BA%90%E7%BB%99%E7%A6%81%E6%8E%89"><span class="toc-number">1.1.</span> <span class="toc-text">将官方源给禁掉</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%BF%E6%8D%A2-vault-%E6%BA%90"><span class="toc-number">1.2.</span> <span class="toc-text">替换 vault 源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98"><span class="toc-number">1.3.</span> <span class="toc-text">生成本地缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">1.4.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CentOS-6-%E7%BD%91%E5%8D%A1%E5%90%8D-em-eth"><span class="toc-number">2.</span> <span class="toc-text">CentOS 6 网卡名 em -&gt; eth</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-grub-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">修改 grub 配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E7%BD%91%E5%8D%A1%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.2.</span> <span class="toc-text">修改网卡的配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%90%AF%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.3.</span> <span class="toc-text">重启服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Update-from-2021-11-24"><span class="toc-number">2.4.</span> <span class="toc-text">Update from 2021-11-24</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference-1"><span class="toc-number">2.5.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        CentOS 6 Utils
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-06-08T00:00:00.000Z" class="dt-published" itemprop="datePublished">2022-06-08 12:00:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-09T11:22:05.397Z" class="dt-updated" itemprop="dateModified">2023-10-09 11:22:05 AM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/CentOS/">CentOS</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/CentOS/" rel="tag">CentOS</a>, <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>, <a class="p-category" href="/tags/Network/" rel="tag">Network</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="CentOS-6-使用国内-yum-源"><a href="#CentOS-6-使用国内-yum-源" class="headerlink" title="CentOS 6 使用国内 yum 源"></a>CentOS 6 使用国内 yum 源</h2><p>虽然说 CentOS 已经被收购了，但是国内还是有部分服务器使用的是 CentOS 6 的系统，这时要想安装<br>一些软件就会有点问题，官网给的源在国内的话速度很慢。解决办法有：</p>
+<ul>
+<li>自己将 CentOS 的镜像下载到本地，搭建个本地源</li>
+<li>替换成国内的源</li>
+</ul>
+<p>方法一操作简单，这里不做介绍，记录下方法二的操作。经过一番 googling 和尝试，发现国内无论是中科<br>大还是网易，都没有 CentOS 6 的 yum 源了，最后发现清华大学的源很流畅。以下是 CentOS 6.10<br>更换清华大学源的操作。</p>
+<p><strong>注：</strong> 以下操作都是在 <code>root</code> 用户下执行的。</p>
+<h3 id="将官方源给禁掉"><a href="#将官方源给禁掉" class="headerlink" title="将官方源给禁掉"></a>将官方源给禁掉</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i <span class="string">&#x27;s/enable=1/enable=0/g&#x27;</span> /etc/yum.repos.d/CentOS-Base.repo</span><br></pre></td></tr></table></figure>
+
+<h3 id="替换-vault-源"><a href="#替换-vault-源" class="headerlink" title="替换 vault 源"></a>替换 vault 源</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sed -i <span class="string">&#x27;s#vault.centos.org#mirrors.tuna.tsinghua.edu.cn/centos-vault#g&#x27;</span> \</span><br><span class="line">  /etc/yum.repos.d/CentOS-Vault.repo</span><br></pre></td></tr></table></figure>
+
+<h3 id="生成本地缓存"><a href="#生成本地缓存" class="headerlink" title="生成本地缓存"></a>生成本地缓存</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
+
+<p>这里会有多个版本的源，如果觉得太多，可以直接将除自己系统对应版本都删掉，只保留系统版本的源。即<br>自行删除 <code>/etc/yum.repos.d/CentOS-Vault.repo</code> 中其他版本的源。</p>
+<p>That’s it.</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1]. <a target="_blank" rel="noopener" href="https://support.huaweicloud.com/ecs_faq/ecs_faq_1009.html">CentOS 6 镜像源更换方法</a></p>
+<h2 id="CentOS-6-网卡名-em-eth"><a href="#CentOS-6-网卡名-em-eth" class="headerlink" title="CentOS 6 网卡名 em -&gt; eth"></a>CentOS 6 网卡名 em -&gt; eth</h2><p>有些 Dell 的服务器和 Redhat&#x2F;CentOS 组合一起就是会出现某些特殊的反应，比如，网卡名不是 <code>eth</code><br>而是 <code>em</code>。这个本来也没啥大问题，但是和一些工业设计软件搭配在一起，就出了个大问题，license<br>激活不了。怎么解决呢？</p>
+<h3 id="修改-grub-配置文件"><a href="#修改-grub-配置文件" class="headerlink" title="修改 grub 配置文件"></a>修改 grub 配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i <span class="string">&#x27;s/quiet/quiet biosdevname=0/&#x27;</span> /etc/grub.conf</span><br></pre></td></tr></table></figure>
+
+<p>如果对 <code>sed</code> 不熟的话，直接用 vi 或 nano 去编辑 <code>/etc/grub.conf</code>，找到以 <code>kernel</code> 开头，<br><code>quiet</code> 结尾的一行，在 <code>quiet</code> 后面添加 <code>biosdevname=0</code>，保存。</p>
+<h3 id="修改网卡的配置文件"><a href="#修改网卡的配置文件" class="headerlink" title="修改网卡的配置文件"></a>修改网卡的配置文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/sysconfig/network-scripts</span><br><span class="line"></span><br><span class="line">for i in &#123;1..4&#125;; do sed -i &quot;s/em$i/eth$(( i-1 ))/&quot; ifcfg-em$i; \</span><br><span class="line">  mv ifcfg-em$i ifcfg-eth$(( i-1 )); done</span><br></pre></td></tr></table></figure>
+
+<p>第二步的具体操作是将 ifcfg-em1 到 ifcfg-em4 这四个文件中的 <code>em1</code> &#x2F; <code>em2</code> &#x2F; <code>em3</code> &#x2F;<br><code>em4</code> 改为 <code>eth0</code> &#x2F; <code>eth1</code> &#x2F; <code>eth2</code> &#x2F; <code>eth3</code>，然后将 <code>ifcfg-em1</code> &#x2F; <code>ifcfg-em2</code> &#x2F;<br><code>ifcfg-em3</code> &#x2F; <code>ifcfg-em4</code> 分别改名为 <code>ifcfg-eth0</code> &#x2F; <code>ifcfg-eth1</code> &#x2F; <code>ifcfg-eth2</code> &#x2F;<br><code>ifcfg-eth3</code></p>
+<h3 id="重启服务器"><a href="#重启服务器" class="headerlink" title="重启服务器"></a>重启服务器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+<h3 id="Update-from-2021-11-24"><a href="#Update-from-2021-11-24" class="headerlink" title="Update from 2021-11-24"></a><strong>Update from 2021-11-24</strong></h3><p>最近又被这个问题折磨了一下，正常来说上面这个操作步骤是能够 work 的，但是总是会有不正常的时候，<br>就比如说我前几天遇到的。</p>
+<p>具体情况是这样的：</p>
+<p>情况是这样的，我根据之前的经验，改了 <code>/etc/grub.conf</code>，然后一改网卡配置文件名，远程就断掉，<br>沟通后知道路由器那边对服务器的网络进行了限制，一开始我以为是配置文件里面的内容没改导致的，然后<br>就叫机房的人协助改一下，结果发现将 <code>em1</code> 改为 <code>eth1</code> 后，竟然不能获取到 IP，配置静态 IP 也<br>不行。无奈之下，只能先恢复成原有的情况，继续使用 <code>em1</code>，将一些不依赖网卡名的服务给配置上。过了<br>一两天，机房那边想要复现这个问题，结果发现改了配置文件重启后用 <code>ip a</code> 命令看到的网卡名并没有<br>变化，还是 <code>em1</code>。</p>
+<p>那么问题出在哪里呢？然后就对比一下配置成功且正常 work 的配置文件，一开始以为是配置文件中少了<br><code>NAME=&quot;System eth0&quot;</code> 这一行配置，结果发现其他的网卡都可以，就是这个 <code>em1</code> 变不成 <code>eth0</code>。<br>通过使用 <code>nmcli</code> 查看分析，改完后 <code>nmcli con</code> 看到的是 <code>eth0</code>，<code>nmcli dev</code> 看到的却是<br><code>em1</code>。</p>
+<p>Ok，检查到这，那么问题很清晰了，<code>nmcli con</code> 查看的是 NetworkManager 中的 connection，<br><code>nmcli dev</code> 查看的是 NetworkManager 管理的 device 名，那么就是配置是生效了的，但是在<br>device 的管理识别中有问题。然后就去 <code>/etc/udev/rules.d/70-persistent-net.rules</code><br>中一看，终于找到问题了，其中 <code>em1</code> 的配置要在 <code>eth0</code> 后面，这就难怪为什么改完网卡配置连接显示<br>的是配置文件中的配置，但是设备名却是 <code>em1</code> 了，根据现象我可以确定对于同一个设备，最新的配置会<br>覆盖掉之前的配置，而这台机器产生这个的原因是因为一开始改成功了，但是没有获取到 IP，之后有改回去，<br>就导致 <code>em1</code> 成为最新的了，然后之后修改并没有出现新的命名，所以 device 的配置文件中就不会再<br>更新。所以解决办法就是：</p>
+<p><strong>直接注释掉 <code>/etc/udev/rules.d/70-persistent-net.rules</code> 中 <code>em1</code> 的配置。</strong></p>
+<p>Problem Solve。</p>
+<p>因此，最完美的方案是：</p>
+<ol>
+<li>修改 <code>/etc/grub.conf</code></li>
+<li>修改 <code>/etc/udev/rules.d/70-persistent-net.rules</code>，如果文件不存在的话，修改完<br><code>/etc/grub.conf</code> 重启后系统会生成，之后再修改</li>
+<li>修改网卡配置文件然后重命名网卡配置文件</li>
+</ol>
+<h3 id="Reference-1"><a href="#Reference-1" class="headerlink" title="Reference"></a>Reference</h3><p>[1]. <a target="_blank" rel="noopener" href="https://www.linuxidc.com/Linux/2013-07/86885.htm">CentOS 6.4 安装后网卡 em 改回 eth 的两种方法</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CentOS-6-%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85-yum-%E6%BA%90"><span class="toc-number">1.</span> <span class="toc-text">CentOS 6 使用国内 yum 源</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E5%AE%98%E6%96%B9%E6%BA%90%E7%BB%99%E7%A6%81%E6%8E%89"><span class="toc-number">1.1.</span> <span class="toc-text">将官方源给禁掉</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%BF%E6%8D%A2-vault-%E6%BA%90"><span class="toc-number">1.2.</span> <span class="toc-text">替换 vault 源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98"><span class="toc-number">1.3.</span> <span class="toc-text">生成本地缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">1.4.</span> <span class="toc-text">Reference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CentOS-6-%E7%BD%91%E5%8D%A1%E5%90%8D-em-eth"><span class="toc-number">2.</span> <span class="toc-text">CentOS 6 网卡名 em -&gt; eth</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-grub-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">修改 grub 配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E7%BD%91%E5%8D%A1%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.2.</span> <span class="toc-text">修改网卡的配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%90%AF%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.3.</span> <span class="toc-text">重启服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Update-from-2021-11-24"><span class="toc-number">2.4.</span> <span class="toc-text">Update from 2021-11-24</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference-1"><span class="toc-number">2.5.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/06/08/centos6-utils/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&text=CentOS 6 Utils"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&title=CentOS 6 Utils"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&is_video=false&description=CentOS 6 Utils"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CentOS 6 Utils&body=Check out this article: https://oneforalone.github.io/2022/06/08/centos6-utils/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&title=CentOS 6 Utils"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&title=CentOS 6 Utils"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&title=CentOS 6 Utils"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&title=CentOS 6 Utils"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/06/08/centos6-utils/&name=CentOS 6 Utils&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/06/08/centos6-utils/&t=CentOS 6 Utils"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="2.2 加法2.2.1证明命题 2.2.5 命题 $2.2.5$ （加法是可结合的）对任意三个自然数 a、b、c，有 $(a + b) + c &#x3D; a + (b + c)$成立。 证明： 设 $a, c$ 为定值，对 $b$ 采取归纳法：当 $b &#x3D; 0$ 时： $$\begin{align}左式 &#x3D; (a + 0) + c &#x3D; a + c \\右式 &amp;#x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="analysis-nature-number-solutions">
+<meta property="og:url" content="https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="2.2 加法2.2.1证明命题 2.2.5 命题 $2.2.5$ （加法是可结合的）对任意三个自然数 a、b、c，有 $(a + b) + c &#x3D; a + (b + c)$成立。 证明： 设 $a, c$ 为定值，对 $b$ 采取归纳法：当 $b &#x3D; 0$ 时： $$\begin{align}左式 &#x3D; (a + 0) + c &#x3D; a + c \\右式 &amp;#x">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-10-26T10:04:56.000Z">
+<meta property="article:modified_time" content="2023-10-07T18:30:29.090Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Mathematic">
+<meta property="article:tag" content="Analysis">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>analysis-nature-number-solutions</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/10/28/analysis-ch03-solutions/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/10/26/analysis-ch01/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&text=analysis-nature-number-solutions"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&title=analysis-nature-number-solutions"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&is_video=false&description=analysis-nature-number-solutions"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=analysis-nature-number-solutions&body=Check out this article: https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&title=analysis-nature-number-solutions"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&title=analysis-nature-number-solutions"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&title=analysis-nature-number-solutions"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&title=analysis-nature-number-solutions"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&name=analysis-nature-number-solutions&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&t=analysis-nature-number-solutions"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%8A%A0%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">2.2 加法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1"><span class="toc-number">1.1.</span> <span class="toc-text">2.2.1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2"><span class="toc-number">1.2.</span> <span class="toc-text">2.2.2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3"><span class="toc-number">1.3.</span> <span class="toc-text">2.2.3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4"><span class="toc-number">1.4.</span> <span class="toc-text">2.2.4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-5"><span class="toc-number">1.5.</span> <span class="toc-text">2.2.5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-6"><span class="toc-number">1.6.</span> <span class="toc-text">2.2.6</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E4%B9%98%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">2.3 乘法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-1"><span class="toc-number">2.1.</span> <span class="toc-text">2.3.1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-2"><span class="toc-number">2.2.</span> <span class="toc-text">2.3.2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-3"><span class="toc-number">2.3.</span> <span class="toc-text">2.3.3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-4"><span class="toc-number">2.4.</span> <span class="toc-text">2.3.4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-5"><span class="toc-number">2.5.</span> <span class="toc-text">2.3.5</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        analysis-nature-number-solutions
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-10-26T10:04:56.000Z" class="dt-published" itemprop="datePublished">2022-10-26 10:04:56 AM</time>
+        
+        (Updated: <time datetime="2023-10-07T18:30:29.090Z" class="dt-updated" itemprop="dateModified">2023-10-07 06:30:29 PM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Mathematic/">Mathematic</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Analysis/" rel="tag">Analysis</a>, <a class="p-category" href="/tags/Mathematic/" rel="tag">Mathematic</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="2-2-加法"><a href="#2-2-加法" class="headerlink" title="2.2 加法"></a>2.2 加法</h2><h3 id="2-2-1"><a href="#2-2-1" class="headerlink" title="2.2.1"></a>2.2.1</h3><p>证明命题 2.2.5</p>
+<p>命题 $2.2.5$ （加法是可结合的）对任意三个自然数 a、b、c，有 $(a + b) + c &#x3D; a + (b + c)$<br>成立。</p>
+<p>证明：</p>
+<p>设 $a, c$ 为定值，对 $b$ 采取归纳法：<br>当 $b &#x3D; 0$ 时：</p>
+<p>$$<br>\begin{align}<br>左式 &#x3D; (a + 0) + c &#x3D; a + c \\<br>右式 &#x3D; a + (0 + c) &#x3D; a + c<br>\end{align}<br>$$</p>
+<p>原式左右两边相等，等式成立。</p>
+<p>假设当 $b &#x3D; b$ 时 $(a + b) + c &#x3D; a + (b + c)$ 成立，<br>则当 $b &#x3D; b++$ 时：</p>
+<p>左式为：$(a + b++) + c$，根据引理 $2.2.3. n + (m++) &#x3D; (n + m)++$ 有：</p>
+<p>$$<br>(a + b++) + c &#x3D; ((a + b)++) + c<br>$$</p>
+<p>根据引理 $2.2.4. n + m &#x3D; m + n$ 有：</p>
+<p>$$<br>\begin{align}<br>((a + b)++) + c &amp;&#x3D; c + ((a + b)++) \\<br>&amp;&#x3D; (c + (a + b))++ \\<br>&amp;&#x3D; ((a + b) + c)++<br>\end{align}<br>$$</p>
+<p>右式为：</p>
+<p>$$<br>\begin{align}<br>a + (b++ + c) &amp;&#x3D; a + ((b + c)++) \\<br>&amp;&#x3D; (a + (b + c))++<br>\end{align}<br>$$</p>
+<p>又因为当 $b &#x3D; b$ 时 $(a + b) + c &#x3D; a + (b + c)$ 成立，</p>
+<p>所以 $(c + (a + b))++ &#x3D; (a + (b + c))++$，即 左式 &#x3D; 右式，</p>
+<p>因此当 $b&#x3D; b++$ 时，原式 $(a + b++) + c &#x3D; a + (b++ + c)$ 成立。</p>
+<p>即证：对任意三个自然数 $a$、$b$、$c$，有 $(a + b) + c &#x3D; a + (b + c)$ 成立。</p>
+<h3 id="2-2-2"><a href="#2-2-2" class="headerlink" title="2.2.2"></a>2.2.2</h3><p>证明引理 2.2.10</p>
+<p>引理 $2.2.10$ 令 $a$ 表示一个正自然数，那么恰存在一个自然数 $b$ 使得 $b++ &#x3D; a$。</p>
+<p>证明：</p>
+<p>因为 $a \in N^+$，</p>
+<p>当 $a &#x3D; 1$ 时，$0++ &#x3D; 1 \Rightarrow b &#x3D; 0$，此时 $b$ 为自然数。</p>
+<p>设当 $a &#x3D; a$ 时，$b++ &#x3D; a$，则当 $a &#x3D; a++$时，有：</p>
+<p>$$<br>b++ &#x3D; a++<br>$$</p>
+<p>此时 $b &#x3D; a$，因为 $a \in N^+$，所以 $ b \in N^+$，等式成立。</p>
+<p>即证：令 $a$ 表示一个正自然数，那么恰存在一个自然数 $b$ 使得 $b++ &#x3D; a$。</p>
+<h3 id="2-2-3"><a href="#2-2-3" class="headerlink" title="2.2.3"></a>2.2.3</h3><p>证明命题 2.2.12</p>
+<p>命题 $2.2.12$ （自然数的序的基本性质）令 a、b、c 为任意自然数，那么：</p>
+<p>(a)（序是自反的）$a \geqslant a$。</p>
+<p>(b)（序是可传递的）如果 $a \geqslant b$ 并且 $b \geqslant c$，那么 $a \geqslant c$。</p>
+<p>(c)（序是反对称的）如果 $a \geqslant b$ 并且 $b \geqslant a$，那么 $a &#x3D; b$。</p>
+<p>(d)（加法保持序不变）$a \geqslant b$，当且仅当 $a + c \geqslant b + c$。</p>
+<p>(e) $a &lt; b$，当且仅当 $a++ \leqslant b$。</p>
+<p>(f) $a &lt; b$，当且仅当存在正自然数 d 使得 $b &#x3D; a + d$。</p>
+<p>证明：</p>
+<p>定义 $2.2.11$（自然数的序）令 $n$ 和 $m$ 表示任意两个自然数。我们称 $n$ 大于等于 $m$，<br>记作 $n \geqslant m$ 或 $m \leqslant n$，当且仅当存在自然数 $a$ 使得 $n &#x3D; m + a$。<br>我们称 $n$ 严格大于 $m$，并且记作 $n &gt; m$ 或 $m &lt; n$，当且仅当 $n \geqslant m$ 且 $n<br>\ne m$。</p>
+<p>(a)</p>
+<p>因为 $a &#x3D; a + 0, 0 \in N$，根据定义 $2.2.11$ 就有 $a \geqslant a$。</p>
+<p>(b)</p>
+<p>根据定义 $2.2.11$ 有：</p>
+<p>$a \geqslant b \Rightarrow a &#x3D; b + m, m \in N$，</p>
+<p>$b \geqslant c \Rightarrow b &#x3D; c + n, n \in N$</p>
+<p>所以：</p>
+<p>$a &#x3D; c + n + m, n + m \in N$。</p>
+<p>即 $a \geqslant c$.</p>
+<p>因此：如果 $a \geqslant b$ 并且 $b \geqslant c$，那么 $a \geqslant c$。</p>
+<p>(c)</p>
+<p>根据定义 $2.2.11$ 有：</p>
+<p>$a \geqslant b \Rightarrow a &#x3D; b + m, m \in N$，</p>
+<p>$b \geqslant a \Rightarrow b &#x3D; a + n, n \in N$</p>
+<p>所以：</p>
+<p>$$<br>\begin{align}<br>&amp;a &#x3D; a + n + m, n + m \in N \\<br>&amp;\Rightarrow n + m &#x3D; 0 \\<br>&amp;\Rightarrow m &#x3D; 0, n &#x3D; 0 \\<br>&amp;\Rightarrow a &#x3D; b<br>\end{align}<br>$$</p>
+<p>即证：如果 $a \geqslant b$ 并且 $b \geqslant a$，那么 $a &#x3D; b$。</p>
+<p>(d)</p>
+<p>由定义 $2.2.11$ 有：</p>
+<p>$$<br>\begin{align}<br>a \geqslant b &amp;\Leftrightarrow a &#x3D; b + m, m \in N \\<br>&amp;\Leftrightarrow a + c &#x3D; b + m + c &#x3D; b + c + m, m \in N \\<br>&amp;\Leftrightarrow a + c \geqslant b + c<br>\end{align}<br>$$</p>
+<p>即证：$a \geqslant b$，当且仅当 $a + c \geqslant b + c$</p>
+<p>(e)</p>
+<p>$$<br>\begin{align}<br>a &lt; b &amp;\Leftrightarrow ((a \leqslant b) \land (a \ne b)) \\<br>&amp;\Leftrightarrow ((a + m &#x3D; b, m \in N) \land (a \ne b)) \\<br>&amp;\Leftrightarrow m \ne 0 \\<br>&amp;\Leftrightarrow \exists n \in N, n++ &#x3D; m \\<br>&amp;\Leftrightarrow a + (n++) &#x3D; b, n \in N \\<br>&amp;\Leftrightarrow (a++) + n &#x3D; b, n \in N \\<br>&amp;\Leftrightarrow a++ \leqslant b<br>\end{align}<br>$$</p>
+<p>(f)</p>
+<p>$$<br>\begin{align}<br>a &lt; b &amp;\Leftrightarrow ((a &lt; b) \land ( a \ne b)) \\<br>&amp;\Leftrightarrow ((a + d &#x3D; b, d \in N) \land (d \ne 0)) \\<br>&amp;\Leftrightarrow a + d &#x3D; b, d \in N^+<br>\end{align}<br>$$</p>
+<h3 id="2-2-4"><a href="#2-2-4" class="headerlink" title="2.2.4"></a>2.2.4</h3><p>证明在命题 2.2.13 证明中标注了（为什么？）的三个命题：</p>
+<ol>
+<li>当 $a &#x3D; 0$ 时，对所有的 b 均有 $0 \leqslant b$</li>
+<li>如果 $a &gt; b$，那么有 $a++ &gt; b$</li>
+<li>如果 $a &#x3D; b$，那么 $a++ &gt; b$</li>
+</ol>
+<p>证明：</p>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>(0 + b &#x3D; b, b \in N) \Rightarrow (0 \leqslant b, b \in N)<br>$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>\begin{align}<br>a &gt; b &amp;\Rightarrow ((a &#x3D; b + m, m \in N) \land (a \ne b)) \\<br>&amp;\Rightarrow a++ &#x3D; (b + m)++ &#x3D; b + (m++), m \in N \\<br>&amp;\Rightarrow a++ &gt; b<br>\end{align}<br>$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>\begin{align}<br>a &#x3D; b &amp;\Rightarrow a++ &#x3D; b++ &#x3D; (b + 0)++ &#x3D; b + (0++) &#x3D; b + 1 \\<br>&amp;\Rightarrow a++ &gt; b<br>\end{align}<br>$$</p>
+<h3 id="2-2-5"><a href="#2-2-5" class="headerlink" title="2.2.5"></a>2.2.5</h3><p>证明命题 2.2.14（提示：定义 $Q(n)$ 是关于 n 的一个如下性质：$P(m)$对任意满足 $m_0<br>\leqslant m \leqslant n$ 的 m 均为真；注意，当 $n &lt; m_0$ 时，$Q(n)$为真，因为此时 m 的<br>取值范围为空。）</p>
+<p>命题 2.2.14（强归纳法原理）令 $m_0$ 表示一个自然数，$P(m)$ 表示与任意自然数 m 有关的性质。<br>假设对任意满足 $m \geqslant m_0$ 的自然数 m，均有如下内容成立：若 $P(m’)$ 对任意满足<br>$m_0 \leqslant m’ &lt; m$ 的自然数 $m’$ 均为真，那么 $P(m)$ 也为真。（特别地，这意味着<br>$P(m_0)$ 为真，因为当 $m &#x3D; m_0$ 时，前提中的 $m’$ 的取值范围为空。）于是我们能够断定，对于<br>任意满足 $m \geqslant m_0$ 的自然数 m，$P(m)$ 为真。</p>
+<p>证明：</p>
+<p>令 $Q(n) :&#x3D; {P(m) 为真，\forall m_0 \leqslant m &lt; n}$，当 $n &lt; m_0$ 时 $Q(n)$ 为真。</p>
+<p>等价于 $\forall n \geqslant m_0, Q(n) 为真$。</p>
+<p>当 $n &#x3D; m_0$ 时，因为 $m_0 \leqslant m &lt; m_0$ 不成立，所以 $Q(m_0) 为真。</p>
+<p>设当 $n &#x3D; n$ 时，$Q(n)$ 为真。</p>
+<p>则当 $n &#x3D; n++$ 时，因为 $Q(n)$ 为真，所以对 $\forall m_0 \leqslant k &lt; n$ 有 $P(k)$为<br>真，因此 $P(n)$ 也为真，从而推出 $Q(n++)$ 也为真，即 $Q(n++) &#x3D; {P(k) 为真， m_0<br>\leqslant k &lt; n++}$</p>
+<h3 id="2-2-6"><a href="#2-2-6" class="headerlink" title="2.2.6"></a>2.2.6</h3><p>令 n 表示一个自然数，令 $P(m)$ 是关于自然数的一个性质并且满足：只要 $P(m++)$ 为真，$P(m)$<br>就为真。假设 $P(n)$ 也为真，证明：$P(m)$ 对任意满足 $m \leqslant n$ 的自然数 $m$ 均为真；<br>这被成为<strong>逆向归纳法原理</strong>。（提示：对变量 $n$ 使用归纳法）</p>
+<p>证明：</p>
+<p>令 $Q(n) :&#x3D; {P(m) 为真，\forall m \leqslant n}$</p>
+<p>当 $n &#x3D; 0$ 时，条件成立.</p>
+<p>设当 $n &#x3D; k$ 时， $Q(k) :&#x3D; {P(m) 为真，\forall m \leqslant k}$，</p>
+<p>则当 $n &#x3D; k++$ 时，因为 $Q(k)$ 成立，所以 $P(k++)$，所以 $Q(k++)$ 为真，</p>
+<p>因此 $Q(k++) &#x3D; {P(m) 为真，\forall m \leqslant k++}$。</p>
+<h2 id="2-3-乘法"><a href="#2-3-乘法" class="headerlink" title="2.3 乘法"></a>2.3 乘法</h2><h3 id="2-3-1"><a href="#2-3-1" class="headerlink" title="2.3.1"></a>2.3.1</h3><p>证明引理 $2.3.2$（提示：修改引理 $2.2.2$、引理 $2.2.3$ 以及命题 $2.2.4$ 的证明）</p>
+<p>引理 $2.3.2$（乘法交换律）令 $n$ 和 $m$ 表示任意两个自然数，那么有 $n \times m &#x3D; m<br>\times n$ 成立。</p>
+<p>证明：</p>
+<p>a). 对 $m \times 0 &#x3D; 0, \forall m \in N$ 成立进行归纳：</p>
+<p>当 $m &#x3D; 0$ 时，$0 \times 0 &#x3D; 0$，等式成立，</p>
+<p>设 $m &#x3D; m$ 时成立，则有 $m \times 0 &#x3D; 0$ 成立，</p>
+<p>当 $m &#x3D; m++$ 时，有 $(m++) \times 0 &#x3D; (m + 0) + 0 &#x3D; 0 + 0 &#x3D; 0$ 等式依然成立。</p>
+<p>b). 对 $n \times (m++) &#x3D; (n \times m) + n, \forall m, n \in N$ 成立进行归纳：</p>
+<p>当 $n &#x3D; 0$ 时，$0 \times (m++) &#x3D; 0 &#x3D; 0 \times m &#x3D; 0$，等式成立，</p>
+<p>设 $n &#x3D; n$ 时成立，则有 $n \times (m++) &#x3D; (n \times m) + n$ 成立，</p>
+<p>当 $n &#x3D; n++$ 时，有</p>
+<p>$$<br>\begin{align}<br>(n++) \times (m++) &amp;&#x3D; n \times (m++) + (m++) \\<br>&amp;&#x3D; n \times m + n + (m++) \\<br>&amp;&#x3D; n \times m + m + (n++) \\<br>&amp;&#x3D; (n++) \times m + (n++)<br>\end{align}<br>$$</p>
+<p>等式 $(n++) \times (m++) &#x3D; (n++) \times m + (n++)$ 成立。</p>
+<p>c). 对 $n \times m &#x3D; m \times n, \forall m, n \in N$ 成立进行归纳：</p>
+<p>当 $n &#x3D; 0$ 时，$ 0 \times m &#x3D; 0 &#x3D; m \times 0$，等式成立，</p>
+<p>设 $n &#x3D; n$ 时成立，则有 $ n \times m &#x3D; m \times n$ 成立，</p>
+<p>当 $n &#x3D; n++$ 时，有：</p>
+<p>$$<br>(n++) \times m &#x3D; n \times m + n &#x3D; m \times n + m &#x3D; m \times (n++)<br>$$</p>
+<p>即等式 $ n \times m &#x3D; m \times n, \forall m, n \in N$ 成立。</p>
+<h3 id="2-3-2"><a href="#2-3-2" class="headerlink" title="2.3.2"></a>2.3.2</h3><p>证明引理 $2.3.3$（提示：首先证明第二个命题）</p>
+<p>引理 $2.3.3$ （正自然数没有零因子）设 $n$、$m$ 为自然数。那么 $n \times m &#x3D; 0$，当且仅当<br>$n$ 和 $m$ 中至少有一个为零。特别的，如果 $n$ 和 $m$ 均为正，那么 $nm$ 也是正的。</p>
+<p>证明：</p>
+<p>有题意有：</p>
+<p>$$<br>\begin{align}<br>&amp;(n \in N+) \land (m \in N^+) \\<br>&amp;\Rightarrow \exists c, d \in N, c++ &#x3D; n, d++ &#x3D; m \\<br>&amp;\Rightarrow nm &#x3D; (c++) \times (d++) &#x3D; c \times (d++) + (d++) &#x3D; (c \times (d++) + d)++ \\<br>&amp;\Rightarrow nm \in N^+<br>\end{align}<br>$$</p>
+<h3 id="2-3-3"><a href="#2-3-3" class="headerlink" title="2.3.3"></a>2.3.3</h3><p>证明命题 2.3.5（提示：修改命题 2.2.5 的证明并利用分配律）</p>
+<p>命题 2.3.5（乘法结合律）对任意自然数 $a$、$b$、$c$ ，$(a \times b) \times c &#x3D; a \times<br>(b \times c)$ 均成立.</p>
+<p>证明：</p>
+<p>对 $b$ 进行归纳：</p>
+<p>当 $b &#x3D; 0$ 时，$(a \times 0) \times c &#x3D; 0 \times c &#x3D; 0, a \times (0 \times c) &#x3D; a<br>\times 0 &#x3D; 0$，左边 &#x3D; 右边，等式成立，</p>
+<p>设当 $b &#x3D; b$ 时成立，则有 $(a \times b) \times c &#x3D; a \times (b \times c)$ 成立，</p>
+<p>当 $b &#x3D; b++$ 时，有：</p>
+<p>$$<br>\begin{align}<br>&amp;(a \times (b++)) \times c &#x3D; (a \times b + a) \times c &#x3D; (a \times b) \times c + a \times c \\<br>&amp;a \times ((b++) \times c) &#x3D; a \times ((b \times c) + c) &#x3D; a \times (b \times c) + a \times c &#x3D; (a \times b) \times c + a \times c \\<br>&amp;\Rightarrow (a \times (b++)) \times c &#x3D; a \times ((b++) \times c)<br>\end{align}<br>$$</p>
+<h3 id="2-3-4"><a href="#2-3-4" class="headerlink" title="2.3.4"></a>2.3.4</h3><p>证明等式 $(a + b)^2 &#x3D; a^2 + 2ab + b^2$ 对任意自然数 $a$ 和 $b$ 均成立</p>
+<p>证明：</p>
+<p>$$<br>\begin{align}<br>&amp;(a + b)^2 &#x3D; (a + b)(a + b) \\<br>&amp;&#x3D;a(a + b) + b(a + b) \\<br>&amp;&#x3D;a^2 + ab + ba + b^2 \\<br>&amp;&#x3D;a^2 + 2ab + b^2<br>\end{align}<br>$$</p>
+<h3 id="2-3-5"><a href="#2-3-5" class="headerlink" title="2.3.5"></a>2.3.5</h3><p>证明命题 2.3.9（提示：固定 $q$ 并对 $n$ 进行归纳）</p>
+<p>命题 2.3.9（欧几里得算法）设 $n$ 是一个自然数，$q$ 表示一个正自然数，那么存在自然数 $m$ 和<br>$r$ 使得 $0 \leqslant r &lt; q$ 并且 $n &#x3D; mq + r$。</p>
+<p>证明：</p>
+<p>固定 $q$，对 $n$ 进行归纳：</p>
+<p>当 $n &#x3D; 0$ 时，$0 &#x3D; m \times q + r, m &#x3D; 0, r &#x3D; 0 &lt; q$，等式成立，</p>
+<p>假设 $n &#x3D; n$ 时成立，则有 $n &#x3D; mq + r, 0 \leqslant r &lt; q$ 成立，</p>
+<p>当 $n &#x3D; n++$ 时，有：</p>
+<p>$$<br>n++ &#x3D; (mq + r)++ &#x3D; mq + (r++) \\<br>r &lt; q \Rightarrow (r++) \leqslant q \Rightarrow ((r++) &lt; q) \lor ((r++) &#x3D; q)<br>$$</p>
+<p>当 $r++ &lt; q$ 时，等式成立，</p>
+<p>当 $r++ &#x3D; q$ 时，有：</p>
+<p>$$<br>n++ &#x3D; (mq + r)++ &#x3D; mq + (r++) &#x3D; mq + q &#x3D; (m++)q + 0<br>$$</p>
+<p>等式依然成立，即证。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%8A%A0%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">2.2 加法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1"><span class="toc-number">1.1.</span> <span class="toc-text">2.2.1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2"><span class="toc-number">1.2.</span> <span class="toc-text">2.2.2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3"><span class="toc-number">1.3.</span> <span class="toc-text">2.2.3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4"><span class="toc-number">1.4.</span> <span class="toc-text">2.2.4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-5"><span class="toc-number">1.5.</span> <span class="toc-text">2.2.5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-6"><span class="toc-number">1.6.</span> <span class="toc-text">2.2.6</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E4%B9%98%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">2.3 乘法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-1"><span class="toc-number">2.1.</span> <span class="toc-text">2.3.1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-2"><span class="toc-number">2.2.</span> <span class="toc-text">2.3.2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-3"><span class="toc-number">2.3.</span> <span class="toc-text">2.3.3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-4"><span class="toc-number">2.4.</span> <span class="toc-text">2.3.4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-5"><span class="toc-number">2.5.</span> <span class="toc-text">2.3.5</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&text=analysis-nature-number-solutions"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&title=analysis-nature-number-solutions"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&is_video=false&description=analysis-nature-number-solutions"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=analysis-nature-number-solutions&body=Check out this article: https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&title=analysis-nature-number-solutions"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&title=analysis-nature-number-solutions"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&title=analysis-nature-number-solutions"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&title=analysis-nature-number-solutions"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&name=analysis-nature-number-solutions&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/10/26/analysis-ch02-solutions/&t=analysis-nature-number-solutions"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

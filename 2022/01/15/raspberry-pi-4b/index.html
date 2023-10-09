@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Raspberry Pi 4b 安装 Ubuntu 配置 Wifi昨天晚上想拿我的 Pi 来做 IPFS 的服务器，然后买了一张 128G 的 SD 卡，本来想着应该很快就能配置玩系统，谁能想到，这届的博主不给力啊，或者说玩 Pi 的人比较少吧。我就是想没找到一个正确配置的博客。 没办法咯，只能自己看下相对应的文件然后自己进行修改测试咯。 首先，需要说明一下我的配置：Raspberry Pi 4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树莓派 4B">
+<meta property="og:url" content="https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="Raspberry Pi 4b 安装 Ubuntu 配置 Wifi昨天晚上想拿我的 Pi 来做 IPFS 的服务器，然后买了一张 128G 的 SD 卡，本来想着应该很快就能配置玩系统，谁能想到，这届的博主不给力啊，或者说玩 Pi 的人比较少吧。我就是想没找到一个正确配置的博客。 没办法咯，只能自己看下相对应的文件然后自己进行修改测试咯。 首先，需要说明一下我的配置：Raspberry Pi 4">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-01-15T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-09T11:27:27.654Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Network">
+<meta property="article:tag" content="Raspberry Pi">
+<meta property="article:tag" content="Ubuntu">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>树莓派 4B</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/04/09/bitcoin-on-pi/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/01/11/macos/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&text=树莓派 4B"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&title=树莓派 4B"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&is_video=false&description=树莓派 4B"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=树莓派 4B&body=Check out this article: https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&title=树莓派 4B"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&title=树莓派 4B"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&title=树莓派 4B"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&title=树莓派 4B"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&name=树莓派 4B&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&t=树莓派 4B"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Raspberry-Pi-4b-%E5%AE%89%E8%A3%85-Ubuntu-%E9%85%8D%E7%BD%AE-Wifi"><span class="toc-number">1.</span> <span class="toc-text">Raspberry Pi 4b 安装 Ubuntu 配置 Wifi</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        树莓派 4B
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-01-15T00:00:00.000Z" class="dt-published" itemprop="datePublished">2022-01-15 12:00:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-09T11:27:27.654Z" class="dt-updated" itemprop="dateModified">2023-10-09 11:27:27 AM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Raspberry-Pi/">Raspberry Pi</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>, <a class="p-category" href="/tags/Network/" rel="tag">Network</a>, <a class="p-category" href="/tags/Raspberry-Pi/" rel="tag">Raspberry Pi</a>, <a class="p-category" href="/tags/Ubuntu/" rel="tag">Ubuntu</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Raspberry-Pi-4b-安装-Ubuntu-配置-Wifi"><a href="#Raspberry-Pi-4b-安装-Ubuntu-配置-Wifi" class="headerlink" title="Raspberry Pi 4b 安装 Ubuntu 配置 Wifi"></a>Raspberry Pi 4b 安装 Ubuntu 配置 Wifi</h2><p>昨天晚上想拿我的 Pi 来做 IPFS 的服务器，然后买了一张 128G 的 SD 卡，本来想着应该很快就能配置<br>玩系统，谁能想到，这届的博主不给力啊，或者说玩 Pi 的人比较少吧。我就是想没找到一个正确配置的博<br>客。</p>
+<p>没办法咯，只能自己看下相对应的文件然后自己进行修改测试咯。</p>
+<p>首先，需要说明一下我的配置：Raspberry Pi 4 Model B，2018。因为目前官网没有 64 bit 的<br>RaspberryOS，所以操作系统我用的是 Ubuntu Server 20.04.3 LTS 64 bit。</p>
+<p>这里要提一下，我没有试过 RaspberryOS，所以我不好评价官网，毕竟我用的是 Ubuntu，同时一些博客<br>的 Pi 是 3B，我也没用过，所以我也不做评价。自己动手，丰衣足食。</p>
+<p>将 SD 卡用官方提供的 <a target="_blank" rel="noopener" href="https://www.raspberrypi.com/software/">Raspberry Pi Imager</a> 刻录好系统，然后看下SD卡中的 README,<br>按照 README 中的加载顺序逐个看下去，最终确认是在根目录下中的 <code>network-config</code><br>文件中，可以自己修改添加对应的网络配置。</p>
+<blockquote>
+<p>P.S. 刻录时右下方有个可以添加配置的地方，可以直接使用这个配置对用户名、主机名、网络进行<br>配置，如果使用这个配置后，刻录好后可以直接连接wifi，不需要执行下面的操作。但是要注意，<br>主机名设置好后之后如果想要修改，重启后又会恢复到一开始设置的。如果硬是要修改也可以，借助<br><code>rc.local</code> 这个服务(系统启动后会自动执行这个文件)，用 <code>sed</code> 命令对 <code>/etc/hosts</code><br>文件进行修改。</p>
+</blockquote>
+<p>其中有线网络的默认是已经配置成了 dhcp4，如果有网线可以直接连到路由器，那其实什么都不需要修改，<br>只需要插上网线，然后登陆路由器的管理界面查看对应的 IP 连接就好，连接上后按照 Ubuntu 的网络<br>设置配置一下无线网络就好。</p>
+<p>但是我就是不想这么做，太麻烦了，我懒得从书包里掏出网线然后去拉线，所以我就去改了一下<br><code>network-config</code>，其中  <code>wifi</code> 部分被注释掉了，我就尝试改一下，看看能不能成功，反正添加<br><code>wpa_suppalicant.conf</code> 文件是没用任何用。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="number">2</span></span><br><span class="line"><span class="attr">ethernets:</span></span><br><span class="line">  <span class="attr">eth0:</span></span><br><span class="line">    <span class="attr">dhcp4:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">optional:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">wifis:</span></span><br><span class="line">  <span class="attr">wlan0:</span></span><br><span class="line">    <span class="attr">dhcp4:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">optional:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">access-points:</span></span><br><span class="line">      <span class="attr">wifi-name:</span></span><br><span class="line">        <span class="attr">password:</span> <span class="string">&quot;wifi-password&quot;</span></span><br><span class="line">      <span class="attr">wifi-name2:</span></span><br><span class="line">        <span class="attr">password:</span> <span class="string">&quot;wifi-password&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>将 <code>wifi-name</code> 和 <code>password</code> 替换成对应的 wifi 名和密码，然后保存，将 SD 卡插回 Pi，开机<br>等待一会就 Pi 就会连上 wifi。至于无法登陆路由器管理界面查看的，方法也很简单，就是将网络配置<br>换成静态 IP，具体配置参考 <a target="_blank" rel="noopener" href="https://netplan.io/examples/">netplan 配置示范</a>。<br>经过验证好像是要重启两次才能生效。</p>
+<p>如果不想登陆路由器的管理界面的话，也可以使用 <code>nmap</code> 扫描一下，就可以定位到树莓派的 IP。</p>
+<ol>
+<li>查看自己的子网：<code>ifconfig</code> &#x2F; <code>ipconfig \a</code> &#x2F; <code>ip a</code></li>
+<li>查询子网中开机的主机：<code>nmap -n -sn -T4 &lt;subnet&gt; -oG -</code></li>
+<li>将上一步中得到的 UP 的 IP 进行 OS 嗅探：<code>sudo nmap -n -Pn -sS -T4 -O &lt;ip-ranges&gt;</code></li>
+</ol>
+<p>可以根据第 3 步中的结果看到 <code>MAC Address: xx:xx:xx:xx:xx:xx (Raspberry Pi Trading)</code><br>的 IP 就是树莓派了。</p>
+<p>That’s all, Happy Hacking :).</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Raspberry-Pi-4b-%E5%AE%89%E8%A3%85-Ubuntu-%E9%85%8D%E7%BD%AE-Wifi"><span class="toc-number">1.</span> <span class="toc-text">Raspberry Pi 4b 安装 Ubuntu 配置 Wifi</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&text=树莓派 4B"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&title=树莓派 4B"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&is_video=false&description=树莓派 4B"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=树莓派 4B&body=Check out this article: https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&title=树莓派 4B"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&title=树莓派 4B"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&title=树莓派 4B"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&title=树莓派 4B"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&name=树莓派 4B&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/01/15/raspberry-pi-4b/&t=树莓派 4B"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

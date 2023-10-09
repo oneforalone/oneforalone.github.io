@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="NOTE: This is a draft. 在上篇 An Overview of Ethereum 中，只是粗略的去了解了一下 ethereum 中的一些基础概念。而要想深入 Ethereum，必然少不了 EVM。EVM 就是 Ethereum 的灵魂。 EVMEVM execution context: The Code: smart contract byte code which is i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dive into Ethereum">
+<meta property="og:url" content="https://oneforalone.github.io/2022/05/05/dive-into-ethereum/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="NOTE: This is a draft. 在上篇 An Overview of Ethereum 中，只是粗略的去了解了一下 ethereum 中的一些基础概念。而要想深入 Ethereum，必然少不了 EVM。EVM 就是 Ethereum 的灵魂。 EVMEVM execution context: The Code: smart contract byte code which is i">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-05-05T14:45:08.000Z">
+<meta property="article:modified_time" content="2023-10-07T18:30:29.092Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Blockchain">
+<meta property="article:tag" content="Ethereum">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Dive into Ethereum</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/06/08/centos7-utils/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/05/03/git-utils/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&text=Dive into Ethereum"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&title=Dive into Ethereum"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&is_video=false&description=Dive into Ethereum"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Dive into Ethereum&body=Check out this article: https://oneforalone.github.io/2022/05/05/dive-into-ethereum/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&title=Dive into Ethereum"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&title=Dive into Ethereum"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&title=Dive into Ethereum"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&title=Dive into Ethereum"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&name=Dive into Ethereum&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&t=Dive into Ethereum"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#EVM"><span class="toc-number">1.</span> <span class="toc-text">EVM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#EVM-execution-context"><span class="toc-number">1.1.</span> <span class="toc-text">EVM execution context:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OPCODES"><span class="toc-number">1.2.</span> <span class="toc-text">OPCODES</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#contract-creation"><span class="toc-number">1.2.1.</span> <span class="toc-text">contract creation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#function-selector"><span class="toc-number">1.2.2.</span> <span class="toc-text">function selector</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#function-wrapper"><span class="toc-number">1.2.3.</span> <span class="toc-text">function wrapper</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#function-body"><span class="toc-number">1.2.4.</span> <span class="toc-text">function body</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Metahash"><span class="toc-number">1.2.5.</span> <span class="toc-text">Metahash</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Dive into Ethereum
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-05-05T14:45:08.000Z" class="dt-published" itemprop="datePublished">2022-05-05 02:45:08 PM</time>
+        
+        (Updated: <time datetime="2023-10-07T18:30:29.092Z" class="dt-updated" itemprop="dateModified">2023-10-07 06:30:29 PM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Blockchain/">Blockchain</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Blockchain/" rel="tag">Blockchain</a>, <a class="p-category" href="/tags/Ethereum/" rel="tag">Ethereum</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><strong>NOTE</strong>: This is a draft.</p>
+<p>在上篇 <a href="/2021/11/23/overview-of-ethereum/" title="An Overview of Ethereum">An Overview of Ethereum</a> 中，只是粗略的去了解了一下 ethereum 中的一<br>些基础概念。而要想深入 Ethereum，必然少不了 EVM。EVM 就是 Ethereum 的灵魂。</p>
+<h2 id="EVM"><a href="#EVM" class="headerlink" title="EVM"></a>EVM</h2><h3 id="EVM-execution-context"><a href="#EVM-execution-context" class="headerlink" title="EVM execution context:"></a>EVM execution context:</h3><ul>
+<li>The Code: smart contract byte code which is immutable, it is stored on-chain<br>and referenced using a contract address</li>
+<li>The Stack: call stack, an empty stack is initialized for each EVM contract<br>execution</li>
+<li>The Memory: contract memory, a clean memory is initialized for each EVM<br>contract execution</li>
+<li>The Storage: contract storage which is persisted across executions, it’s<br>stored on-chain and is referenced via a contract address and its storage slot.</li>
+<li>The Call Data: the input data for a transaction</li>
+<li>The Return Data: the data returned from a contract function call</li>
+</ul>
+<p>Tips: zero function signature selector: <code>wfjizxua()</code>, it’s signature is<br><code>0x00000000</code></p>
+<p>The main difference between <code>DELEGATECALL</code> and <code>CALL</code> is which storage the<br>contract access. <code>CALL</code> will access the contract’s storage which contains the<br>function, <code>DELEGATECALL</code> will access the contract’s storage which call this<br>function.</p>
+<p><code>JUMP</code>: jump to the location of the top of the stack value<br><code>JUMPI</code>: if the top of the stack value is 0 , jump to the location of the second<br>of the stack value, otherwise no jump<br><code>JUMPDEST</code>: mark a location as a valid jump target. If the target location do<br>not contain a JUMPDEST opcode, the execution will fail.</p>
+<h3 id="OPCODES"><a href="#OPCODES" class="headerlink" title="OPCODES"></a>OPCODES</h3><h4 id="contract-creation"><a href="#contract-creation" class="headerlink" title="contract creation"></a>contract creation</h4><p>push1 80<br>push1 40</p>
+<p>a sign for contract creation<br><code>0x60806040</code></p>
+<p>opcode: push1 -&gt; 60</p>
+<p>evm operation base on 32 bytes</p>
+<p>why 80 and 40, this is hex,</p>
+<p><code>0x80</code> is 128 in decimal, one hex stands for 4 bits,</p>
+<p>32 bytes &#x3D; 256 bits &#x3D; 64 hex string &#x3D; <code>0x40</code></p>
+<p>in memory:<br>80 stands for start point of the memory pointer, max length 32 bytes<br><code>0x00</code> - <code>0x40</code> reserver for hash compute<br><code>0x40</code> - <code>0x80</code> storing the memory pointer</p>
+<p>more details:<br><code>0x00</code> - <code>0x3f</code> (64 bytes): scratch space, can be used between statements i.e.<br>within inline assembly and for hashing methods.<br><code>0x40</code> - <code>0x5f</code> (32 bytes): free memory pointer, free memory pointer, currently<br>allocated memory size, start location of free memory, <code>0x80</code> initially<br><code>0x60</code> - <code>0x7f</code> (32 bytes): zero slot, is used as an initial value for dynamic<br>memory arrays and should never be written to.</p>
+<p>so free memory pointer assambly is:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PUSH1 80</span><br><span class="line">PUSH1 40</span><br><span class="line">MSTORE</span><br></pre></td></tr></table></figure>
+
+<p>The hex code is : <code>0x6080604052</code></p>
+<h4 id="function-selector"><a href="#function-selector" class="headerlink" title="function selector"></a>function selector</h4><p>In EVM OPCODE:</p>
+<p>function signature (4 bytes) + function arguments ( each is 32 bytes)</p>
+<p>function signature:<br>keccak256(“function-name(arg1-type, arg2-type, …)”) and get the first 4 bytes,<br>8 hex string.</p>
+<p>function selector, compare with the function signature, with the function entry<br>program counter(PC), if eq, then jump to the location which pc point to.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">PUSH1 0x0</span><br><span class="line"></span><br><span class="line">CALLDATALOAD // load the arguments after the function signature</span><br><span class="line"></span><br><span class="line">PUSH1 0xe0   // 0xe0 = bits_of(calldataload, in this case is 32bytes, 256 bits)</span><br><span class="line">             // - bits_of(function siganatures, normally is 4 bytes, 32 bits),</span><br><span class="line">             // thus 0xe0(224) = 0x100(256) - 0x20(32)</span><br><span class="line"></span><br><span class="line">SHR // bit shift right, the first item on the top of stack is the how much to</span><br><span class="line">    // shift, and the second item on the top of stack is value need to shifting.</span><br><span class="line">    // This step is to get the function signature</span><br><span class="line"></span><br><span class="line">DUP1</span><br><span class="line"></span><br><span class="line">PUSH4 0x2E64CEC1</span><br><span class="line"></span><br><span class="line">EQ // compare the two items on the top of stack, if equal, then push 1 to the</span><br><span class="line">   // stack, otherwise push 0</span><br><span class="line"></span><br><span class="line">PUSH2 0x3b // the entry of function signature 0x2E64CEC1</span><br><span class="line"></span><br><span class="line">JUMPI // jump to 0x3b if the second item on the top of stack is 1, otherwise</span><br><span class="line">      // continue to the next operation</span><br><span class="line"></span><br><span class="line">DUP1 // Offset 17</span><br><span class="line"></span><br><span class="line">PUSH4 0x6057361D // Offset 18</span><br><span class="line"></span><br><span class="line">EQ // Offset 23 (previous instruction occupies 5 bytes)</span><br><span class="line"></span><br><span class="line">PUSH2 0x59 // Offset 24</span><br><span class="line"></span><br><span class="line">JUMPI // Offset 27 (previous instruction occupies 3 bytes)</span><br><span class="line"></span><br><span class="line">// These are just padding to enable us to get to program counter 59 &amp; 89</span><br><span class="line">PUSH30 0x0 // Offset 28</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// retrieve() bytecode</span><br><span class="line">JUMPDEST // Offset 59 (previous instruction occupies 31 bytes)</span><br><span class="line">PUSH1 0x1 // Offset 60 (retrieve() function execution...)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// These are just padding to enable us to get to program counter 59 &amp; 89</span><br><span class="line">PUSH26 0x0 // Offset 62 (previous instruction occupies 2 bytes)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// store(uint256) bytecode</span><br><span class="line">JUMPDEST // Offset 89 (previous instruction occupies 27 bytes)</span><br><span class="line">PUSH1 0x0 // Continue function execution....</span><br></pre></td></tr></table></figure>
+
+<p>step 1: free memory pointer</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PUSH1 80</span><br><span class="line">PUSH1 40</span><br><span class="line">MSTORE</span><br></pre></td></tr></table></figure>
+
+<p>step 2: calldata check</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PUSH1 04</span><br><span class="line">CALLDATASIZE</span><br><span class="line">LT</span><br><span class="line">PUSH2 0056 // position of revert</span><br><span class="line">JUMPI</span><br></pre></td></tr></table></figure>
+
+<p>step 3: function selector</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">// extract first four bytes of calldata(function signature hash)</span><br><span class="line">013 PUSH4 ffffffff</span><br><span class="line">018 PUSH29 0100000000000000000000000000000000000000000000000000000000</span><br><span class="line">048 PUSH1 00</span><br><span class="line">050 CALLDATALOAD</span><br><span class="line">051 DIV</span><br><span class="line">052 AND</span><br><span class="line">// matches the first function, here is totalSupply(), if matches, jump to 091</span><br><span class="line">053 PUSH4 18160ddd</span><br><span class="line">058 DUP2</span><br><span class="line">059 EQ</span><br><span class="line">060 PUSH2 005b // 0x005b = 091</span><br><span class="line">063 JUMPI</span><br><span class="line">// matches the second function, here is balanceOf(address), if matches, jump</span><br><span class="line">// to 130</span><br><span class="line">064 DUP1</span><br><span class="line">065 PUSH4 70a08231</span><br><span class="line">070 EQ</span><br><span class="line">071 PUSH2 0082 // 0x0082 = 130</span><br><span class="line">074 JUMPI</span><br><span class="line">// matches the third function, here is transfer(address, uint256), if matches,</span><br><span class="line">// jump to 176</span><br><span class="line">075 DUP1</span><br><span class="line">076 PUSH4 a9059cbb</span><br><span class="line">081 EQ</span><br><span class="line">082 PUSH2 00b0 // 0x00b0 = 176</span><br><span class="line">085 JUMPI</span><br><span class="line">// no match (and no fallback function), revert, terminate execution</span><br><span class="line">086 JUMPDEST</span><br><span class="line">087 PUSH1 00</span><br><span class="line">089 DUP1</span><br><span class="line">090 REVERT</span><br></pre></td></tr></table></figure>
+
+<h4 id="function-wrapper"><a href="#function-wrapper" class="headerlink" title="function wrapper"></a>function wrapper</h4><p>function entry point</p>
+<h4 id="function-body"><a href="#function-body" class="headerlink" title="function body"></a>function body</h4><p>the content of a function</p>
+<h4 id="Metahash"><a href="#Metahash" class="headerlink" title="Metahash"></a>Metahash</h4><p>associate with swarm storing the source code.</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#EVM"><span class="toc-number">1.</span> <span class="toc-text">EVM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#EVM-execution-context"><span class="toc-number">1.1.</span> <span class="toc-text">EVM execution context:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OPCODES"><span class="toc-number">1.2.</span> <span class="toc-text">OPCODES</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#contract-creation"><span class="toc-number">1.2.1.</span> <span class="toc-text">contract creation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#function-selector"><span class="toc-number">1.2.2.</span> <span class="toc-text">function selector</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#function-wrapper"><span class="toc-number">1.2.3.</span> <span class="toc-text">function wrapper</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#function-body"><span class="toc-number">1.2.4.</span> <span class="toc-text">function body</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Metahash"><span class="toc-number">1.2.5.</span> <span class="toc-text">Metahash</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&text=Dive into Ethereum"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&title=Dive into Ethereum"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&is_video=false&description=Dive into Ethereum"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Dive into Ethereum&body=Check out this article: https://oneforalone.github.io/2022/05/05/dive-into-ethereum/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&title=Dive into Ethereum"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&title=Dive into Ethereum"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&title=Dive into Ethereum"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&title=Dive into Ethereum"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&name=Dive into Ethereum&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2022/05/05/dive-into-ethereum/&t=Dive into Ethereum"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="序不知不觉已经进入区块链这一行有小半年了，从最开始的 Chia，到 Swarm Bee，再到Phala，然后是 Filcoin，最后到 Ethereum。前面的都只是在研究怎么挖，计算回本周期，最后回归到技术原理，本文试图讲解清楚 Ethereum 中的基础技术概念。 当然，这是篇技术性文章，所以会有一些技术层面知识的要求。同时，我并不是很想翻译，习惯下英文吧。对于一些基础的概念，参考 Block">
+<meta property="og:type" content="article">
+<meta property="og:title" content="An Overview of Ethereum">
+<meta property="og:url" content="https://oneforalone.github.io/2021/11/23/overview-of-ethereum/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="序不知不觉已经进入区块链这一行有小半年了，从最开始的 Chia，到 Swarm Bee，再到Phala，然后是 Filcoin，最后到 Ethereum。前面的都只是在研究怎么挖，计算回本周期，最后回归到技术原理，本文试图讲解清楚 Ethereum 中的基础技术概念。 当然，这是篇技术性文章，所以会有一些技术层面知识的要求。同时，我并不是很想翻译，习惯下英文吧。对于一些基础的概念，参考 Block">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/block.svg">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/tx-block.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/overview-of-ethereum.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/evm.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/evm-layer.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/evm-execution-model.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/accounts.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/world-state.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/transaction.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/tx-contract-creation.png">
+<meta property="og:image" content="https://oneforalone.github.io/images/ethereum/tx-message-call.png">
+<meta property="article:published_time" content="2021-11-23T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-07T18:30:29.091Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Blockchain">
+<meta property="article:tag" content="Ethereum">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oneforalone.github.io/images/ethereum/block.svg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>An Overview of Ethereum</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2021/11/26/frp/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/09/20/calculus-formula/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&text=An Overview of Ethereum"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&title=An Overview of Ethereum"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&is_video=false&description=An Overview of Ethereum"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=An Overview of Ethereum&body=Check out this article: https://oneforalone.github.io/2021/11/23/overview-of-ethereum/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&title=An Overview of Ethereum"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&title=An Overview of Ethereum"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&title=An Overview of Ethereum"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&title=An Overview of Ethereum"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&name=An Overview of Ethereum&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&t=An Overview of Ethereum"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ethereum"><span class="toc-number">2.</span> <span class="toc-text">Ethereum</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview"><span class="toc-number">2.2.</span> <span class="toc-text">Overview</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EVM"><span class="toc-number">3.</span> <span class="toc-text">EVM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-1"><span class="toc-number">3.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text">工作原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#World-state"><span class="toc-number">4.</span> <span class="toc-text">World state</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#account"><span class="toc-number">4.1.</span> <span class="toc-text">account</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-2"><span class="toc-number">4.2.</span> <span class="toc-text">定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Transaction"><span class="toc-number">5.</span> <span class="toc-text">Transaction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#message"><span class="toc-number">5.1.</span> <span class="toc-text">message</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-3"><span class="toc-number">5.2.</span> <span class="toc-text">定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        An Overview of Ethereum
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-11-23T00:00:00.000Z" class="dt-published" itemprop="datePublished">2021-11-23 12:00:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-07T18:30:29.091Z" class="dt-updated" itemprop="dateModified">2023-10-07 06:30:29 PM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Blockchain/">Blockchain</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Blockchain/" rel="tag">Blockchain</a>, <a class="p-category" href="/tags/Ethereum/" rel="tag">Ethereum</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="序"><a href="#序" class="headerlink" title="序"></a>序</h2><p>不知不觉已经进入区块链这一行有小半年了，从最开始的 <a target="_blank" rel="noopener" href="https://www.chia.net/">Chia</a>，到 <a target="_blank" rel="noopener" href="https://www.ethswarm.org/">Swarm Bee</a>，再到<br><a target="_blank" rel="noopener" href="https://phala.network/en/">Phala</a>，然后是 <a target="_blank" rel="noopener" href="https://filecoin.io/">Filcoin</a>，最后到 <a target="_blank" rel="noopener" href="https://ethereum.org/en/">Ethereum</a>。前面的都只是在研究怎么挖，<br>计算回本周期，最后回归到技术原理，本文试图讲解清楚 Ethereum 中的基础技术概念。</p>
+<p>当然，这是篇技术性文章，所以会有一些技术层面知识的要求。同时，我并不是很想翻译，习惯下英文吧。对<br>于一些基础的概念，参考 <a href="/2021/12/07/blockchain-basics/" title="Blockchain Basics">Blockchain Basics</a>。</p>
+<p>首先简单地介绍一下 Blockchain 吧。所谓的 Blockchain 呢，就是由一个个 <strong>block</strong> 的组成的<br>链，每个节点都会保存一份这个链的备份。而每个 <strong>block</strong> 中都包含了多个 <strong>transaction</strong>。</p>
+<p>Overview of Block:<br><img src="/images/ethereum/block.svg" alt="block.svg"></p>
+<p>Block in Ethereum:<br><img src="/images/ethereum/tx-block.png" alt="tx-block.png"></p>
+<blockquote>
+<p>transaction, 中文通常叫做转账记录，但在不同的链中，对 transaction 的操作不同。所以个人<br>还是更喜欢直接叫 transaction。</p>
+</blockquote>
+<h2 id="Ethereum"><a href="#Ethereum" class="headerlink" title="Ethereum"></a>Ethereum</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>官网对应 Ethereum 的定义是：</p>
+<blockquote>
+<p>Ethereum is open access to digital money and data-friendly services for<br>everyone - no matter your background or location.</p>
+</blockquote>
+<p>这个定义介绍的是 Ethereum 的应用，并没有给出技术上的定义。</p>
+<p>然后 <a target="_blank" rel="noopener" href="https://ethereum.org/en/whitepaper/">Whitepaper</a> 上关于 Ethereum 的描述就比较冗长：</p>
+<blockquote>
+<p>The intent of Ethereum is to create an aleternative protocol for building<br>decentralized applications, providing a different set of tradeoffs that we<br>believe will be very useful for a large class of decentralized applications,<br>with particular emphasis on situations where rapid developement time, security<br>for small and rarely used applications, and the ability of different<br>applications to very efficiently interact, are important.</p>
+</blockquote>
+<p>这么一段长长的介绍，主要是阐述了 Ethereum 创建的目的以及功能特性，用这么长的一段话来定义<br>Ethereum 似乎不够简洁。</p>
+<p>即然 <a target="_blank" rel="noopener" href="https://ethereum.org/en/whitepaper/">Whitepaper</a> 上没找到满意的定义，那么看看<br><a target="_blank" rel="noopener" href="https://ethereum.github.io/yellowpaper/paper.pdf">Yellowpaper</a> 吧：</p>
+<blockquote>
+<p>Ethereum, taken as a whole, can be viewed as a transaction-based state<br>machine: we begin with a genesis state and incrementally execute transactions<br>to morph it into some current state.</p>
+</blockquote>
+<p>欸，这里感觉有点味道了，可总觉得还是没那味。</p>
+<p>所以这里根据参考的上面的资料，大胆的给 Ethereum 下个定义：</p>
+<blockquote>
+<p><em>Ethereum is decentralised database which stores transaction-based state root</em><br><em>hashes</em></p>
+</blockquote>
+<p>这里解释一下，其中的 <code>decentralised database</code> 就是区块链，区块链的本质上就是个去中心化的<br>数据库。后面的 <code>transaction-based state</code> 才是 Ethereum 的核心特征。下面会介绍到什么是<br><code>transaction</code>。</p>
+<h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p>知道了 Ethereum 的定义，然后来看下整个以太坊的概览：</p>
+<p><img src="/images/ethereum/overview-of-ethereum.png" alt="Overview of Ethereum.png"></p>
+<p>通常，技术上是将 Ethereum 代指 Ethereum network。从上图可以看出，Ethereum network 是由<br>Ethereum node 组成。而每个 Ethereum node 都是 EVM 和 <strong>world state</strong> 的具体实现。<br>所以，要想了解 Ethereum，就必须了解 EVM 和 <strong>world state</strong>。那么下面开始介绍 EVM。</p>
+<h2 id="EVM"><a href="#EVM" class="headerlink" title="EVM"></a>EVM</h2><h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p>EVM (Ethereum Virtual Machine): 定义了计算区块之间新的有效状态规则的虚拟机，是智能合约的<br>运行环境。原文是:</p>
+<blockquote>
+<p>EVM is what defines the rules for computing a new valid state from block to<br>block, the runtime environment for smart contracts in Ethereum.<br>​<br>EVM 的架构如下：</p>
+</blockquote>
+<p><img src="/images/ethereum/evm.png" alt="evm.png"></p>
+<ul>
+<li>stack: 256 bits * 1024 elements</li>
+<li>memory: byte addressing linear memory, can be addressed at byte level, random<br>access by stack.</li>
+<li>storage (Account): presistent memory, 256 bits to 256 bit key-value store,<br>random access by stack.</li>
+<li>EVM code: bytuecode that EVM can natively exectue.<br>​<br>从上图可以看出，EVM 的个 stack-based 的架构，计算架构模型一般有两种，stack-based 和<br>register-based。其主要差别在于，register-based 的效率更高，但其设计实现的复杂程度要高，<br>stack-based 效率相比于 register-based 不高，但实现简单。针对物理机，更倾向于<br>register-based 的模型，因为物理机就是要尽可能的高效执行，而对于 VM，都是在内存中操作，效率的<br>差别不会很大，因此更倾向于 stack-based 的模型。<br>​<br>参考自：<a target="_blank" rel="noopener" href="https://softwareengineering.stackexchange.com/questions/244354/why-do-vms-need-to-be-stack-machines-or-register-machines-etc">why-do-vms-need-to-be-stack-machines-or-register-machines-etc</a><br>​<br>或许有关于 memory 是 linear memory，但却被 stack random access 的疑惑，这里产生的疑惑<br>是对 random access 的理解有误，random access 由可以叫做 direct access，可以直接定位<br>到某个元素，对应的数据结构是数组，而 linear address 本来就是可以 random access 的。查看<br>geth 中 memory 得实现可知，memroy 就是由一个字节型的数组和一个 uint64 的整型组成的。与<br>random access 对立的 linear access 是如果要访问，只能从头开始慢慢查找，不能直接定位到某个<br>位置，与之对应的数据结构是链表。</li>
+</ul>
+<p>The big picture：</p>
+<p><img src="/images/ethereum/evm-layer.png" alt="evm-layer.png"></p>
+<p><strong>注</strong>：上图中在 Software 和 hardware 的中间，漏掉了操作系统。</p>
+<h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3><p>​<br>EVM 的工作流程如下：</p>
+<p><img src="/images/ethereum/evm-execution-model.png" alt="evm-execution-model.png"></p>
+<p>首先，用户将自己的智能合约编译成 EVM byte code，然后 EVM 根据 byte code 里对应的指令集，<br>消耗一定量的 gas，在 Stack 上执行操作，期间如果需要对 storage 进行操作的话，与需要扣除一定<br>量的 gas，同理，调用其他智能合约也需要消耗 gas。</p>
+<h2 id="World-state"><a href="#World-state" class="headerlink" title="World state"></a>World state</h2><p>在介绍 <strong>world state</strong> 之前，首先要介绍 <strong>account</strong>。</p>
+<h3 id="account"><a href="#account" class="headerlink" title="account"></a>account</h3><p><a target="_blank" rel="noopener" href="https://ethereum.github.io/yellowpaper/paper.pdf">Yellowpaper</a> 上的定义：</p>
+<blockquote>
+<p>Accounts have an intrinsic balance and transaciton count maintained as part<br>of the Ethereum state. They also have some (possibly empty) EVM Code and a<br>(possibly empty) Storage State associated with them.Though homogenous, it<br>makes sense to distinguish between two practical types of account: those<br>with empty associated EVM Code (thus the account represents an Autonomous<br>Object). Each Account has a single Address that identifies it.</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://takenobu-hs.github.io/downloads/ethereum_evm_illustrated.pdf">Ethereum EVM Illustrated</a> 中的定义：</p>
+<blockquote>
+<p>An account is a mapping between address and account state.<br>An account is an object in the world state.</p>
+</blockquote>
+<p>官方文档中 <strong>account</strong> 的结构如下图所示：</p>
+<p><img src="/images/ethereum/accounts.png" alt="accounts.png"></p>
+<p>因此，<a target="_blank" rel="noopener" href="https://takenobu-hs.github.io/downloads/ethereum_evm_illustrated.pdf">Ethereum EVM Illustrated</a> 中的定义更为贴切。<br>​<br>​<strong>account</strong> 根据是否有 EVM Code 分为两种：</p>
+<ul>
+<li>Externally owned account (aka. EOA): 不包含智能合约的账户，其中 <code>storage hash</code> 和<br><code>code hash</code> 字段为空</li>
+<li>Contract account：智能合约对应的账户，<code>code hash</code> 字段保存的是合约代码 EVM Code 的<br>哈希值，在 message call 时用来定位 EVM Code，<code>storage hash</code> 字段保存的该账户所在<br><strong>block</strong> 的 header 中的 Merkle tree 根节点的哈希值，该 Merkle tree 将 <strong>account</strong><br>中的内容编码到 trie 中。通俗点讲就是用来确定当前用户的最新状态是在哪个 <strong>block</strong> 中。</li>
+</ul>
+<h3 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h3><p><strong><em>A collection of accounts that is a mapping between address and account<br>state.</em></strong></p>
+<p>这个定义是我自己定义的，因为参考的资料的定义有些模糊。<br>​<br><a target="_blank" rel="noopener" href="https://ethereum.github.io/yellowpaper/paper.pdf">Yellowpaper</a> 上的定义：</p>
+<blockquote>
+<p>The world state, is a mapping between addresses (160-bit identifiers) and<br>account states (a datastructure serialised as RLP, see Appendix B).</p>
+</blockquote>
+<p>而在 <a target="_blank" rel="noopener" href="https://takenobu-hs.github.io/downloads/ethereum_evm_illustrated.pdf">Ethereum EVM Illustrated</a> 中 <strong>world state</strong><br>和 <strong>account</strong> 的定义是完全一致的：</p>
+<blockquote>
+<p>The world state is a mapping between address and account state.</p>
+</blockquote>
+<p><strong>world state</strong> 的结构如下图所示：</p>
+<p><img src="/images/ethereum/world-state.png" alt="world-state.png"></p>
+<p>从图中可以清楚的看到 <strong>world state</strong> 与 <strong>account</strong> 的差别。<br>​</p>
+<h2 id="Transaction"><a href="#Transaction" class="headerlink" title="Transaction"></a>Transaction</h2><p>在介绍 <strong>transaction</strong> 之前，首先要介绍 <strong>message</strong> 。</p>
+<h3 id="message"><a href="#message" class="headerlink" title="message"></a>message</h3><p>​<br>这个术语的定义比较清晰，就是：</p>
+<blockquote>
+<p>Message is Data ( as a set of bytes) and Value (specified as Ether) that is<br>passwd between two Accounts.</p>
+</blockquote>
+<p>这个定义也没什么好解释的，就是说两个账户之间进行转账就叫 <strong>message</strong>。<br>​<br>P.S. 在 Ethereum 中，Ether 表示的就是 ETH。<br>​</p>
+<h3 id="定义-3"><a href="#定义-3" class="headerlink" title="定义"></a>定义</h3><blockquote>
+<p>A transaction is a single cryptographically-signed instruction by External<br>Actor.</p>
+</blockquote>
+<p><img src="/images/ethereum/transaction.png" alt="transaction.png"></p>
+<p>何为 External Actor? 不在 <strong>world state</strong> 中的就叫 Extrenal Actor。就比如说你需要创建<br>个智能合约，你创建你需要对 node 发送创建指令并对其签名，然后你就会得到个合约账户，对于<br>Ethereum 来说，你就是 External actor，而所得到的合约账户已经记录在 <strong>world state</strong><br>中了，那他就不是 External Actor。还有就是你要用一个 EOA 向另一个 EOA 转账，你是 Extrenal<br>Actor，EOA 不是。而如果是由智能合约触发的对 EOA 的转账，那就叫 <strong>message</strong>，而不能叫<br><strong>transaction</strong>。而这，又将 <strong>transaction</strong> 分成了两种：</p>
+<ul>
+<li><p>contract creation： 对应第一种情况，创建智能合约时的 <strong>transaction</strong><br><img src="/images/ethereum/tx-contract-creation.png" alt="tx-contract-creation.png"></p>
+</li>
+<li><p>message call：对应第二种情况，External Actor 用一个 EOA 给另一个 EOA 转账的<br><strong>transaction</strong><br><img src="/images/ethereum/tx-message-call.png" alt="tx-message-call.png"></p>
+</li>
+</ul>
+<p>那 <strong>transaction</strong> 和 <strong>message</strong> 之间的关系是什么呢？其实就是每个 <strong>transaction</strong> ​<br>都至少会触发一个 <strong>message</strong>，而每个 <strong>trasaction</strong> 都会封装到 block 中，每个 block<br>会保存到 Ethereum Network 中，将 block 保存到 Ethereum Network 中的这个操作通常称为<br><em>上链</em>。</p>
+<p>至此，对于 Ethereum 里的大部分概念算是理清了。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://ethereum.org/en/">Ethereum.org</a></li>
+<li><a target="_blank" rel="noopener" href="https://ethereum.org/en/whitepaper/">Ethereum Whitepaper</a></li>
+<li><a target="_blank" rel="noopener" href="https://ethereum.github.io/yellowpaper/paper.pdf">Ethereum: A Secure Decentralised Generalised Transaction Ledger</a></li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ethereum"><span class="toc-number">2.</span> <span class="toc-text">Ethereum</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview"><span class="toc-number">2.2.</span> <span class="toc-text">Overview</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EVM"><span class="toc-number">3.</span> <span class="toc-text">EVM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-1"><span class="toc-number">3.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text">工作原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#World-state"><span class="toc-number">4.</span> <span class="toc-text">World state</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#account"><span class="toc-number">4.1.</span> <span class="toc-text">account</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-2"><span class="toc-number">4.2.</span> <span class="toc-text">定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Transaction"><span class="toc-number">5.</span> <span class="toc-text">Transaction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#message"><span class="toc-number">5.1.</span> <span class="toc-text">message</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-3"><span class="toc-number">5.2.</span> <span class="toc-text">定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&text=An Overview of Ethereum"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&title=An Overview of Ethereum"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&is_video=false&description=An Overview of Ethereum"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=An Overview of Ethereum&body=Check out this article: https://oneforalone.github.io/2021/11/23/overview-of-ethereum/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&title=An Overview of Ethereum"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&title=An Overview of Ethereum"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&title=An Overview of Ethereum"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&title=An Overview of Ethereum"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&name=An Overview of Ethereum&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2021/11/23/overview-of-ethereum/&t=An Overview of Ethereum"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

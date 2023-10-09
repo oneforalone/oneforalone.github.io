@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="序之前玩过微信公众号，在那上面也写过一篇关于命令行参数的文章。但公众号的文章不支持 Markdown 语法，而我也懒得去找第三方插件，就直接销掉了。 今天重新整理一下常用到的命令参数。 Terminal 之辩得益与《黑客帝国》，大部分人第一想到的大概是一个闪着绿光的黑黑的窗口，上面有很多字符在滚动。这个大概是，想要在 Linux 中模拟电影里的特效的话，可以试试 cmatrix。这个窗口广义的来说">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我与 Linux 的那些事03：命令">
+<meta property="og:url" content="https://oneforalone.github.io/2021/02/19/linux-staffs-03/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="序之前玩过微信公众号，在那上面也写过一篇关于命令行参数的文章。但公众号的文章不支持 Markdown 语法，而我也懒得去找第三方插件，就直接销掉了。 今天重新整理一下常用到的命令参数。 Terminal 之辩得益与《黑客帝国》，大部分人第一想到的大概是一个闪着绿光的黑黑的窗口，上面有很多字符在滚动。这个大概是，想要在 Linux 中模拟电影里的特效的话，可以试试 cmatrix。这个窗口广义的来说">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-02-19T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-07T18:30:29.081Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Shell">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>我与 Linux 的那些事03：命令</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2021/03/19/kubernetes/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/01/10/linux-staffs-02/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2021/02/19/linux-staffs-03/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&text=我与 Linux 的那些事03：命令"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&title=我与 Linux 的那些事03：命令"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&is_video=false&description=我与 Linux 的那些事03：命令"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=我与 Linux 的那些事03：命令&body=Check out this article: https://oneforalone.github.io/2021/02/19/linux-staffs-03/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&title=我与 Linux 的那些事03：命令"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&title=我与 Linux 的那些事03：命令"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&title=我与 Linux 的那些事03：命令"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&title=我与 Linux 的那些事03：命令"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&name=我与 Linux 的那些事03：命令&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&t=我与 Linux 的那些事03：命令"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Terminal-%E4%B9%8B%E8%BE%A9"><span class="toc-number">2.</span> <span class="toc-text">Terminal 之辩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-Shell"><span class="toc-number">3.</span> <span class="toc-text">常见的 Shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E5%8F%82%E6%95%B0"><span class="toc-number">4.</span> <span class="toc-text">命令参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#v"><span class="toc-number">4.1.</span> <span class="toc-text">-v</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#f"><span class="toc-number">4.2.</span> <span class="toc-text">-f</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#i"><span class="toc-number">4.3.</span> <span class="toc-text">-i</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#r-R"><span class="toc-number">4.4.</span> <span class="toc-text">-r&#x2F;-R</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#h"><span class="toc-number">4.5.</span> <span class="toc-text">-h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#e"><span class="toc-number">4.6.</span> <span class="toc-text">-e</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">4.7.</span> <span class="toc-text">其他</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">5.</span> <span class="toc-text">结语</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        我与 Linux 的那些事03：命令
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-02-19T00:00:00.000Z" class="dt-published" itemprop="datePublished">2021-02-19 12:00:00 AM</time>
+        
+        (Updated: <time datetime="2023-10-07T18:30:29.081Z" class="dt-updated" itemprop="dateModified">2023-10-07 06:30:29 PM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Linux/">Linux</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>, <a class="p-category" href="/tags/Shell/" rel="tag">Shell</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="序"><a href="#序" class="headerlink" title="序"></a>序</h2><p>之前玩过微信公众号，在那上面也写过一篇关于命令行参数的文章。但公众号的文章不支持 <a target="_blank" rel="noopener" href="https://markdown.com.cn/basic-syntax/"><code>Markdown</code></a> 语法，而我也懒得去找第三方插件，就直接销掉了。</p>
+<p>今天重新整理一下常用到的命令参数。</p>
+<h2 id="Terminal-之辩"><a href="#Terminal-之辩" class="headerlink" title="Terminal 之辩"></a>Terminal 之辩</h2><p>得益与《黑客帝国》，大部分人第一想到的大概是一个闪着绿光的黑黑的窗口，上面有很多字符在滚动。这个大概是，想要在 Linux 中模拟电影里的特效的话，可以试试 <a target="_blank" rel="noopener" href="https://github.com/abishekvashok/cmatrix"><code>cmatrix</code></a>。这个窗口广义<br>的来说，就是 <code>Terminal</code>。</p>
+<p><code>Terminal</code> 在 Unix 术语里叫终端，而不是<code>终结者</code>的 <code>Terminal</code>。所谓终端呢，就是最终端（说<br>了也白说），通俗点讲就是用来和用户交互的，处理显示一些用户输入输出。说起 <code>Terminal</code>，就不得不<br>提与之相关的几个名词了，分别是：</p>
+<ul>
+<li>terminal</li>
+<li>tty</li>
+<li>console</li>
+<li>shell</li>
+</ul>
+<p>这几个名词所指代感觉是差不多，但其实还是有差别的。<a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/4126/what-is-the-exact-difference-between-a-terminal-a-shell-a-tty-and-a-con">StackExchange 上的解释</a>是:</p>
+<ul>
+<li>terminal &#x3D; tty &#x3D; text input&#x2F;output environment</li>
+<li>console &#x3D; physical terminal</li>
+<li>shell &#x3D; command line interpreter</li>
+</ul>
+<p>上面解释的很清楚，详细的解释说明参考 A.1。</p>
+<p>等等，为什么介绍命令参数要写这些呢？借用鲁迅先生的话来说“凡事总须研究，才会明白。”如果你像我一<br>样使用的是英文的 Linux distro 的话，那么这几个名词你大概率是会遇到的，还有就是远程登录<br>Linux 时会看到的名词是<code>pty</code> 或 <code>pts</code>&#x2F;<code>ptmx</code>。<code>pty</code> 是 pseduo-tty，即虚拟终端的缩写。<br><code>pts</code>&#x2F;<code>ptmx</code> 分别是 pseduo-terminal slave 和 pseduo-terminal master 的简写（Ops，<br>是不是涉及了敏感词呢？），是 <code>pty</code> 的实现方法。</p>
+<h2 id="常见的-Shell"><a href="#常见的-Shell" class="headerlink" title="常见的 Shell"></a>常见的 Shell</h2><p>上面介绍了一些名词术语的区别，接下来就简单的介绍下常见的 Shell 吧。</p>
+<p>既然是个 interpreter，那么肯定就有不同的实现方法，就像 Linux distro 一样，常见的 Shell<br><sup>A.2</sup>有：</p>
+<ul>
+<li>sh: Bourne shell</li>
+<li>bash: Bourne-again shell</li>
+<li>csh: C shell</li>
+<li>ksh: Korn shell</li>
+<li>tcsh: TENEX C shell</li>
+<li>zsh: Z shell</li>
+</ul>
+<p><code>sh</code> 是 Steve Bourne 在贝尔实验室开发的，<code>bash</code> 是 GNU 组织为了对抗 Unix 商业化开发出来<br>的，遵循 POSIX 标准，<code>csh</code> 是 Bill Joy 在伯克利开发的，控制流类似 C 语言，目前以不被推荐<br>使用，(具体参考 A.3)。<code>ksh</code> 是 <code>sh</code> 的后续者，由 David Korn 在贝尔实验室开发。<code>tcsh</code> 是<br><code>csh</code> 的加强版，从 TENEX 操作系统（1972 年 BBN 公司 开发）借鉴了很多特色。<code>zsh</code> 是后起之<br>秀，其配合 <a target="_blank" rel="noopener" href="https://ohmyz.sh/"><code>oh-my-zsh</code></a> 被广大开发者使用。这些 shell 中，只有 <code>csh</code> 和<br><code>tcsh</code> 不支持兼容 <code>sh</code>，其他的都是支持和兼容 <code>sh</code> 的语法，并在其基础上进行了扩充。</p>
+<h2 id="命令参数"><a href="#命令参数" class="headerlink" title="命令参数"></a>命令参数</h2><p>总算是介绍完了历史及周边，那么下面将正式介绍一下一些常用的参数。本节的主要意图是如何理解参数，而<br>不是详细的介绍所有命令的参数。具体到参数的语法和含义找“男人”（i.e. <code>man</code> 命令）去吧。</p>
+<h3 id="v"><a href="#v" class="headerlink" title="-v"></a>-v</h3><p>首先， unix 有个哲学：没有消息便是好消息。这个哲学确实很不错，但是呢，有时候我就想看下这条命令<br>具体做了什么，这时候就要用到 <code>-v</code> 参数了，对于 <code>v</code> 无非就代表 verbose、version 和<br>inverse 这么几个单词。大部分情况下， <code>-v</code> 表示的是 verbose，即将命令执行的消息打印到标准<br>输出，只有 <code>grep</code> 命令中的 <code>-v</code> 参数是 <code>inverse</code>，毕竟 <code>grep</code> 本身就是处理文本的，默认<br>就会将结果打印到标准输出。对于 version 来说，很少命令是用 <code>-v</code> 参数的，就我所接触的而言，<br>一般要获取版本号要么是 <code>-V</code>，要么就是 <code>--version</code>，极少数命令会使用 <code>-v</code> 表示 version，<br>当然，我说的命令是那些通用的命令，想一些后续安装的软件什么的那都是看开发者的，他们可能就会使用<br><code>-v</code> 作为 version 的缩写。像通用的 <code>tar</code>、<code>cp</code>、<code>mv</code>、<code>rm</code>、<code>chmod</code>、<code>mkdir</code>……<br>这一类基础的命令，想要打印信息，直接放心大胆的加上 <code>-v</code> 参数。</p>
+<h3 id="f"><a href="#f" class="headerlink" title="-f"></a>-f</h3><p><code>-f</code> 能表示的单词也就 force 和 file，对于文本处理的命令三剑客（之后会用另外的文章专门<br>介绍）——<code>awk</code>、<code>grep</code> 和 <code>sed</code> 来说，没有所谓的 force 一说，所以就只能是表示 file 的<br>意思了，或是 input-file，或是 pattern-file，亦或是 program-file，反正无论怎么说后面都是<br>要接一个文件名参数，具体情况请查阅 man page。对于其他命令来说，<code>-f</code> 就是 force 的意思，<br>表强制。知名的例子就是 <code>rm -rf /</code> 删盘命令。</p>
+<h3 id="i"><a href="#i" class="headerlink" title="-i"></a>-i</h3><p><code>-i</code> 能代表的单词也就只有 interactive、ignore-case、in-place、input-file。对于常见的<br>文件操作 <code>cp</code>、<code>mv</code> 和 <code>rm</code> 来说，<code>-i</code> 就是表示 interactive，尤其是对 <code>rm</code> 命令来说，<br>一般都会在删除时加个 <code>-i</code> 参数，防止误操作。ignore-case 是在 <code>grep</code> 中表示忽略大小写，<br>in-place 是 <code>sed</code> 中的替换参数，input-file 是 <code>wget</code> 中一连串下载链接文件。其他的命令<br>也没怎么接触到这个参数。</p>
+<h3 id="r-R"><a href="#r-R" class="headerlink" title="-r&#x2F;-R"></a>-r&#x2F;-R</h3><p><code>-r</code> 一般就是 recursive，表示递归操作。这个通常是在拷贝文件（<code>cp</code> 不能直接拷贝文件夹）或修改<br>文件夹权限、所属用户&#x2F;组之类（这里使用的是 <code>-R</code>）的时候常用，或者说是 <code>grep</code> 对文件夹中的所有<br>文件进行检索。反正不是 <code>-r</code> 就是 <code>-R</code>，两个之中总有一个表示递归。</p>
+<h3 id="h"><a href="#h" class="headerlink" title="-h"></a>-h</h3><p><code>-h</code> 无外乎就两个意思，一个是 help，另个是 human-readable，一般来说就是将文件的大小显示为<br>Mb 或 Gb，默认单位是 Kb。但有时大文件比较多的时候看着那些数字有些烦，加个 -h 显示成 Mb 或<br>Gb 更加清晰直观。</p>
+<h3 id="e"><a href="#e" class="headerlink" title="-e"></a>-e</h3><p><code>-e</code> 在命令中一般都是后面接脚本或表达式之类的。比如说 <code>grep</code> 中的 <code>-e</code> 是接正则表达式<br>（<code>grep -e</code> 等效于 <code>egrep</code>），<code>perl</code> 中的 <code>-e</code> 后接的是 perl 的脚本。注意，这里不要和<br><code>-f</code> 参数搞混淆， <code>-f</code> 是将脚本语句写到一个文件中，然后用 <code>-f</code> 参数指定需要执行的脚本文件，<br>适用于多条脚本语句，<code>-e</code> 是直接写脚本的语句，适用于单条脚本语句。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>对于 <code>mkdir</code>、<code>touch</code>、<code>cp</code>、<code>mv</code> 这些文件&#x2F;文件夹操作命令来说，可以使用 perl 的语法，如<br>创建多个文件&#x2F;文件夹：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">touch</span> <span class="built_in">test</span>&#123;1..9&#125;</span><br><span class="line"><span class="built_in">mkdir</span> <span class="built_in">dir</span>&#123;1..9&#125;</span><br></pre></td></tr></table></figure>
+
+<p>拷贝或移动多个无规律文件:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> ./&#123;hello,world,<span class="built_in">test</span>&#125; /tmp/</span><br><span class="line"><span class="built_in">mv</span> ./&#123;hello,world,<span class="built_in">test</span>&#125; /tmp/</span><br></pre></td></tr></table></figure>
+<p><strong>注</strong>：其中大括号里不能出现空格</p>
+<p>当然，如果是有规律的，直接使用通配符就好。</p>
+<p><code>-o</code> 一般也就是 options 或 output，作为 options 时，后面接的参数用逗号隔开时不能有空格。<br>大部分命令的参数也都遵循这个原则，就是如果参数后要接多个使用逗号分隔的实参时，中间不能有空格。<br>如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">usermod -aG sudo,wheel,root username</span><br><span class="line">mount -o remount,ro /dev/sdX /mnt</span><br></pre></td></tr></table></figure>
+
+<p><code>-a</code> 一般表示 all，当然还有 append 的意思。<code>-l</code> 一般表 list，<code>-p</code> 一般就是 print 或<br>port，表示 port 有时是<code>-P</code>，反正在涉及端口时，<code>-p</code> 或 <code>-P</code> 总有一个是要接端口号的。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>当然，要想记住所有命令的参数基本不可能，反正我是记不住那么多，反正只要理解这些参数所代表的英文单<br>词，然后再类推，常用的命令还是很容易记住的（谁说学计算机对英语没有要求的）。</p>
+<p>最后的最后，记住一句话，有事找男人（<code>man</code>）。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>A.1. <a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/4126/what-is-the-exact-difference-between-a-terminal-a-shell-a-tty-and-a-con">https://unix.stackexchange.com/questions/4126/what-is-the-exact-difference-between-a-terminal-a-shell-a-tty-and-a-con</a></p>
+<p>A.2. Advanced Programming in the Unix Environment. Third Edition. Page 3.</p>
+<p>A.3. <a target="_blank" rel="noopener" href="http://doc.novsu.ac.ru/oreilly/unix/upt/ch47_02.htm">http://doc.novsu.ac.ru/oreilly/unix/upt/ch47_02.htm</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Terminal-%E4%B9%8B%E8%BE%A9"><span class="toc-number">2.</span> <span class="toc-text">Terminal 之辩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-Shell"><span class="toc-number">3.</span> <span class="toc-text">常见的 Shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E5%8F%82%E6%95%B0"><span class="toc-number">4.</span> <span class="toc-text">命令参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#v"><span class="toc-number">4.1.</span> <span class="toc-text">-v</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#f"><span class="toc-number">4.2.</span> <span class="toc-text">-f</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#i"><span class="toc-number">4.3.</span> <span class="toc-text">-i</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#r-R"><span class="toc-number">4.4.</span> <span class="toc-text">-r&#x2F;-R</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#h"><span class="toc-number">4.5.</span> <span class="toc-text">-h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#e"><span class="toc-number">4.6.</span> <span class="toc-text">-e</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">4.7.</span> <span class="toc-text">其他</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-number">5.</span> <span class="toc-text">结语</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2021/02/19/linux-staffs-03/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&text=我与 Linux 的那些事03：命令"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&title=我与 Linux 的那些事03：命令"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&is_video=false&description=我与 Linux 的那些事03：命令"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=我与 Linux 的那些事03：命令&body=Check out this article: https://oneforalone.github.io/2021/02/19/linux-staffs-03/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&title=我与 Linux 的那些事03：命令"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&title=我与 Linux 的那些事03：命令"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&title=我与 Linux 的那些事03：命令"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&title=我与 Linux 的那些事03：命令"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&name=我与 Linux 的那些事03：命令&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2021/02/19/linux-staffs-03/&t=我与 Linux 的那些事03：命令"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
