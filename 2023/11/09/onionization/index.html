@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="序最近闲着无聊看看了 Onion 的协议，发现 Onion 是真的好，完全可以取代内网穿透，而且还匿名，感觉没有比这个更方便的了。 Onion 协议的具体原理就不再这里详细展开讲解，你只需要知道，Onion 是对数据进行了加密，而且每一层都只知道其下一跳路由，就像洋葱一样一层一层剥开。本质上运营商是能知道你是在使用 Tor 进行访问，只不过无法查看里面的数据内容。即 Tor 的匿名性是由两个性质来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Onionization">
+<meta property="og:url" content="https://oneforalone.github.io/2023/11/09/onionization/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="序最近闲着无聊看看了 Onion 的协议，发现 Onion 是真的好，完全可以取代内网穿透，而且还匿名，感觉没有比这个更方便的了。 Onion 协议的具体原理就不再这里详细展开讲解，你只需要知道，Onion 是对数据进行了加密，而且每一层都只知道其下一跳路由，就像洋葱一样一层一层剥开。本质上运营商是能知道你是在使用 Tor 进行访问，只不过无法查看里面的数据内容。即 Tor 的匿名性是由两个性质来">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-11-08T16:02:41.000Z">
+<meta property="article:modified_time" content="2023-11-08T10:44:05.384Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="Anonymous">
+<meta property="article:tag" content="Proxy">
+<meta property="article:tag" content="Tor">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>Onionization</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/10/11/gpg-on-macos/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2023/11/09/onionization/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2023/11/09/onionization/&text=Onionization"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2023/11/09/onionization/&title=Onionization"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2023/11/09/onionization/&is_video=false&description=Onionization"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Onionization&body=Check out this article: https://oneforalone.github.io/2023/11/09/onionization/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2023/11/09/onionization/&title=Onionization"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2023/11/09/onionization/&title=Onionization"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2023/11/09/onionization/&title=Onionization"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2023/11/09/onionization/&title=Onionization"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2023/11/09/onionization/&name=Onionization&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2023/11/09/onionization/&t=Onionization"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Why-Tor"><span class="toc-number">2.</span> <span class="toc-text">Why Tor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tor-relay"><span class="toc-number">3.</span> <span class="toc-text">Tor relay</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MacOS"><span class="toc-number">3.1.</span> <span class="toc-text">MacOS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Debian-Ubuntu"><span class="toc-number">4.</span> <span class="toc-text">Debian&#x2F;Ubuntu</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSH-Example"><span class="toc-number">5.</span> <span class="toc-text">SSH Example</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Raspberry-PI-Server"><span class="toc-number">5.1.</span> <span class="toc-text">Raspberry PI (Server)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Client"><span class="toc-number">5.2.</span> <span class="toc-text">Client</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summary"><span class="toc-number">6.</span> <span class="toc-text">Summary</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Onionization
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-11-08T16:02:41.000Z" class="dt-published" itemprop="datePublished">2023-11-08 04:02:41 PM</time>
+        
+        (Updated: <time datetime="2023-11-08T10:44:05.384Z" class="dt-updated" itemprop="dateModified">2023-11-08 10:44:05 AM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Tor/">Tor</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Anonymous/" rel="tag">Anonymous</a>, <a class="p-category" href="/tags/Proxy/" rel="tag">Proxy</a>, <a class="p-category" href="/tags/Tor/" rel="tag">Tor</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="序"><a href="#序" class="headerlink" title="序"></a>序</h2><p>最近闲着无聊看看了 Onion 的协议，发现 Onion 是真的好，完全可以取代内网穿透，而且还匿名，感觉<br>没有比这个更方便的了。</p>
+<p>Onion 协议的具体原理就不再这里详细展开讲解，你只需要知道，Onion 是对数据进行了加密，而且每一<br>层都只知道其下一跳路由，就像洋葱一样一层一层剥开。本质上运营商是能知道你是在使用 Tor 进行访问，<br>只不过无法查看里面的数据内容。即 Tor 的匿名性是由两个性质来保障的，一个是 Tor 的加密算法，<br>另外一个就是其路由协议，只知道下一跳路由。当然，事无绝对，据传闻是美国 NSA 有能力将 Onion<br>的加密算法给破解掉，但是成本很高，所以只要抓到你的收益要低于破解的成本的话，完全没必要担心。还有<br>一个就是 Onion 的 Exit Relay 也是个风险点，如果有人控制了对应的 Exit Relay，那么也可以<br>监听对应的流量数据，但这个要求更高，Exit Relay是分布的，除非有人和机构能将所有的 Exit Relay<br>进行监听，这个比 NSA 破解的成本还要高，也可以忽略。风险最高的其实是自己搭建 Exit Relay，然后<br>只使用自己的 Exit Relay，那么风险点就转移到自建的 Exit Relay 上了。</p>
+<p>对于 Onion 的详细介绍直接参考官方社区的文档吧，我这里就不做一些无聊的翻译工作了。<br>官方社区为：<a target="_blank" rel="noopener" href="https://community.torproject.org/">https://community.torproject.org/</a></p>
+<p>本文主要记录一下如何搭建一个匿名的网络服务。</p>
+<h2 id="Why-Tor"><a href="#Why-Tor" class="headerlink" title="Why Tor"></a>Why Tor</h2><p>一般来说，一个能够访问的网站至少需要满足两个条件：</p>
+<ul>
+<li>公网 IP</li>
+<li>处理请求的服务程序</li>
+</ul>
+<p>当然，为了能跟好的推广，会需要一个域名，然后配上 DNS 解析，这样一个标准的 Web 服务就搭建好了。</p>
+<p>通常来说，处理请求的服务程序很容易开发&#x2F;获取&#x2F;配置。但是对于公网 IP 来说，不同的国家有不同的<br>要求，就算是使用云服务厂商的云服务器，也需要遵循当地的政策。这个在大多数国家是个难点，而且一个单<br>独的公网 IP 的费用也比较贵。</p>
+<p>Tor (The Onion Route) 给出了一个很好的解决方案。通过 Tor，只需要配置好 Tor，就可以对自己<br>的服务进行访问了。当然，everything has a trade-off, Tor 也不例外，那就是 Tor 的服务都<br>需要通过 Tor 浏览器或者是其代理软件 Tor 进行访问，不能像一般的服务只要连接到了 Internet，<br>就能直接访问。不过这个 trade-off 对于大部分独立的开发者来说问题不大，因为很多开发环境本身<br>就不能对外网公开，所以这个 trade-off 很大程度还是一个很好的 feature，不过还是因人而异了。</p>
+<p>P.S. 在中国大陆，是用 Tor 需要使用到代理，这里会有一笔支出，不过因为我本身就是要用代理，<br>所以对我来说这比支出是必不可少的，而且也比申请一个单独的公网 IP 要便宜，同时我也可以将我的<br>Raspberry PI 完全利用起来。其实我的配置是所谓的 Tor over Proxy，虽然 Proxy 可能会有<br>日志，但是我已经不 care 了。还有一种就是没有代理的话需要去申请一个 Bridge，这个我没配置，<br>因为这个在中国大陆有点死锁，需要用的 Telegram 的 Bot，而 Telegram 在中国大陆默认是无法<br>无法访问的。一个没有代理的方案就是使用邮件，给 <code>gettor@torproject.org</code> 这个地址发个邮件，<br>主题为对应 OS 的名字: “windows”, “macos”, “linux”。Bridge 的获取方法就是给<br><code>frontdesk@torproject.org</code> 发个主题为 “private bridge cn” 的邮件。</p>
+<h2 id="Tor-relay"><a href="#Tor-relay" class="headerlink" title="Tor relay"></a>Tor relay</h2><p>Tor browser 默认是集成了 Tor Relay 的服务，其端口是 9051, 如果不想去跑 Tor Relay, 那么<br>直接打开 Tor browser 就可以使用 Tor。但是我需要对一些服务进行 Onionize，所以我需要单独跑<br>一下 Tor Relay。Windows 我不太熟，理论上是一样的，只不过需要下载对应的 Tor Relay 软件，而<br>因为 Windows 没有包管理，所以这个可能会发一点时间，同时配置文件的位置也会有所不同，所以如果是<br>Windows 用户的话，<code>DO YOUR OWN RESEARCH</code>。具体各个 OS 的平台操作可参考：<br><a target="_blank" rel="noopener" href="https://community.torproject.org/relay/setup/guard/">https://community.torproject.org/relay/setup/guard/</a>. 这个上面有详细的教程。</p>
+<h3 id="MacOS"><a href="#MacOS" class="headerlink" title="MacOS"></a>MacOS</h3><p>在 MacOS 上，直接使用 <a target="_blank" rel="noopener" href="https://brew.sh/">Homebrew</a> 进行安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install tor</span><br></pre></td></tr></table></figure>
+
+<p>安装好后在配置文件 <code>torrc</code> 中添加：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HiddenServiceDir /var/lib/tor/&lt;service-name&gt;/</span><br><span class="line">HiddenServicePort &lt;port&gt; &lt;service-listening-ip-address&gt;:&lt;port&gt;</span><br><span class="line"># Tor over proxy</span><br><span class="line">Socks5Proxy 127.0.0.1:7890</span><br></pre></td></tr></table></figure>
+
+<p>因为 MacOS 中默认没有 <code>torrc</code>, 只有 <code>torrc.sample</code>，所以需要先将 <code>torrc.sample</code> copy<br>到 <code>torrc</code>。</p>
+<p>注：Intel Chip 和 Apple Silicon Homebrew 安装位置不一样，所以配置文件的路径也不一样:</p>
+<ul>
+<li>Intel Chip: <code>/usr/local/etc/tor/torrc</code></li>
+<li>Apple Silicon: <code>/opt/homebrew/etc/tor/torrc</code></li>
+</ul>
+<p>其实默认配置文件的路径就是 <code>/etc/tor/torrc</code>，只不过因为 MacOS 是用 Homebrew 管理，就在其<br>默认目录下的 <code>/etc/tor/torrc</code>。那个 <code>HiddenServiceDir</code> 的路径也推荐改到 Homebrew 的<br>对应目录下。</p>
+<p>同时，为了安全起见，推荐服务只监听本地回环地址（127.0.0.1）, 这样就只能通过 Tor 进行访问，<br>外部无法访问。</p>
+<h2 id="Debian-Ubuntu"><a href="#Debian-Ubuntu" class="headerlink" title="Debian&#x2F;Ubuntu"></a>Debian&#x2F;Ubuntu</h2><p>Deb 系的要安装 Tor 其实很简单，配置一下源，然后 <code>apt install</code> 一下就好。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install apt-transport-https</span><br><span class="line">sudo tee -a /etc/apt/sources.list.d/tor.list &lt;&lt;-EOF</span><br><span class="line">deb     [signed-by=/usr/share/keyrings/tor-archive-keyring.gpg] https://deb.torproject.org/torproject.org &lt;DISTRIBUTION&gt; main</span><br><span class="line">deb-src [signed-by=/usr/share/keyrings/tor-archive-keyring.gpg] https://deb.torproject.org/torproject.org &lt;DISTRIBUTION&gt; main</span><br><span class="line">EOF</span><br><span class="line">sudo wget -qO- https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | sudo gpg --dearmor | sudo tee /usr/share/keyrings/tor-archive-keyring.gpg &gt;/dev/null</span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install tor deb.torproject.org-keyring</span><br></pre></td></tr></table></figure>
+
+<p>其中的 <code>&lt;Distribution&gt;</code> 根据自己系统的版本替换成对应的版本名。使用 <code>lsb_release -c</code> 或是<br><code>cat /etc/debian_version</code> 来获取对应的版本名。</p>
+<p>P.S. 我在 Rapsberry Pi 上试过，Ubuntu 22.04.3 LTS 通过 apt 安装会因为部分库的版本过低而<br>失败，所以我直接从源代码编译出来的，也不难，直接四步走：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./autogen.sh</span><br><span class="line">./configure</span><br><span class="line">make -j4</span><br><span class="line">make install -j4</span><br></pre></td></tr></table></figure>
+
+<p>根据 configure 时的报错，缺什么库就装什么库。</p>
+<h2 id="SSH-Example"><a href="#SSH-Example" class="headerlink" title="SSH Example"></a>SSH Example</h2><p>对我来说，一直想要访问家里的 Raspberry PI，但是之前一直都是只能在家里才能访问，在外面就无法<br>访问了，虽然有 frp 这样的内网穿透的软件，但前提还是需要一台有公网 IP 的服务器。</p>
+<h3 id="Raspberry-PI-Server"><a href="#Raspberry-PI-Server" class="headerlink" title="Raspberry PI (Server)"></a>Raspberry PI (Server)</h3><p>服务端需要对服务和 Tor 都进行配置，其实就是将 SSH 的监听地址改为只能本地访问，然后再在 Tor<br>的配置中配置一下端口和地址重启一下服务就 Ok。</p>
+<ul>
+<li>SSH service:</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo tee -a /etc/ssh/sshd_config &lt;&lt;-EOF</span><br><span class="line">ListenAddress 127.0.0.1</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl restart ssh</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Tor service:</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install tor</span><br><span class="line">sudo tee -a /etc/tor/torrc &lt;&lt;-EOF</span><br><span class="line">HiddenServiceDir /var/lib/tor/ssh/</span><br><span class="line">HiddenServicePort 22 127.0.0.1:22</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Tor over Proxy</span></span><br><span class="line">Socks5Proxy 192.168.0.106:7890</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl restart tor@default.service</span><br><span class="line"></span><br><span class="line">sudo cat /var/lib/tor/ssh/hostname</span><br></pre></td></tr></table></figure>
+
+<p>最后一行的命令是获取对应的 onion 地址，访问时使用。</p>
+<h3 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h3><p>Client 侧也需要安装好 Tor，并给 Tor 配上代理，如果是能够直接连到外网，就不需要配置代理，直接<br>启动 Tor Relay 就好了，因为我是用的平台是 MacOS，所以命令为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew services start tor</span><br></pre></td></tr></table></figure>
+
+<p>启动完 Tor 后，需要对 SSH 进行配置，有两种方法：</p>
+<ol>
+<li>SSH config</li>
+</ol>
+<p>在 <code>~/.ssh/config</code> 文件中，添加如下配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Host opi</span><br><span class="line">  Hostname &lt;onion-address&gt;</span><br><span class="line">  ProxyCommand nc -x 127.0.0.1:9050 -X5 %h %p</span><br><span class="line">  User &lt;user-name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>Honstname</code> 的值是在服务端的 <code>/var/lib/tor/ssh/hostname</code> 的值。配置好之后就可以<br>直接在 terminal 中使用 <code>ssh opi</code> 对 Raspberry PI 进行连接了。</p>
+<ol start="2">
+<li>Torify</li>
+</ol>
+<p>Torify 会自动将流量转到 Tor Relay 上。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew install torify torsocks</span><br><span class="line">torify ssh &lt;onion-address&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注：是用 Torify 时需要将 MacOS 的 System Integrity Protection (SIP) 给关掉, 具体参考<br><a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection">https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection</a></p>
+<p>关掉 MacOS 的 SIP 会有一定的风险，而且配置起来还比较麻烦，所以还是推荐使用 SSH config 这种<br>方法更加简单。</p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>以上就是使用 Tor 将自己的服务提供给外网访问，其他的服务也是类似的，只需要在服务端的 <code>torrc</code><br>中加上对应的服务的目录和端口配置，就可以通过 Tor 进行访问了。其实，掌握了这个，可以对所以的服务<br>都进行 Onionize，将服务设置为只监听本地服务，然后让 Tor 给代理出来，既安全，又匿名。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Why-Tor"><span class="toc-number">2.</span> <span class="toc-text">Why Tor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tor-relay"><span class="toc-number">3.</span> <span class="toc-text">Tor relay</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MacOS"><span class="toc-number">3.1.</span> <span class="toc-text">MacOS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Debian-Ubuntu"><span class="toc-number">4.</span> <span class="toc-text">Debian&#x2F;Ubuntu</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSH-Example"><span class="toc-number">5.</span> <span class="toc-text">SSH Example</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Raspberry-PI-Server"><span class="toc-number">5.1.</span> <span class="toc-text">Raspberry PI (Server)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Client"><span class="toc-number">5.2.</span> <span class="toc-text">Client</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summary"><span class="toc-number">6.</span> <span class="toc-text">Summary</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2023/11/09/onionization/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2023/11/09/onionization/&text=Onionization"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2023/11/09/onionization/&title=Onionization"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2023/11/09/onionization/&is_video=false&description=Onionization"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Onionization&body=Check out this article: https://oneforalone.github.io/2023/11/09/onionization/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2023/11/09/onionization/&title=Onionization"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2023/11/09/onionization/&title=Onionization"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2023/11/09/onionization/&title=Onionization"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2023/11/09/onionization/&title=Onionization"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2023/11/09/onionization/&name=Onionization&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2023/11/09/onionization/&t=Onionization"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

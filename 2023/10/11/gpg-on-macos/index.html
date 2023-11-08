@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="简介进入 crypto 了，那么就不得不注重起隐私来了，论隐私来说，那些 IM 的信息没啥好谈的，就连开源界都要政治正确，所以也就没啥好说的。但是对于一个比较喜欢用邮箱的人来说，可以使用 GPG 来规避信息内容泄漏的风险。下面是在 Mac OS 使用 GPG Suit 的一些记录。 安装首先，千万不要使用 homebrew 安装 GPG Suit，不然 Apple Mail 的插件你是启用不了的，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GPG on MacOS">
+<meta property="og:url" content="https://oneforalone.github.io/2023/10/11/gpg-on-macos/index.html">
+<meta property="og:site_name" content="Oneforalone">
+<meta property="og:description" content="简介进入 crypto 了，那么就不得不注重起隐私来了，论隐私来说，那些 IM 的信息没啥好谈的，就连开源界都要政治正确，所以也就没啥好说的。但是对于一个比较喜欢用邮箱的人来说，可以使用 GPG 来规避信息内容泄漏的风险。下面是在 Mac OS 使用 GPG Suit 的一些记录。 安装首先，千万不要使用 homebrew 安装 GPG Suit，不然 Apple Mail 的插件你是启用不了的，">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-10T17:46:44.000Z">
+<meta property="article:modified_time" content="2023-11-04T09:14:33.079Z">
+<meta property="article:author" content="oneforalone">
+<meta property="article:tag" content="GPG">
+<meta property="article:tag" content="MacOS">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/avatar.png">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/avatar.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.png">
+        
+      
+    
+    <!-- title -->
+    <title>GPG on MacOS</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2023/11/09/onionization/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/10/09/filecoin-store-data/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2023/10/11/gpg-on-macos/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&text=GPG on MacOS"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&title=GPG on MacOS"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&is_video=false&description=GPG on MacOS"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=GPG on MacOS&body=Check out this article: https://oneforalone.github.io/2023/10/11/gpg-on-macos/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&title=GPG on MacOS"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&title=GPG on MacOS"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&title=GPG on MacOS"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&title=GPG on MacOS"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&name=GPG on MacOS&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&t=GPG on MacOS"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Command-Line"><span class="toc-number">4.</span> <span class="toc-text">Command Line</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">5.</span> <span class="toc-text">Reference</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        GPG on MacOS
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">oneforalone</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-10-10T17:46:44.000Z" class="dt-published" itemprop="datePublished">2023-10-10 05:46:44 PM</time>
+        
+        (Updated: <time datetime="2023-11-04T09:14:33.079Z" class="dt-updated" itemprop="dateModified">2023-11-04 09:14:33 AM</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/GPG/">GPG</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/GPG/" rel="tag">GPG</a>, <a class="p-category" href="/tags/MacOS/" rel="tag">MacOS</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>进入 crypto 了，那么就不得不注重起隐私来了，论隐私来说，那些 IM 的信息没啥好谈的，就连开源界<br>都要政治正确，所以也就没啥好说的。但是对于一个比较喜欢用邮箱的人来说，可以使用 GPG 来规避信息<br>内容泄漏的风险。下面是在 Mac OS 使用 GPG Suit 的一些记录。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>首先，千万不要使用 homebrew 安装 GPG Suit，不然 Apple Mail 的插件你是启用不了的，要去官网<br>下载 dmg 手动安装。这已经不是我第一次因为 homebrew 安装导致软件版本的问题了，所以，官网没有<br>推荐使用 homebrew 的，就不要使用，免得又遇到什么问题。</p>
+<p>官网地址为：<a target="_blank" rel="noopener" href="https://gpgtools.org/">https://gpgtools.org/</a></p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>创建密钥对和在 Apple Mail 中启用 GPG Suit 插件就不用我介绍了，安装完成后会自动弹窗让你选<br>择，选择是就好。这里所说的配置是，我怎么给在 GPG 中添加了公钥的人发送加密邮件呢？这里需要找一<br>找官方的论坛。所以说任何产品如果官方提供了论坛的话，一定要去逛一逛，你会找到大部分答案的。</p>
+<p>好了，talk is cheap，要使用添加了公钥的地址发送加密邮件需要执行一条命令，然后新建发送邮件时，<br>如果收件人是那个地址，主题那一栏最右边会有一把小锁的 icon。</p>
+<ul>
+<li>One Recipient One Public Key</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ defaults write org.gpgtools.common KeyMapping \</span><br><span class="line">    -dict-add &lt;email-address&gt; &lt;fingerprint&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>&lt;email-address&gt;</code>：公钥的邮箱地址</li>
+<li><code>&lt;fingerprint&gt;</code>：公钥的 fingerprint</li>
+</ul>
+<p>如果是有对应整个邮箱的域名是用的都是同一个公钥的话，可以这么添加域名的 mapping：</p>
+<ul>
+<li>Multiple Recipients One Public Key</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ defaults write org.gpgtools.common KeyMapping \</span><br><span class="line">    -dict-add <span class="string">&#x27;*@&lt;domain-name&gt;&#x27;</span> &lt;fingerprint&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>One Recipient Multiple Public Keys</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi ~/.gnupg/gpg.conf</span><br><span class="line"></span><br><span class="line"><span class="comment">## add one line at the end of the file</span></span><br><span class="line">group &lt;email-address&gt; = &lt;fingerprint1&gt; &lt;fingerprint2&gt; ...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Check the Results</li>
+</ul>
+<p>如果要查看是否添加正确，可以使用命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ defaults <span class="built_in">read</span> org.gpgtools.common KeyMapping</span><br></pre></td></tr></table></figure>
+
+<p>Okay, 那么现在你就可以发送加密邮件或者对邮件进行签名了。</p>
+<blockquote>
+<p><strong>注</strong>：如果没有收件地址的公钥，只能对邮件进行签名，不能加密，这个是密码学的知识，这里就不<br>介绍了。收件人收到的邮件会附带一个公钥文件，用来验证签名的。如果邮件加密了的话，没有插件的话<br>是会有两个文件的，一个是加密文件，一个是个加密协议的文件。如果对文件进行了加密，<br>记得备份自己的密钥对哦。</p>
+</blockquote>
+<h2 id="Command-Line"><a href="#Command-Line" class="headerlink" title="Command Line"></a>Command Line</h2><ul>
+<li>Generate&#x2F;Revoke&#x2F;Delete Key Pair</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># generate key pair</span></span><br><span class="line">gpg --gen-key</span><br><span class="line"></span><br><span class="line"><span class="comment"># revoke key pair</span></span><br><span class="line">gpg --gen-revoke &lt;user-id&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># delete key pair</span></span><br><span class="line">gpg --delete-key &lt;user-id&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>&lt;user-id&gt;</code> 可以是邮箱地址，也可以是 Hash 字符串，一下所指的 <code>&lt;user-id&gt;</code> 都是同样的指代。</p>
+<ul>
+<li>List Keys</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --list-keys</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Export&#x2F;Import Private&#x2F;Public Key</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Export Public Key</span></span><br><span class="line">gpg --armor --output public-key.asc --<span class="built_in">export</span> &lt;user-id&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Export Private Key</span></span><br><span class="line">gpg --armor --output private-key.prv --export-secret-keys &lt;user-id&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Import Public/Private Keys</span></span><br><span class="line">gpg --import &lt;key-file&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Send&#x2F;Retrieve Public Keys to&#x2F;from Server</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Send Public Keys to Server</span></span><br><span class="line">gpg --send-keys &lt;user-id&gt; --keyserver hkps://keys.openpgp.org</span><br><span class="line"></span><br><span class="line"><span class="comment"># Retrieve Public Keys from Server</span></span><br><span class="line">gpg --keyserver hkps://keys.openpgp.org --search-keys &lt;user-id&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Verify a Fingerprint from Server</span></span><br><span class="line">gpg --fingerprint &lt;user-id&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Sign&#x2F;Verify Files</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Sign a file</span></span><br><span class="line">gpg --armor --detach-sign &lt;filename&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Verify a file</span></span><br><span class="line">gpg --verify &lt;sign-file&gt; &lt;filename&gt;</span><br></pre></td></tr></table></figure>
+
+<p>默认的签名是 <code>--sign</code>，会直接生成个二进制文件，如果像生成 ASCII码的文件，使用<br><code>--clearsign</code> 参数，如果想将原文件和签名文件分开，使用 <code>--detach-sign</code> 参数，这个参数生成<br>的签名文件是二进制的，要生成单独的 ASCII 的签名文件，则使用<code>--armor --detach-sign</code>参数。</p>
+<ul>
+<li>Encrypt&#x2F;Decrypt Files</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Encrypt file</span></span><br><span class="line">gpg --recipient &lt;user-id&gt; --output &lt;encrypted-filename&gt; \</span><br><span class="line">  --encrypt &lt;filename&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Decrypt file</span></span><br><span class="line">gpg --output &lt;filename&gt; --decrypt &lt;encrypted-filename&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>&lt;output-filename&gt;</code> 是加密后的文件，<code>&lt;filename&gt;</code> 是需要加密<br>的文件。注意 <code>--output</code> 和 <code>--decrypt/encrypt</code> 的顺序不能变。</p>
+<p>P.S. 同时进行加密签名的命令为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gpg --local-user &lt;user-id&gt; --recipient &lt;recipient-address&gt; \</span><br><span class="line">  --armor --sign --encrypt &lt;filename&gt;</span><br></pre></td></tr></table></figure>
+
+<p>其实这些命令使用 <code>pgp --help</code> 就能查到，但还是记录一下吧，有总比没有要好。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://gpgtools.org/">https://gpgtools.org/</a></li>
+<li><a target="_blank" rel="noopener" href="https://gpgtools.tenderapp.com/kb/how-to/add-email-address-to-existing-public-key-domain-mapping-group-feature">https://gpgtools.tenderapp.com/kb/how-to/add-email-address-to-existing-public-key-domain-mapping-group-feature</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.gnupg.org/gph/en/manual.html">https://www.gnupg.org/gph/en/manual.html</a></li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Categories</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Command-Line"><span class="toc-number">4.</span> <span class="toc-text">Command Line</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">5.</span> <span class="toc-text">Reference</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://oneforalone.github.io/2023/10/11/gpg-on-macos/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&text=GPG on MacOS"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&title=GPG on MacOS"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&is_video=false&description=GPG on MacOS"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=GPG on MacOS&body=Check out this article: https://oneforalone.github.io/2023/10/11/gpg-on-macos/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&title=GPG on MacOS"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&title=GPG on MacOS"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&title=GPG on MacOS"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&title=GPG on MacOS"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&name=GPG on MacOS&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://oneforalone.github.io/2023/10/11/gpg-on-macos/&t=GPG on MacOS"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2020-2023
+    oneforalone
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Categories</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/oneforalone/oneforalone.github.io">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
