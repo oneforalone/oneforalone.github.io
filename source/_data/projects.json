@@ -1,0 +1,17 @@
+[
+  {
+    "name": "The CommonLisp Cookbook Chinese Version",
+    "url": "https://oneforalone.github.io/cl-cookbook-cn/#/",
+    "desc": "The CL Cookbook aims to tackle all sort of topics, for the beginner as for the more advanced developer."
+  },
+  {
+    "name": "Let Over Lambda Chinese Version",
+    "url": "https://oneforalone.github.io/lol-zh/",
+    "desc": "The magic of Lisp macros."
+  },
+  {
+    "name": "revmasm",
+    "url": "https://github.com/oneforalone/revmasm",
+    "desc": "Simple Ethereum Virtual Machine assembler written in Rust."
+  }
+]
